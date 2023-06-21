@@ -1,0 +1,28 @@
+.p-change_account{
+    margin-bottom: 30px;
+    text-align: center;
+    &__add{
+        display: inline-block;
+        width: 200px;
+        font-size: $font-size_l;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        // border: 1px solid#ddd;
+        border-radius: 15px;
+    }
+    &__reached{
+        display: inline-block;
+        width: 200px;
+        font-size: $font-size_m;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        border: 1px solid#ddd;
+        background-color: $background-color_soft;
+        border-radius: 15px;
+        opacity: 0.6;
+    }
+}

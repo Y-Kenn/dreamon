@@ -1,0 +1,11 @@
+.p-home{
+    &__header{
+        line-height: 4rem;
+        font-size: $font-size_xl;
+        border-bottom: 1px solid#ddd;
+        padding-left: 0.5rem;
+    }
+    &__icon{
+        margin-right: 0.5rem;
+    }
+}

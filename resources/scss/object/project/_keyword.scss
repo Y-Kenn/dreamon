@@ -1,0 +1,66 @@
+.p-keyword{
+    margin-bottom: 80px;
+    &__item{
+        display: inline-block;
+        border: 1px solid#ddd;
+        font-size: $font-size_m;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 2rem;
+        padding-right: 1.5rem;
+        margin-left: 20px;
+        margin-top: 10px;
+        border-radius: 3rem;
+
+    }
+
+    &__inner{
+        margin-bottom: 2rem;
+    }
+    
+    &__input{
+        height: 4rem;
+        width: 250px;
+        border: 1px solid#ddd;
+        font-size: $font-size_m;
+        padding-left: 1.5rem;
+        margin-left: 1rem;
+        vertical-align: middle;
+        background-color: $background-color_soft;
+        
+    }
+    &__exclude{
+        vertical-align: middle;
+        position: relative;
+        height: 4rem;
+        width: 5rem;
+        font-size: $font-size_s;
+        text-align: center;
+        justify-content: center;
+        display: inline-flex;
+        align-items: center;
+        background-color: #eee;
+        color: #999;
+        margin-left: 1rem;
+        cursor: pointer;
+        &--active{
+            background-color: #0d7bfd;
+            color: white;
+        }
+    }
+    &__submit{
+        vertical-align: middle;
+        height: 4rem;
+        width: 6rem;
+        text-align: center;
+        border-radius: 10rem;
+        font-size: $font-size_s;
+        margin-left: 4rem;
+    }
+    &__delete{
+        margin-left: 0.3rem;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}

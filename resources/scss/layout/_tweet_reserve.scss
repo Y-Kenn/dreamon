@@ -1,0 +1,13 @@
+.l-tweet_reserve{
+    display: flex;
+
+    &__reserve{
+        width: 50%;
+    }
+    &__tweets{
+        width: 50%;
+        & > div{
+            margin: auto;
+        }
+    }
+}

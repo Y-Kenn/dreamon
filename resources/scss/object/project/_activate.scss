@@ -1,0 +1,32 @@
+.p-activate{
+    margin-top: 30px;
+    //margin-left: 15px;
+    //margin: auto;
+    display: flex;
+    justify-content: center;
+    &__button{
+        height: 70px;
+        width: 200px;
+        border: 1px solid $mainBlue;
+        color: $mainBlue;
+        border-radius: 15px;
+        font-weight: 600;
+        text-align: center;
+        font-size: $font-size_m;
+        transition: 0.5s;
+        box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        opacity: 0.6;
+        &:hover{
+            transform: translateY(3px);
+            opacity: 0.8;
+        }
+        &--active{
+            color: white;
+            border: none;
+            // background-image: radial-gradient(#74c9f3 30%,#17b2ff 70%);
+            background-image: radial-gradient(#74c9f3 40%,$mainBlue 110%);
+            opacity: 1;
+        }
+    }
+}

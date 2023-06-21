@@ -1,0 +1,58 @@
+// ==============================
+// 変数
+// ==============================
+$font-color_soft: #aaa;
+$font-color_default: #777;
+$font-color_dark: #656565;
+$font-color_link: #1568e4;
+
+$background-color_hover: #f3f3f3;
+$background-color_soft: #f7f8fa;
+
+$border-color_default: #ddd;
+$border-color_dark: #999;
+
+$mainBlue: #1e88f5;
+$lightBlue: #54c2f9;
+
+
+$site-width: 980px;
+
+$font-size_default: 62.5%;
+$font-size_ss: 1.2rem;
+$font-size_s: 1.4rem;
+$font-size_m: 1.6rem;
+$font-size_l: 1.8rem;
+$font-size_xl: 2.4rem;
+$font-size_xxl: 3.0rem;
+$font-size_3l: 3.4rem;
+
+$space_s: 5px;
+$space_m: 10px;
+$space_l: 15px;
+$space_xl: 20px;
+$space_xxl: 30px;
+$space_3l: 40px;
+
+
+// ==================================
+// base
+// ==================================
+html, body {
+width: 100%;
+color: $font-color_default;
+font-size: $font-size_default;
+line-height: 1.6;
+//font-family: 'Noto Sans JP', sans-serif;
+font-family:  'Noto Sans JP', sans-serif, Quicksand, 游ゴシック体, "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif; // TODO:リファクタ必要（変数にする）
+text-size-adjust: 100%;
+letter-spacing: 0.1em;
+}
+a{
+    text-decoration: none;
+    color:inherit;
+    display: inline-block;
+}
+pre {
+	white-space: pre-wrap ;
+}

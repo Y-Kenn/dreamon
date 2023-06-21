@@ -1,0 +1,24 @@
+.p-footer{
+    height: 80px;
+    border-top: 1px solid #ddd;
+    background-color: #fff;
+    text-align: center;
+    padding: 1rem 100px;
+    &__inner{
+        // display: flex;
+        // justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+    &__link{
+        font-size: $font-size_m;
+        margin: 0 50px;
+        transition: 0.5s;
+        &:hover{
+            color: $font-color_link;
+            cursor: pointer;
+        }
+    }
+    &__copyright{
+        font-size: $font-size_s;
+    }
+}

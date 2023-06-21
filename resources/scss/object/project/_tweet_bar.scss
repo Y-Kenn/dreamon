@@ -1,0 +1,52 @@
+.p-tweet_bar{
+
+    // margin: auto;
+    &__inner{
+        display: flex;
+        flex-direction: column;
+        // border-left: 1px solid#ddd;
+        // border-right: 1px solid#ddd;
+    }
+    &__item{
+        border-bottom: 1px solid#ddd;
+        padding: 0.5rem 1rem;
+        // padding-top: 0;
+        // overflow: hidden;
+        // margin-bottom: 0.5rem;
+        max-width: 350px;
+        transition: 0.5s;
+        &__text{
+            font-size: $font-size_s;
+            padding-left: 0.5rem;
+            & > pre{
+                margin-bottom: 0;
+                font-size: $font-size_s;
+            }
+        }
+        &:hover{
+            background-color: $background-color_hover;
+        }
+        &__date{
+            margin-top: 0.5rem;
+            float: right;
+        }
+        &__date_header{
+            background-color: $background-color_hover;
+            border-radius: 4px;
+            font-size: $font-size_s;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        &__delete{
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+}

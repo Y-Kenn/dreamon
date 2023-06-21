@@ -1,0 +1,67 @@
+.p-sidenav{
+    height: 100%;
+    width: 100%;
+    border-right: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    &__logo{
+        width: 100%;
+        padding: 7px;
+        &>img{
+            max-width: 100%;
+        }
+    }
+    &__account{
+        //border: 1px solid#ddd;
+        width: 90%;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-right: 0.5rem;
+        padding-bottom: 0.5rem;
+        margin: 3rem auto 5rem auto;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        box-shadow: inset 5px 5px 10px #dedede,
+            inset -5px -5px 10px #ffffff;
+        // overflow: hidden;
+    }
+    &__info{
+        margin-top: 5px;
+        margin-left: 5px;
+        display: flex;
+        justify-content: space-between;
+        &__title{
+            font-size: $font-size_ss;
+            width: 50%;
+            //margin-left: 10px
+        }
+        &__num{
+            font-size: $font-size_m;
+            width: 45%;
+            //margin-right: 20px;
+        }
+    }
+    &__item{
+        font-size: $font-size_s;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        height: 60px;
+        padding-left: 2rem;
+        border-top: 1px solid #eee;
+        transition: 0.4s;
+        &:last-child{
+            border-bottom: 1px solid#eee;
+        }
+        &--active{
+            color: $mainBlue;
+            font-weight: bold;
+            //background-color: #e3f3fc;
+        }
+        &:hover{
+            background-color: $background-color_hover;
+        }
+    }
+}

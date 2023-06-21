@@ -1,0 +1,43 @@
+.p-dashboard{
+    background-image: linear-gradient(160deg,#54c2f9,#1e88f5);
+    color: aliceblue;
+    &__header{
+        height: 6rem;
+        display: flex;
+        align-items: center;
+        font-size: $font-size_l;
+        font-weight: bold;
+        margin-left: 1.2rem;
+    }
+    &__inner{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    &__item{
+        width: 25%;
+        font-size: $font-size_m;
+        padding: 1.5rem;
+        box-sizing: border-box;
+        border-bottom: 1px solid #72b1fb;
+        &__title{
+            
+            height: 3rem;
+            font-size: 1.8rem;
+        }
+        &__icon{
+            margin-right: 0.5rem;
+        }
+        &__num{
+            height: 9rem;
+            line-height: 9rem;
+            width: 100%;
+            text-align: center;
+            font-size: 4rem;
+        }
+    }
+    &__process{
+        width: 25%;
+    }
+}

@@ -1,0 +1,47 @@
+.p-setting{
+    &__email{
+        margin-left: 200px;
+        &__input{
+            width: 400px;
+            height: 4rem;
+            font-size: $font-size_m;
+            padding: 1rem 2rem;
+            vertical-align: middle;
+        }
+        
+    
+    }
+    &__password{
+        margin-top: 1.5rem;
+        &__name{
+            display: inline-block;
+            text-align: right;
+            width: 180px;
+            font-size: $font-size_m;
+            margin-right: 2rem;
+        }
+        &__input{
+            width: 400px;
+            height: 4rem;
+            font-size: $font-size_m;
+        }
+    }
+    &__submit{
+        vertical-align: middle;
+        height: 4rem;
+        width: 6rem;
+        text-align: center;
+        border-radius: 10rem;
+        font-size: $font-size_s;
+        margin-left: 3rem;
+        vertical-align: middle;
+    }
+    &__error{
+        & > span{
+            margin-left: 200px;
+            color: red;
+            font-size: $font-size_s;
+        }
+    }
+    
+}

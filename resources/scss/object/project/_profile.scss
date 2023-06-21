@@ -1,0 +1,100 @@
+.p-profile{
+    margin-left: 1rem;
+    
+    &__input{
+        display: inline-block;
+        &__header{
+            display: inline-block;
+            background-color: #ededed;
+            font-size: $font-size_m;
+            height: 4rem;
+            width: 4rem;
+            line-height: 4rem;
+            text-align: right;
+            vertical-align: middle;
+            padding-right: 0.7rem;
+            border: 1px solid#ddd;
+            border-right: none;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        & > input[type=text]{
+            height: 4rem;
+            width: 300px;
+            border-left: none;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            font-size: $font-size_m;
+            vertical-align: middle;
+            padding-left: 1.5rem;
+            background-color: $background-color_soft;
+        }
+    }
+    &__submit{
+        height: 4rem;
+        width: 6rem;
+        text-align: center;
+        border-radius: 10rem;
+        font-size: $font-size_s;
+        margin-left: 4rem;
+        vertical-align: middle;
+    }
+    &__item{
+        border: 1px solid#ddd;
+        padding: 1rem;
+        margin-top: 20px;
+        border-radius: 15px;
+        // box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        // -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        &__header{
+            width: 23%;
+            & img{
+                width: 60px;
+                height: 60px;
+                min-width: 60px;
+                min-height: 60px;
+            }
+        }
+        &__description{
+            width: 47%;
+        }
+        &__data{
+            display: flex;
+            justify-content: space-between;
+        }
+        &__ff{
+            font-size: $font-size_m;
+            width: 20%;
+            height: 9rem;
+            justify-content: space-between;
+            margin-right: 2rem;
+        }
+        &__delete{
+            margin-right: 2rem;
+            font-size: $font-size_m;
+            &:hover{
+                cursor: pointer;
+            }
+        }
+        &__status{
+            font-size: $font-size_s;
+            border-radius: 4px;
+            text-align: center;
+            width: 50%;
+            margin-left: 70px;
+            &--active{
+                background-image: linear-gradient(160deg,#7acdf3,#98d1be);
+                color: #fff;
+            }
+            &--inactive{
+                box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+                -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+                transition: 0.5s;
+                &:hover{
+                    cursor: pointer;
+                    transform: translateY(3px);
+                }
+            }
+        }
+    }
+}

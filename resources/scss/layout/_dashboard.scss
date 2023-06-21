@@ -1,0 +1,11 @@
+.l-dashboard{
+    display: flex;
+    &__main{
+        width: 75%;
+    }
+    &__sub{
+        width: 25%;
+        min-height: 100vh;
+        border-left: 1px solid#eee;
+    }
+}

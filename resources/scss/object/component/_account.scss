@@ -1,0 +1,62 @@
+.c-account{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    // white-space: nowrap;
+    //     overflow: hidden;
+    //     text-overflow: ellipsis;
+    &__header{
+        display: flex;
+        align-items: center;
+        min-height: 55px;
+        width: 100%;
+        
+        &__icon{
+            height: 48px;
+            width: 48px;
+            display: inline-block;
+            margin-right: 10px;
+            border-radius: 48px;
+            border: 1px solid#ddd;
+        }
+        &__name{
+            font-size: $font-size_s;
+            color: $font-color_dark;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        &__screen_name{
+            font-size: $font-size_ss;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    &__inner{
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    &__description{
+        font-size: $font-size_s;
+    }
+    &__info{
+        margin-top: 5px;
+        margin-left: 5px;
+        display: flex;
+        justify-content: space-between;
+        &__title{
+            font-size: $font-size_ss;
+            width: 45%;
+            //margin-left: 10px
+        }
+        &__num{
+            font-size: $font-size_m;
+            width: 45%;
+            //margin-right: 20px;
+        }
+    }
+}

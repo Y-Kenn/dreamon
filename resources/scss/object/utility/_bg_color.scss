@@ -1,0 +1,14 @@
+.u-bg_color{
+    &--lightGray{
+        background-color: #ededed;
+    }
+    &--softGray{
+        background-color: $background-color_soft;
+    }
+    &--white{
+        background-color: #fff;
+        &--impotant{
+            background-color: #fff !important;
+        }
+    }
+}

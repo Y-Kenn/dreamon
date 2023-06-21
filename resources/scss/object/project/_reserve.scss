@@ -1,0 +1,64 @@
+.p-reserve{
+    width: 420px;
+    &__text{
+        height: 100px;
+        width: 100%;
+        display: block;
+        margin-bottom: 1rem;
+        font-size: $font-size_m;
+        resize: none;
+        background-color: $background-color_soft;
+        overflow-wrap: anywhere;
+        
+    }
+    &__inner{
+        display: flex;
+        justify-content: space-between;
+    }
+    &__datetime{
+        
+        
+        align-items: center;
+        &::-webkit-datetime-edit{
+            font-size: $font-size_m;
+            border-bottom: 1px solid #ddd;
+            margin-left: 1rem;
+            margin-right: 1rem;
+            //border-radius: 4px;
+            padding-left: 0.5rem;
+            // padding-right: 1rem;
+            padding-top: 0.1rem;
+            padding-bottom: 0.1rem;
+        }
+        &::-webkit-calendar-picker-indicator{
+            font-size: $font-size_xl;
+            margin-left: 0.5rem;
+            mix-blend-mode: difference;
+            background-color: #c87500;
+            border-radius: 4px;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+            -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+            :hover{
+                cursor: pointer;
+            }
+        }
+    }
+    &__text_count{
+        font-size: $font-size_m;
+        width: 110px;
+        margin: auto 0;
+        &--over{
+            color: red;
+            font-weight: bold;
+        }
+    }
+    &__submit{
+        vertical-align: middle;
+        height: 4rem;
+        width: 6rem;
+        text-align: center;
+        border-radius: 10rem;
+        font-size: $font-size_s;
+    }
+}
+
