@@ -1,7 +1,7 @@
 <template>
     <div class="p-dashboard">
         
-        <div class="p-dashboard__header">TODAY'S PARFORMANCE</div>
+        <div class="p-dashboard__header"><span class="u-font_size--xl">T</span>ODAY'S PARFORMANCE</div>
         <div class="p-dashboard__inner">
             
             <div class="p-dashboard__item">
@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="p-dashboard">
-        <div class="p-dashboard__header">30DAY'S PARFORMANCE</div>
+        <div class="p-dashboard__header"><span class="u-font_size--xl">30</span>&nbsp;DAY'S PARFORMANCE</div>
         <div class="p-dashboard__inner">
             <div class="p-dashboard__item">
                 <div class="p-dashboard__item__titele">

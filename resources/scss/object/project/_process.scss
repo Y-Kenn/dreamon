@@ -1,6 +1,7 @@
 .p-process{
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
     margin-top: 25px;
     &__item{
         width: 20%;
@@ -15,6 +16,10 @@
         font-weight: 600;
         color: #999797;
         border: 1px solid#ddd;
+        margin-bottom: 25px;
+        @include mq(){
+            width: 40%;
+        }
         &--active{
             color: #fff;
             &:nth-child(1){

@@ -31,11 +31,6 @@ export default {
         });
         const getProtectedAccounts = async ()=>{
             store.dispatch('getProtectedAccounts');
-            // const url = 'http://localhost/protected-account';
-            // console.log('GET');
-            // const result = await axios.get(url);
-            // console.log(result);
-            // protected_accounts.data = result.data;
         }
         
         const createProtectedAccount = async ()=>{
@@ -44,6 +39,7 @@ export default {
             console.log(twitter_name);
             const result = await axios.post(url, twitter_name)
                             .then(res =>{
+                                twitter_name.twitter_name = '';
                                 getProtectedAccounts();
                             });
         }

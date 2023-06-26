@@ -207,14 +207,11 @@ class TwitterApi
         if(time() - strtotime($account['token_generated_time']) > env('TOKEN_LIFETIME')){
             
             Log::debug('REFRESH : ' .print_r($twitter_id, true));
-            Log::debug('REFRESH : ' .print_r($account, true));
             $refreshed_tokens = $this->refreshToken($account['refresh_token']);
-            // $refreshed_tokens = $this->refreshToken('Q0pWRDROTjVxM1lCdFlEa0ViUms1eXVrMUVQYTNBRmVyY0pnMVlINFJJblB0OjE2ODYzMTU2NjMzMTY6MTowOnJ0OjE');
 
             //アカウント凍結を検出
             $this->checkAccountLocked($refreshed_tokens, $twitter_id);
 
-            Log::debug('REFRESH : ' .print_r($refreshed_tokens, true));
             $account_builder->update([
                 'access_token' => $refreshed_tokens['access_token'],
                 'refresh_token' => $refreshed_tokens['refresh_token'],
@@ -629,7 +626,6 @@ class TwitterApi
             Log::debug('ERROR - GET TWEETS : ' . print_r($result, true));
             return $result;
         }
-        Log::debug('SUCCESS - GET TWEETS : ' . print_r($result, true));
 
         $tweets = array();
         foreach($result['data'] as $one_tweet){

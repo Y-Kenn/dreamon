@@ -4,6 +4,10 @@
     padding-right: 50px;
     padding-bottom: 100px;
     max-width: 1000px;
+    @include mq(){
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
     &__title{
         font-weight: bold;
         font-size: $font-size_xl;

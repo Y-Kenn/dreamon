@@ -34,7 +34,6 @@ class UpdateFollowedAccountsJob implements ShouldQueue
             $allready_followed_flag = false;
             foreach($followed_accounts as $account){
                 if($following['id'] === $account['target_twitter_id']){
-                    //Log::debug('ALREADY FOLLOW : ' . print_r($following['id'], true));
                     $allready_followed_flag = true;
                     break;
                 }
@@ -65,9 +64,10 @@ class UpdateFollowedAccountsJob implements ShouldQueue
         //更新日時が古い順にソートしてDBからフォロー済アカウントを取得
         $followed_accounts_builder = FollowedAccount::where('user_twitter_id', $this->user_twitter_id)
                                                         ->whereNull('unfollowed_at')
-                                                        ->orderBy('updated_at', 'desc');
+                                                        ->orderBy('updated_at', 'asc');
         $followed_accounts = $followed_accounts_builder->get();
-
+        // Log::debug('FOLLOWED ACCOUNTS: ' .print_r($followed_accounts->toArray(), true));
+        
         #####################################################################
         #手動登録されたアカウントを検出し、DB(followed_accounts_table)へ登録する処理
         #####################################################################
@@ -79,17 +79,17 @@ class UpdateFollowedAccountsJob implements ShouldQueue
         $TwitterApi->checkAccountLocked($followings, $this->user_twitter_id);
 
         if(isset($followings['data'])){
-            Log::debug('GET FOLLOWINGS : ' . print_r($this->user_twitter_id, true));
             
             if($followed_accounts_builder->exists()){
                 $followed_accounts = $followed_accounts_builder->get();
                 //Twitter APIで取得したフォローアカウントとDBを比較し、DBに未登録のアカウントのリストを抽出
                 $unregistered_followings = $this->filterUnregisteredFollowings($followings['data'], $followed_accounts);
+            }else{
+                $unregistered_followings = $followings['data'];
             }
         }
         
         if(!empty($unregistered_followings)){
-            
             // foreach($unregistered_followings as $following){
             //     //非アクティブ期間のチェック
             //     $last_active_at = $TwitterApi->checkLastActiveTime($following['id']);
@@ -125,7 +125,6 @@ class UpdateFollowedAccountsJob implements ShouldQueue
         
         if($followed_accounts_builder->exists()){
             foreach($followed_accounts as $account){
-                //Log::debug('UPDATE TARGET : ' . print_r($account['target_twitter_id'], true));
                 $last_active_at = $TwitterApi->checkLastActiveTime($account['target_twitter_id']);
                 //checkLastActiveTime()が取得失敗した場合、$followingsのループ終了
                 //TwitterのBasicプランで最大連続15回
@@ -134,9 +133,9 @@ class UpdateFollowedAccountsJob implements ShouldQueue
                     break;
                 //checkLastActiveTime()が取得できた場合
                 }else{
+                    Log::debug('UPDADTED : ' .print_r($account['id'], true));
                     FollowedAccount::find($account['id'])
                     ->update(['last_active_at' => date("Y/m/d H:i:s", $last_active_at)]);
-                    //Log::debug('UPDATE : ' . print_r($account['id'], true));
                 }
             }
         }

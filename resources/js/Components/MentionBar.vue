@@ -1,11 +1,9 @@
 <template>
     <div class="p-tweet_bar">
-        <div class="p-tweet_bar__inner">
             
             <SmallTweet v-for="mention in mentions"
                         v-bind:key="mention.id"
                         v-bind:tweet="mention" />
-        </div>
     </div>
     
 </template>

@@ -2,6 +2,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @include mq('md'){
+        flex-direction: column;
+    }
     width: 100%;
     // white-space: nowrap;
     //     overflow: hidden;

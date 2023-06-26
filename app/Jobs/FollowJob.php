@@ -21,17 +21,17 @@ class FollowJob implements ShouldQueue
     protected $record_id;
     protected $user_twitter_id;
     protected $target_twitter_id;
-    protected $last_active_time;
+    // protected $last_active_time;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($record_id, $user_twitter_id, $target_twitter_id, $last_active_time)
+    public function __construct($record_id, $user_twitter_id, $target_twitter_id)//, $last_active_time
     {
         $this->record_id = $record_id;
         $this->user_twitter_id = $user_twitter_id;
         $this->target_twitter_id = $target_twitter_id;
-        $this->last_active_time = $last_active_time;
+        // $this->last_active_time = $last_active_time;
     }
 
     /**
@@ -82,7 +82,7 @@ class FollowJob implements ShouldQueue
                 'user_twitter_id' => $this->user_twitter_id,
                 'target_twitter_id' => $this->target_twitter_id,
                 'followed_at' => date("Y/m/d H:i:s"),
-                'last_active_at' => date("Y/m/d H:i:s", $this->last_active_time),
+                // 'last_active_at' => date("Y/m/d H:i:s", $this->last_active_time),
             ]);
             Log::debug('FOLLOW JOB : SUCCESS--');
         }else{

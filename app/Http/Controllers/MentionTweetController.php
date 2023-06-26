@@ -17,15 +17,15 @@ class MentionTweetController extends Controller
     {
         $twitter_id = Session::get('twitter_id');
 
-        // $TwitterApi = new TwitterApi(env('API_KEY'), 
-        //                             env('API_SECRET'), 
-        //                             env('BEARER'), 
-        //                             env('CLIENT_ID'), 
-        //                             env('CLIENT_SECRET'), 
-        //                             env('REDIRECT_URI'));
-        // $access_token = $TwitterApi->checkRefreshToken($twitter_id);
-        // $TwitterApi->setTokenToHeader($access_token);
-        // $result = $TwitterApi->getMentions($twitter_id);
+        $TwitterApi = new TwitterApi(env('API_KEY'), 
+                                    env('API_SECRET'), 
+                                    env('BEARER'), 
+                                    env('CLIENT_ID'), 
+                                    env('CLIENT_SECRET'), 
+                                    env('REDIRECT_URI'));
+        $access_token = $TwitterApi->checkRefreshToken($twitter_id);
+        $TwitterApi->setTokenToHeader($access_token);
+        $result = $TwitterApi->getMentions($twitter_id);
         //リクエスト失敗時
         if(!isset($result['data'])){
             return array();

@@ -18,6 +18,7 @@ use App\Models\LikeTarget;
 use App\Models\FollowedAccount;
 use App\Models\ProtectedFollowedAccount;
 use App\Models\UnfollowTarget;
+use App\Models\TwitterAccountData;
 use App\Library\TwitterApi;
 use App\Jobs\ReadyChinjob;
 use App\Jobs\FollowJob;
@@ -59,23 +60,23 @@ class GenerateChainJob implements ShouldQueue
     ////////////////////////////////
 
     //24時間以内にフォローした数を計算
-    protected function countFollowedNum24h(){
+    protected function countFollowedNum($span){
         $followed_accounts_builder = FollowedAccount::where('user_twitter_id', $this->user_twitter_id)
                                                     ->whereNotNull('followed_at');
         $followed_accounts = $followed_accounts_builder->get();
         
         $now = time();
-        $followed_num_24h = 0;
+        $followed_num = 0;
         if($followed_accounts_builder->exists()){
             foreach($followed_accounts as $followed_account){
                 //24時間以内にアンフォローされている場合
-                if($now - strtotime($followed_account['followed_at']) < 86400){
-                    $followed_num_24h++;
+                if($now - strtotime($followed_account['followed_at']) < $span){
+                    $followed_num++;
                 }
             }
         }
         
-        return $followed_num_24h;
+        return $followed_num;
     }
 
     //検索キーワードにマッチするアカウントのリストを作成
@@ -89,18 +90,14 @@ class GenerateChainJob implements ShouldQueue
                 $unmatch_flg = false;//AND判定用
                 //キーワードセットの各キーワード適用
                 foreach($keywords as $keyword){
-                    //Log::debug('KEYWORD : ' .print_r($keyword, true));
                     //キーワードにアンマッチの場合
                     if(mb_strpos($account['description'], $keyword) === false){
-                        //Log::debug('UNMATCH KEYWORD');
                         $unmatch_flg = true;
                         break;
                     }
                 }
                 //AND判定(一つのキーワードセット内で一度もアンマッチが発生しなかった場合)
                 if(!$unmatch_flg){
-                    // Log::debug('SEARCHED TARGET : ' .print_r($account['id'], true)
-                    //             .' : ' .print_r($account['description'], true));
                     array_push($searched_follow_targets, [
                         'target_twitter_id' => $account['id'],
                         'description' => $account['description'],
@@ -118,22 +115,17 @@ class GenerateChainJob implements ShouldQueue
     {
         $excluded_follow_targets = array();
         foreach($searched_follow_targets as $follow_target){
-            //Log::debug('NEW ACCOUNT###################################');
             $unmatch_keywords_list_flg = true;//各キーワードセット(１レコード分のキーワード)のいずれかでも完全マッチするとfalseとなる(除外)
             foreach($exclude_keyword_list as $keywords){
                 $unmatch_keywords_set_flg = false;//キーワードセット(１レコード分のキーワード)内で１回でもアンマッチが発生すればtrueになる
                 foreach($keywords as $keyword){
                     //除外キーワードとアンマッチだった場合
                     if(mb_strpos($follow_target['description'], $keyword) === false){
-                        //Log::debug('EXCLUDED KEYWORD SET : UNMATCH');
                         $unmatch_keywords_set_flg = true;
                         break;
-                    }else{
-                        //Log::debug('EXCLUDED KEYWORD SET : MATCH' .print_r($keyword, true));
                     }
                 }
                 $unmatch_keywords_list_flg &= $unmatch_keywords_set_flg;
-                //Log::debug('BOOLEAN : ' .print_r($unmatch_keywords_list_flg, true));
             }
             //除外キーワードにアンマッチだったターゲットアカウントはフォローターゲットリストに追加
             if($unmatch_keywords_list_flg){
@@ -203,7 +195,6 @@ class GenerateChainJob implements ShouldQueue
                 $searched_follow_targets = $this->makeSearchedFollowTarget($search_keywords_list, $account_list['data']);
                 //除外キーワードにマッチするアカウントを除外
                 $keyword_excluded_target = $this->keywordExcludeTarget($exclude_keywords_list, $searched_follow_targets);
-                // Log::debug('EXCLUDED FOLLOW TARGETS : ' . print_r($keyword_excluded_target, true));
 
                 if(!empty($keyword_excluded_target)){
 
@@ -268,24 +259,24 @@ class GenerateChainJob implements ShouldQueue
     //ライクターゲット用メソッド
     ////////////////////////////////
 
-    //24時間以内にいいねした数を計算
-    protected function countLikedNum24h(){
+    //指定時間以内にいいねした数を計算
+    protected function countLikedNum($span){
         $liked_targets_builder = LikeTarget::where('user_twitter_id', $this->user_twitter_id)
                                                     ->whereNotNull('liked_at');
         $liked_targets = $liked_targets_builder->get();
         
         $now = time();
-        $liked_num_24h = 0;
+        $liked_num = 0;
         if($liked_targets_builder->exists()){
             foreach($liked_targets as $liked_target){
                 //24時間以内にいいねしている場合
-                if($now - strtotime($liked_target['liked_at']) < 86400){
-                    $liked_num_24h++;
+                if($now - strtotime($liked_target['liked_at']) < $span){
+                    $liked_num++;
                 }
             }
         }
         
-        return $liked_num_24h;
+        return $liked_num;
     }
 
     //DBレコードからTwitter API 用のクエリを生成
@@ -344,7 +335,6 @@ class GenerateChainJob implements ShouldQueue
             $start_time = date("Y/m/d H:i:s", time() - env('SEARCH_TWEETS_INTERVAL'));
             $start_time_twitter = $TwitterApi->toTwitterTime($start_time);
             $tweet_list = $TwitterApi->searchTweets($search_query, $start_time_twitter, env('GET_LIKE_TARGET_NUM'));
-            //Log::debug('SEARCH TWEETS : ' . print_r($tweet_list, true));
             if(isset($tweet_list['data'])){
                 return array_column($tweet_list['data'], 'id');
             }else{
@@ -380,24 +370,24 @@ class GenerateChainJob implements ShouldQueue
     //アンフォローターゲット用メソッド
     ////////////////////////////////
 
-    //24時間以内にアンフォローした数を計算
-    protected function countUnfollowedNum24h(){
+    //指定時間以内にアンフォローした数を計算
+    protected function countUnfollowedNum($span){
         $unfollowed_accounts_builder = FollowedAccount::where('user_twitter_id', $this->user_twitter_id)
                                                     ->whereNotNull('unfollowed_at');
         $unfollowed_accounts = $unfollowed_accounts_builder->get();
         
         $now = time();
-        $unfollowed_num_24h = 0;
+        $unfollowed_num = 0;
         if($unfollowed_accounts_builder->exists()){
             foreach($unfollowed_accounts as $unfollowed_account){
                 //24時間以内にアンフォローされている場合
-                if($now - strtotime($unfollowed_account['unfollowed_at']) < 86400){
-                    $unfollowed_num_24h++;
+                if($now - strtotime($unfollowed_account['unfollowed_at']) < $span){
+                    $unfollowed_num++;
                 }
             }
         }
         
-        return $unfollowed_num_24h;
+        return $unfollowed_num;
     }
 
     //フォロー保護アカウントか確認(protected_followed_accounts_tableに登録済のアカウント)
@@ -451,11 +441,6 @@ class GenerateChainJob implements ShouldQueue
 
     //アンフォローターゲット生成メソッド
     protected function generateUnfollowTarget(){
-        //24時間以内のアンフォロー数が上限に達している場合、終了
-        if($this->countUnfollowedNum24h($this->user_twitter_id) >= env('DAILY_UNFOLLOW_LIMIT')){
-            Log::debug('UNFOLLOW 24H LIMIT');
-            return;
-        }
 
         //フォロー中のアカウントをDBから取得
         //->inRandomOrder()でランダムに結果をシャッフル
@@ -467,17 +452,19 @@ class GenerateChainJob implements ShouldQueue
         //アンフォロー開始基準のフォロー数より少ない場合、終了
         if($followed_accounts_builder->count() < env('START_BASELINE_UNFOLLOW')){
             Log::debug('UNDER BASELINE UNFOLLOW : ' .print_r($followed_accounts_builder->count(), true));
-            Log::debug('START_BASELINE_UNFOLLOW : ' .print_r(env('START_BASELINE_UNFOLLOW'), true));
             return;
         }
-        Log::debug('START GENERATE UNFOLLOW TARGET');  
+        Log::debug('START GENERATE UNFOLLOW TARGET : ' .print_r($this->user_twitter_id, true));  
         
         $now = time();
         //フォロー中のアカウント
         $followed_accounts = $followed_accounts_builder->get();
         //アンフォロー除外登録されたアカウント
         $protected_accounts = ProtectedFollowedAccount::where('user_twitter_id', $this->user_twitter_id)->get();
+        
         $unfollow_targets = array();
+        $for_check_friendship = array();
+
         foreach($followed_accounts as $followed_account){
             ////保護アカウントは除外
             if($this->checkProtectedAccount($followed_account['target_twitter_id'], $protected_accounts)){
@@ -489,33 +476,72 @@ class GenerateChainJob implements ShouldQueue
                 Log::debug('UNDER FOLLOWING TIME BASELINE ACCOUNT : ' .print_r($followed_account['target_twitter_id'], true));
                 continue;
             }
-            //非アクティブ期間が指定期間より短い場合
-            if($now - strtotime($followed_account['last_active_at']) < env('INACTIVE_BASELINE_UNFOLLOW')){
-                //Log::debug('CHECK RELATION');
-                $relation = $this->checkFriendship($followed_account['target_twitter_id']);
-                
-                //相手からフォローされていれば除外
-                if($relation === 'friend'){
-                    Log::debug('FRIEND ACCOUNT : ' .print_r($followed_account['target_twitter_id'], true));
-                    continue;
-                //API制限エラーでループ終了
-                }elseif($relation === 'limit'){
-                    Log::debug('API LIMIT - GET FOLLOWING');
-                    break;
-                }
-            }
-            //ここまで除外されなかったアカウントはアンフォローターゲットへ追加
-            $target = ['followed_accounts_id' => $followed_account['id'],
+            //非アクティブ期間が指定期間より長い場合はアンフォローターゲットに追加
+            if($followed_account['last_active_at'] && strtotime($followed_account['updated_at']) - strtotime($followed_account['last_active_at']) > env('INACTIVE_BASELINE_UNFOLLOW')){
+                $target = ['followed_accounts_id' => $followed_account['id'],
                         'target_twitter_id' => $followed_account['target_twitter_id']];
-            array_push($unfollow_targets, $target);
+                array_push($unfollow_targets, $target);
+                continue;
+            //指定期間以外の場合はフォローバック済か確認する用の配列に格納
+            }else{
+                array_push($for_check_friendship, $followed_account);
+            }
+            //非アクティブ期間が指定期間より短い場合
+            // if($now - strtotime($followed_account['last_active_at']) < env('INACTIVE_BASELINE_UNFOLLOW')){
+                
+            //     $relation = $this->checkFriendship($followed_account['target_twitter_id']);
+                
+            //     //相手からフォローされていれば除外
+            //     if($relation === 'friend'){
+            //         Log::debug('FRIEND ACCOUNT : ' .print_r($followed_account['target_twitter_id'], true));
+            //         continue;
+            //     //API制限エラーでループ終了
+            //     }elseif($relation === 'limit'){
+            //         Log::debug('API LIMIT - GET FOLLOWING');
+            //         break;
+            //     }
+            // }
+            //ここまで除外されなかったアカウントはアンフォローターゲットへ追加
+            // $target = ['followed_accounts_id' => $followed_account['id'],
+            //             'target_twitter_id' => $followed_account['target_twitter_id']];
+            // array_push($unfollow_targets, $target);
+        }
+
+        foreach($for_check_friendship as $followed_account){
+            //アンフォローターゲットは生成数を制限
+            if(count($unfollow_targets) >= env('UNFOLLOW_TARGET_GENERATE_NUM')){
+                break;
+            }
+
+            $relation = $this->checkFriendship($followed_account['target_twitter_id']);
+            //相手からフォローされていれば除外
+            if($relation === 'friend'){
+                Log::debug('FRIEND ACCOUNT : ' .print_r($followed_account['target_twitter_id'], true));
+                continue;
+            //API制限エラーでループ終了
+            }elseif($relation === 'limit'){
+                Log::debug('API LIMIT - GET FOLLOWING');
+                break;
+            //その他アンフォロー
+            }else{
+                $target = ['followed_accounts_id' => $followed_account['id'],
+                    'target_twitter_id' => $followed_account['target_twitter_id']];
+                array_push($unfollow_targets, $target);
+                Log::debug('NOT FRIEND ACCOUNT : ' .print_r($followed_account['target_twitter_id'], true));
+            }
+        }
+
+        //アンフォローターゲットは生成数を制限
+        if(count($unfollow_targets) >= env('UNFOLLOW_TARGET_GENERATE_NUM')){
+            $unfollow_targets = array_slice($unfollow_targets, 0, env('UNFOLLOW_TARGET_GENERATE_NUM'));
         }
         Log::debug('UNFOLLOW TARGETS : ' .print_r($unfollow_targets, true));
         //ターゲットのDB登録
-        foreach($unfollow_targets as $follow_target){
+        foreach($unfollow_targets as $unfollow_target){
             UnfollowTarget::create([
-                'followed_accounts_id' => $follow_target['followed_accounts_id'],
+                'followed_accounts_id' => $unfollow_target['followed_accounts_id'],
                 'user_twitter_id' => $this->user_twitter_id,
-                'target_twitter_id' => $follow_target['target_twitter_id'],                
+                'target_twitter_id' => $unfollow_target['target_twitter_id'],                
             ]);
         }
     }
@@ -535,32 +561,35 @@ class GenerateChainJob implements ShouldQueue
             $follow_targets = $follow_targets_builder->get();
             foreach($follow_targets as $target){
 
-                $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                        env('API_SECRET'), 
-                                        env('BEARER'), 
-                                        env('CLIENT_ID'), 
-                                        env('CLIENT_SECRET'), 
-                                        env('REDIRECT_URI'));
+                //API制限対策とフォロー効率のため機能OFF
+                // $TwitterApi = new TwitterApi(env('API_KEY'), 
+                //                         env('API_SECRET'), 
+                //                         env('BEARER'), 
+                //                         env('CLIENT_ID'), 
+                //                         env('CLIENT_SECRET'), 
+                //                         env('REDIRECT_URI'));
 
-                $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
-                $TwitterApi->setTokenToHeader($access_token);
+                // $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
+                // $TwitterApi->setTokenToHeader($access_token);
 
-                $last_active_time = $TwitterApi->checkLastActiveTime($target['target_twitter_id']);
-                //API制限で取得できていなければジョブ生成終了
-                if($last_active_time === strtotime("1980-01-01")){
-                    Log::debug('API LIMIT - CHECK LAST ACTIVE TIME - IN GENERATE CHAIN JOB');
-                    break;
-                }
-                $now = time();
-                //非アクティブ期間が指定期間以上であれば、ジョブ生成せずにターゲットのレコード削除
-                if($now - $last_active_time > env('INACTIVE_BASELINE_UNFOLLOW')){
-                    //$follow_target_builder->forceDelete();
-                    FollowTarget::find($target['id'])->forceDelete();
-                    Log::debug('DELETE FOLLOW TARGET RECORD : ' . print_r($target['id'], true));
-                    continue;
-                }
+            
+                // $last_active_time = $TwitterApi->checkLastActiveTime($target['target_twitter_id']);
+                // //API制限で取得できていなければジョブ生成終了
+                // if($last_active_time === strtotime("1980-01-01")){
+                //     Log::debug('API LIMIT - CHECK LAST ACTIVE TIME - IN GENERATE CHAIN JOB');
+                //     break;
+                // }
+                // $now = time();
+                // //非アクティブ期間が指定期間以上であれば、ジョブ生成せずにターゲットのレコード削除
+                // if($now - $last_active_time > env('INACTIVE_BASELINE_UNFOLLOW')){
+                //     //$follow_target_builder->forceDelete();
+                //     FollowTarget::find($target['id'])->forceDelete();
+                //     Log::debug('DELETE FOLLOW TARGET RECORD : ' . print_r($target['id'], true));
+                //     continue;
+                // }
 
-                $job = new FollowJob($target['id'], $this->user_twitter_id, $target['target_twitter_id'], $last_active_time);
+                // $job = new FollowJob($target['id'], $this->user_twitter_id, $target['target_twitter_id'], $last_active_time);
+                $job = new FollowJob($target['id'], $this->user_twitter_id, $target['target_twitter_id']);
                 array_push($jobs, $job);
             }
             $follow_targets_builder->update(['thrown_at' => date("Y/m/d H:i:s")]);
@@ -607,14 +636,70 @@ class GenerateChainJob implements ShouldQueue
         return $jobs;
     }
 
-    //ジョブチェーンを生成、ジョブテーブルに投入
-    protected function throwJobChain()
+    //各アカウントごとのフォローの24時間上限を計算
+    protected function calcFolloLimit24h()
     {
-        $redady_chain_job = [new ReadyChainJob($this->user_twitter_id)];
-        $follow_jobs = $this->makeFollowJobs();
-        $like_jobs = $this->makeLikeJobs();
-        $unfollow_jobs = $this->makeUnfollowJobs();
+        $data_builder = TwitterAccountData::where('twitter_id', $this->user_twitter_id)
+                                    ->latest()
+                                    ->select('following', 'followers');
 
+        if(!$data_builder->exists()){
+            $follow_limit = 50;
+            Log::debug('FOLLOW LIMIT NUM - NO TWITTER DATA : ' .print_r($follow_limit, true)); 
+
+            return $follow_limit;
+        }
+
+        $data = $data_builder->first();
+        Log::debug('TWITTER DATA LATEST : ' .print_r($data, true)); 
+
+        if($data['following'] < 5000 ){
+            //各アカウントのフォロワー数から計算したフォロー上限か、Kamitter規定の上限の小さい方を取得
+            $follow_limit = (int)min([$data['followers'] * 0.1 + 50, env('DAILY_FOLLOW_LIMIT')]);
+        }else{
+            //フォローが5000人を超えた場合、フォロー総数の上限をフォロワー総数の1.1倍までとして計算
+            $follow_limit = (int)min([$data['followers'] * 1.1 - $data['following'], env('DAILY_FOLLOW_LIMIT')]);
+        }
+        Log::debug('FOLLOW LIMIT NUM : ' .print_r($follow_limit, true)); 
+
+        return $follow_limit;
+    }
+
+    //ジョブチェーンを生成、ジョブテーブルに投入
+    protected function throwJobChain($liking_flag, $following_flag, $unfollowing_flag)
+    {
+        $liked_num_24h = $this->countlikedNum(60*60*24);
+        $folloewd_num_24h = $this->countFollowedNum(60*60*24);
+        $unfolloewd_num_24h = $this->countUnfollowedNum(60*60*24);
+
+        $redady_chain_job = [new ReadyChainJob($this->user_twitter_id)];
+        $like_jobs = array();
+        $follow_jobs = array();
+        $unfollow_jobs = array();
+
+        //いいね稼働設定　かつ　今回のいいねを含めて１時間のいいねが指定値を超えない場合 　かつ　1日のいいねが指定値を超えない場合
+        if($liking_flag 
+            && $this->countLikedNum(60*60*1) <= env('HOURLY_LIKE_LIMIT') - env('CONSECUTIV_LIKE_LIMIT')
+            && $liked_num_24h <= env('DAILY_LIKE_LIMIT') - env('CONSECUTIV_LIKE_LIMIT'))
+        {
+            $like_jobs = $this->makeLikeJobs();
+        } 
+        //自動フォロー稼働設定　かつ　今回のフォロー含めて１時間のフォローが指定値を超えない場合　かつ　1日のフォローが指定値が上限を超えない場合
+        if($following_flag 
+            && $this->countFollowedNum(60*60*1) <= env('HOURLY_FOLLOW_LIMIT') - env('CONSECUTIV_FOLLOW_LIMIT')
+            && $folloewd_num_24h <= $this->calcFolloLimit24h() - env('CONSECUTIV_FOLLOW_LIMIT'))
+        {
+            $follow_jobs = $this->makeFollowJobs();
+        } 
+        //自動アンフォロー稼働設定　かつ　今回のアンフォロー含めて１時間のアンフォローが指定値を超えない場合　かつ　1日のアンフォローが指定値が上限を超えない場合
+        if($unfollowing_flag 
+            && $this->countUNFollowedNum(60*60*1) <= env('HOURLY_UNFOLLOW_LIMIT') - env('CONSECUTIV_UNFOLLOW_LIMIT')
+            //1日上限算出メソッドはフォロー用のメソッドを流用
+            && $unfolloewd_num_24h <= $this->calcFolloLimit24h() - env('CONSECUTIV_UNFOLLOW_LIMIT'))
+        {
+            $unfollow_jobs = $this->makeUnfollowJobs();
+        } 
+        
         //全てのジョブが空だった場合はジョブチェーンを発行せず終了
         if(empty($follow_jobs) && empty($like_jobs) && empty($unfollow_jobs)){
             Log::debug('EMPTY ALL JOBS');
@@ -626,6 +711,7 @@ class GenerateChainJob implements ShouldQueue
         TwitterAccount::find($this->user_twitter_id)->update(['waiting_chain_flag' => true]);
     }
 
+
     /**
      * Execute the job.
      */
@@ -633,13 +719,13 @@ class GenerateChainJob implements ShouldQueue
     {
         $account_status = TwitterAccount::where('twitter_id', $this->user_twitter_id)->first();
 
-        $liked_num_24h = $this->countlikedNum24h($this->user_twitter_id);
-        $folloewd_num_24h = $this->countFollowedNum24h($this->user_twitter_id);
-        $unfolloewd_num_24h = $this->countUnfollowedNum24h($this->user_twitter_id);
+        $liked_num_24h = $this->countlikedNum(60*60*24);
+        $folloewd_num_24h = $this->countFollowedNum(60*60*24);
+        $unfolloewd_num_24h = $this->countUnfollowedNum(60*60*24);
 
         //ライクターゲット生成
         //自動いいねが稼働設定、かつ24時間の実行制限数を超えていない場合に実施
-        if($account_status['liking_flag'] && $liked_num_24h <= env('DAILY_LIKE_LIMIT') - env('CONSECUTIV_LIKE_LIMIT')){
+        if($account_status['liking_flag']){
             $this->generateLikeTarget();
         }else {
             Log::debug('LIKING FLAG : FALSE');
@@ -647,7 +733,7 @@ class GenerateChainJob implements ShouldQueue
 
         //フォローターゲット生成
         //自動フォローが稼働設定、かつ24時間の実行制限数を超えていない場合に実施
-        if($account_status['following_flag'] && $liked_num_24h <= env('DAILY_FOLLOW_LIMIT') - env('CONSECUTIV_FOLLOW_LIMIT')){
+        if($account_status['following_flag']){
             $this->generateFollowTarget();
         }else {
             Log::debug('FOLLOWING FLAG : FALSE');
@@ -655,19 +741,19 @@ class GenerateChainJob implements ShouldQueue
         
         //アンフォローターゲット生成
         //自動アンフォローが稼働設定、かつ24時間の実行制限数を超えていない場合に実施
-        if($account_status['unfollowing_flag'] && $liked_num_24h <= env('DAILY_UNFOLLOW_LIMIT') - env('CONSECUTIV_UNFOLLOW_LIMIT')){
+        if($account_status['unfollowing_flag']){
             $this->generateUnfollowTarget();
         }else {
-            Log::debug('UNFOLLOWING FLAG : FALSE');
+            Log::debug('UNFOLLOWING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));  
         }
         
 
         //全ての自動機能がオフの場合はジョブチェーンを発行しない
         if($account_status['following_flag'] || $account_status['liking_flag'] || $account_status['unfollowing_flag']){
-            Log::debug('THROW JOB CHAIN');
-            $this->throwJobChain();
+            Log::debug('THROW JOB CHAIN : ' .print_r($this->user_twitter_id, true));  
+            $this->throwJobChain($account_status['liking_flag'], $account_status['following_flag'], $account_status['unfollowing_flag']);
         }else{
-            Log::debug('ALL WORKING FLAG : FALSE');
+            Log::debug('ALL WORKING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));  
         }
         
     }

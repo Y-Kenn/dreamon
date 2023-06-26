@@ -1,12 +1,18 @@
 .p-setting{
     &__email{
         margin-left: 200px;
+        @include mq(sm){
+            margin-left: 0;
+        }
         &__input{
             width: 400px;
             height: 4rem;
             font-size: $font-size_m;
             padding: 1rem 2rem;
             vertical-align: middle;
+            @include mq(sm){
+                width: 100%;
+            }
         }
         
     
@@ -19,11 +25,17 @@
             width: 180px;
             font-size: $font-size_m;
             margin-right: 2rem;
+            @include mq(sm){
+                text-align: left;
+            }
         }
         &__input{
             width: 400px;
             height: 4rem;
             font-size: $font-size_m;
+            @include mq(sm){
+                width: 100%;
+            }
         }
     }
     &__submit{
@@ -35,6 +47,11 @@
         font-size: $font-size_s;
         margin-left: 3rem;
         vertical-align: middle;
+        @include mq(sm){
+            display: block;
+            width: 100px;
+            margin: 1.5rem auto 0 auto;
+        }
     }
     &__error{
         & > span{

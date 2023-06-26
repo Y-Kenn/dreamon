@@ -1,16 +1,89 @@
 .p-sidenav{
+    z-index: 1;
     height: 100%;
     width: 100%;
     border-right: 1px solid #ddd;
     position: sticky;
     top: 0;
     height: 100vh;
+    background-color: white;
+    @include mq(){
+        height: 70px;
+    }
+    &__header{
+        overflow: hidden;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        @include mq(){
+            box-shadow: 0 1px 3px #cacaca;
+        }
+        &__triggar{
+            display: none;
+            position: relative;
+            @include mq(){
+                display: inline-block;
+                // flex-direction: column;
+                // justify-content: space-around;
+                width: 50px;
+                height: 50px;
+                margin-right: 15px;
+            }
+            & > span{
+                position: absolute;
+                display: inline-block;
+                border-bottom: 2px solid #ddd;
+                border-radius: 2px;
+                width: 50px;
+                transition: 0.5s;
+                &:nth-of-type(1){
+                    top: 11px;
+                }
+                &:nth-of-type(2){
+                    top: 25px;
+                }
+                &:nth-of-type(3){
+                    top: 39px;
+                }
+            }
+            &--active > span{
+                transition: 0.5s;
+                &:nth-of-type(1){
+                    transform: translateY(12px) rotate(-45deg);
+                }
+                &:nth-of-type(2){
+                    opacity: 0;
+                }
+                &:nth-of-type(3){
+                    transform: translateY(-15px) rotate(45deg);
+                }
+            }
+        }
+    }
     &__logo{
         width: 100%;
         padding: 7px;
+        display: inline-block;
+        @include mq(){
+            width: 170px;
+        }
         &>img{
             max-width: 100%;
         }
+    }
+    &__nav{
+        @include mq(){
+            width: 300px;
+            height: 200vh;
+            transition: all .5s;
+            position: absolute;
+            top: 80;
+            right: -301px;
+            background-color: white;
+            &--active{
+                transform: translateX(-300px);
+            }
+    }
     }
     &__account{
         //border: 1px solid#ddd;
@@ -25,7 +98,10 @@
         border-radius: 7px;
         box-shadow: inset 5px 5px 10px #dedede,
             inset -5px -5px 10px #ffffff;
-        // overflow: hidden;
+        @include mq(){
+            margin: 2rem auto 3rem auto;
+        }
+
     }
     &__info{
         margin-top: 5px;
@@ -48,10 +124,14 @@
         width: 100%;
         display: flex;
         align-items: center;
-        height: 60px;
+        height: 55px;
         padding-left: 2rem;
         border-top: 1px solid #eee;
         transition: 0.4s;
+        @include mq(){
+            padding-left: 5rem;
+            height: 60px;
+        }
         &:last-child{
             border-bottom: 1px solid#eee;
         }

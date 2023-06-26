@@ -1,11 +1,13 @@
 .l-tweet_reserve{
     display: flex;
-
+    @include mq(){
+        flex-direction: column;
+    }
     &__reserve{
-        width: 50%;
+        width: 100%;
     }
     &__tweets{
-        width: 50%;
+        width: 100%;
         & > div{
             margin: auto;
         }

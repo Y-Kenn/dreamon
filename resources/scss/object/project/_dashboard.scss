@@ -4,7 +4,7 @@
     &__header{
         height: 6rem;
         display: flex;
-        align-items: center;
+        align-items: baseline;
         font-size: $font-size_l;
         font-weight: bold;
         margin-left: 1.2rem;
@@ -21,6 +21,9 @@
         padding: 1.5rem;
         box-sizing: border-box;
         border-bottom: 1px solid #72b1fb;
+        @include mq(){
+            width: 50%;
+        }
         &__title{
             
             height: 3rem;

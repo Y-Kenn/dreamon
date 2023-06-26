@@ -1,14 +1,17 @@
 .u-font_size{
-    &__ss{
+    &--ss{
         font-size: $font-size_ss;
     }
-    &__s{
+    &--s{
         font-size: $font-size_s;
     }
-    &__m{
+    &--m{
         font-size: $font-size_m;
     }
-    &__l{
+    &--l{
         font-size: $font-size_l;
+    }
+    &--xl{
+        font-size: $font-size_xl;
     }
 }

@@ -11,11 +11,14 @@
         margin-left: 20px;
         margin-top: 10px;
         border-radius: 3rem;
-
+        @include mq(sm){
+            margin-left: 10px;
+        }
     }
 
     &__inner{
         margin-bottom: 2rem;
+        
     }
     
     &__input{
@@ -27,6 +30,10 @@
         margin-left: 1rem;
         vertical-align: middle;
         background-color: $background-color_soft;
+        @include mq(sm){
+            width: 200px;
+            margin-left: 0;
+        }
         
     }
     &__exclude{
@@ -56,6 +63,9 @@
         border-radius: 10rem;
         font-size: $font-size_s;
         margin-left: 4rem;
+        @include mq(sm){
+            margin-left: 1rem;
+        }
     }
     &__delete{
         margin-left: 0.3rem;

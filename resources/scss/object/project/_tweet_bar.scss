@@ -4,6 +4,11 @@
     &__inner{
         display: flex;
         flex-direction: column;
+        width: 350px;
+        margin: auto;
+        @include mq(){
+            width: 100%;
+        }
         // border-left: 1px solid#ddd;
         // border-right: 1px solid#ddd;
     }
@@ -13,8 +18,11 @@
         // padding-top: 0;
         // overflow: hidden;
         // margin-bottom: 0.5rem;
-        max-width: 350px;
+        width: 100%;
         transition: 0.5s;
+        @include mq(){
+            padding: 0.5rem 2rem;
+        }
         &__text{
             font-size: $font-size_s;
             padding-left: 0.5rem;

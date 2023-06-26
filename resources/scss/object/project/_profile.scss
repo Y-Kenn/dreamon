@@ -20,7 +20,7 @@
         }
         & > input[type=text]{
             height: 4rem;
-            width: 300px;
+            width: 280px;
             border-left: none;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
@@ -28,6 +28,9 @@
             vertical-align: middle;
             padding-left: 1.5rem;
             background-color: $background-color_soft;
+            @include mq(sm){
+                width: 210px;
+            }
         }
     }
     &__submit{
@@ -38,6 +41,11 @@
         font-size: $font-size_s;
         margin-left: 4rem;
         vertical-align: middle;
+        @include mq(sm){
+            // display: block;
+            // margin: 0 auto;
+            margin-left: 1rem;
+        }
     }
     &__item{
         border: 1px solid#ddd;
@@ -46,8 +54,15 @@
         border-radius: 15px;
         // box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
         // -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        @include mq(md){
+           padding: 1rem 2rem;
+        }
         &__header{
             width: 23%;
+            @include mq(md){
+                width: 100%;
+                margin-bottom: 1rem;
+            }
             & img{
                 width: 60px;
                 height: 60px;
@@ -57,6 +72,10 @@
         }
         &__description{
             width: 47%;
+            @include mq(md){
+                width: 100%;
+                margin-bottom: 1rem;
+            }
         }
         &__data{
             display: flex;
@@ -68,6 +87,10 @@
             height: 9rem;
             justify-content: space-between;
             margin-right: 2rem;
+            @include mq(md){
+                width: 200px;
+                margin-bottom: 1rem;
+            }
         }
         &__delete{
             margin-right: 2rem;
@@ -82,6 +105,10 @@
             text-align: center;
             width: 50%;
             margin-left: 70px;
+            @include mq(md){
+                margin: auto;
+                width: 170px;
+            }
             &--active{
                 background-image: linear-gradient(160deg,#7acdf3,#98d1be);
                 color: #fff;

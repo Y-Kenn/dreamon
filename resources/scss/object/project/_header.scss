@@ -7,6 +7,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @include mq(sm){
+        padding: 3px 10px;
+    }
     &__logo{
         width: 160px;
         vertical-align: middle;
@@ -21,12 +25,19 @@
             background-color: #fff;
             border-radius: 30px;
             width: 220px;
+            @include mq(sm){
+                width: 200px;
+                font-size: $font-size_ss;
+            }
         }
         &--login{
             font-size: $font-size_m;
             background-color: #fff;
             border-radius: 30px;
             width: 150px;
+            @include mq(sm){
+                width: 100px;
+            }
         }
     }
 }

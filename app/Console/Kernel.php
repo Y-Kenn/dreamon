@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
         // })->everyMinute();
 
         //ジョブチェーンのキュー投入(フォロー・ライク・アンフォロー)
-        $schedule->command('throw-chains')->everyFiveMinutes();
+        $schedule->command('throw-chains')->everyMinute();//everyFiveMinutes();
         //予約ツイートジョブのキュー投入(予約ツイートのジョブは最優先にする)
         $schedule->command('throw-tweets')->everyMinute();
         //followed_accounts table の更新
