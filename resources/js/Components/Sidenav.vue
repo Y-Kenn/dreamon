@@ -42,9 +42,9 @@
                 <router-link @click="slideSidenav" to="/like" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-heart-circle-check u-margin--right--10px"></i>いいね</router-link>
                 <router-link @click="slideSidenav" to="/tweet" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-comment-medical u-margin--right--10px"></i>ツイート予約</router-link>
                 <router-link @click="slideSidenav" to="/twitter-account" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-right-left u-margin--right--10px"></i>アカウント切り替え</router-link>
-                <router-link @click="slideSidenav" to="/setting" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-gear u-margin--right--10px"></i>設定</router-link>
+                <router-link @click.prevent.stop="slideSidenav" to="/setting" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-gear u-margin--right--10px"></i>設定</router-link>
                 <!-- <a href="" class="p-sidenav__item"><i class="fa-solid fa-circle-question u-margin--right--10px"></i>ヘルプ</a> -->
-                <a @click="logout" href="" class="p-sidenav__item"><i class="fa-solid fa-right-from-bracket u-margin--right--10px"></i>ログアウト</a>
+                <a @click.prevent.stop="logout" href="" class="p-sidenav__item"><i class="fa-solid fa-right-from-bracket u-margin--right--10px"></i>ログアウト</a>
             </div>
         </div>
     </div>

@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /config/database.php
 /resources/views/loading.blade.php
+vite.config.js
