@@ -9,7 +9,7 @@
         <Account v-for="account in protected_accounts"
                         v-bind:key="account.record_id"
                         v-bind:info="account"
-                        v-bind:url="'http://localhost/protected-account'"
+                        v-bind:url="url_protected_account"
                         @delete="getProtectedAccounts" />
     </div>
     
@@ -32,19 +32,18 @@ export default {
         const getProtectedAccounts = async ()=>{
             store.dispatch('getProtectedAccounts');
         }
-        
+        const url_protected_account = import.meta.env.VITE_URL_PROTECTED_ACCOUNT;
         const createProtectedAccount = async ()=>{
-            const url = 'http://localhost/protected-account';
             console.log('POST');
             console.log(twitter_name);
-            const result = await axios.post(url, twitter_name)
+            const result = await axios.post(url_protected_account, twitter_name)
                             .then(res =>{
                                 twitter_name.twitter_name = '';
                                 getProtectedAccounts();
                             });
         }
         
-        return { protected_accounts, twitter_name, getProtectedAccounts, createProtectedAccount }
+        return { protected_accounts, twitter_name, getProtectedAccounts, createProtectedAccount, url_protected_account }
 
     }
 }

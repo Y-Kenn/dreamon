@@ -26,7 +26,8 @@ export default {
             email: '',
         });
         const updateEmail = async ()=>{
-            let result = await axios.put('http://localhost/email/1', email)
+            const url = import.meta.env.VITE_URL_EMAIL;
+            let result = await axios.put(url + '/1', email)
                                     .then(res =>{
                                         store.dispatch('getEmailAddress');
                                     }).catch(res=>{

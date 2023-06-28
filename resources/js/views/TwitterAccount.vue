@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="p-change_account">
-                <a v-if=" my_accounts.length < max_accounts " class="p-change_account__add c-button c-button--submit" href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id=ZjZHYkRfS0JKLVpWb2NudlJIQTQ6MTpjaQ&redirect_uri=http%3A%2F%2Flocalhost%2Floading&scope=users.read+tweet.read+list.read+like.read+follows.read+follows.write+tweet.write+like.write+offline.access&state=7fLCZLoNqH33-WzLIAFg2QJ6VCaKq6G4GU5MlfnCmCo&code_challenge=JbNNjq_oyqUgUokY8sIs3lrmobD21ZY96Wjrma3661w&code_challenge_method=s256">アカウントを追加</a>
+                <a v-if=" my_accounts.length < max_accounts " class="p-change_account__add c-button c-button--submit" :href="url_twitter_oauth">アカウントを追加</a>
                 <span v-else class="p-change_account__reached c-button" >最大数に達しました</span>
             </div>
             
@@ -18,7 +18,7 @@
             <MyAccount v-for="account in my_accounts"
                         v-bind:key="account.record_id"
                         v-bind:info="account"
-                        v-bind:url="'http://localhost/change-account'"
+                        v-bind:url="url_change_account"
                         @put="getAllData"
                         @delete="getAccounts" />
         </div>
@@ -40,7 +40,8 @@ export default {
     components: { MyAccount },
     setup(props){
         const store = useStore();
-
+        const url_twitter_oauth = import.meta.env.VITE_URL_TWITTER_OAUTH;
+        const url_change_account = import.meta.env.VITE_URL_CHANGE_ACCOUNT;
         let my_accounts = computed(()=> store.state.my_accounts);
         let max_accounts = computed(()=> store.state.max_accounts);
         const getAccounts = ()=>{
@@ -60,7 +61,7 @@ export default {
         }
             
         
-        return { getAccounts, getAllData, my_accounts, max_accounts };
+        return { getAccounts, getAllData, my_accounts, max_accounts, url_twitter_oauth, url_change_account };
     }
 }
 </script>

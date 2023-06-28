@@ -62,7 +62,7 @@ export default {
             // console.log(reserved_tweets.data);
         };
         const createTweet = async ()=>{
-            const url = 'http://localhost/reserved-tweet';
+            const url = import.meta.env.VITE_URL_RESERVED_TWEET;
             console.log(new_tweet);
             const result = await axios.post(url, new_tweet)
                             .then(res =>{

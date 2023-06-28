@@ -11,7 +11,7 @@
                     v-bind:id="keyword.id"
                     v-bind:not_flag="keyword.not_flag"
                     v-bind:text="keyword.keywords"
-                    v-bind:url="'http://localhost/follow-keywords'"
+                    v-bind:url="url_follow_keyword"
                     @delete="getKeywords" />
     </div>
     
@@ -45,19 +45,19 @@ export default {
         const toggleNotFlag = ()=>{
             new_keywords.not_flag = (new_keywords.not_flag) ? false : true;
         }
+        const url_follow_keyword = import.meta.env.VITE_URL_FOLLOW_KEYWORDS;
         const createKeywords = async ()=>{
-            const url = 'http://localhost/follow-keywords';
             console.log('POST');
             console.log(new_keywords);
             new_keywords.keywords = new_keywords.keywords.replace(/　/g, ' ');
-            const result = await axios.post(url, new_keywords)
+            const result = await axios.post(url_follow_keyword, new_keywords)
                             .then(res =>{
                                 getKeywords();
                                 new_keywords.keywords = "";
                                 new_keywords.not_flag = false;
                             });
         }
-        return { keywords, new_keywords, createKeywords, getKeywords, toggleNotFlag };
+        return { keywords, new_keywords, createKeywords, getKeywords, toggleNotFlag, url_follow_keyword };
     }
 }
 </script>

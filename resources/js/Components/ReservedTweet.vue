@@ -40,7 +40,7 @@ export default {
         const date = moment(props.reserved_date).format('YYYY/M/D HH:mm');
         console.log(props.reserved_date);
         const deleteReservedTweet = async ()=>{
-            const url = 'http://localhost/reserved-tweet'+ '/' + props.id;
+            const url = import.meta.env.VITE_URL_RESERVED_TWEET + '/' + props.id;
             console.log('Delete');
             const result = await axios.delete(url, {
                                         data: props.id})

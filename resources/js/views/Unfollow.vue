@@ -41,7 +41,7 @@ export default {
             store.dispatch('getProcessStatuses');
         };
         const toggleStatus = async ()=>{
-            const url = 'http://localhost/process-status/1';
+            const url = import.meta.env.VITE_URL_PROCESS_STATUS + '/1';
             console.log(status.value.status);
             const new_status = status.value.status ? false : true;
             const result = await axios.put(url, {flag_name: 'unfollowing_flag',

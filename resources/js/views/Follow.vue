@@ -49,7 +49,7 @@ export default {
             // console.log(result.data.twitter_id);
         }
         const toggleStatus = async ()=>{
-            const url = 'http://localhost/process-status/1';
+            const url = import.meta.env.VITE_URL_PROCESS_STATUS + '/1';
             const new_status = status.value.status ? false : true;
             const result = await axios.put(url, {flag_name: 'following_flag',
                                                     status: new_status})

@@ -80,7 +80,7 @@ export default {
             }else{
                 console.log('match');
             }
-            const url = 'http://localhost/regist-password/1';
+            const url = import.meta.env.VITE_URL_REGIST_PASSWORD + '/1';
             let result = await axios.put(url, password)
                                     .then(res =>{
                                         password.password = '';

@@ -9,7 +9,7 @@
         <Account v-for="account in base_accounts"
                         v-bind:key="account.id"
                         v-bind:info="account"
-                        v-bind:url="'http://localhost/target-base'"
+                        v-bind:url="url_target_base"
                         @delete="getFollowBases" />
     </div>
     
@@ -37,18 +37,17 @@ export default {
             // console.log(result);
             // base_accounts.data = result.data;
         }
-        
+        const url_target_base = import.meta.env.VITE_URL_TARGET_BASE;
         const createFollowBase = async ()=>{
-            const url = 'http://localhost/target-base';
             console.log('POST');
             console.log(twitter_name);
-            const result = await axios.post(url, twitter_name)
+            const result = await axios.post(url_target_base, twitter_name)
                             .then(res =>{
                                 getFollowBases();
                                 twitter_name.twitter_name = '';
                             });
         }
-        return { base_accounts, twitter_name, getFollowBases, createFollowBase }
+        return { base_accounts, twitter_name, getFollowBases, createFollowBase, url_target_base }
 
     }
 }

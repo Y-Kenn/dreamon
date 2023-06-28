@@ -65,7 +65,7 @@ export default {
             store.dispatch('getMyAccounts');
         }
         const logout = async ()=>{
-            const url = 'http://localhost/logout';
+            const url = import.meta.env.VITE_URL_LOGOUT;
             let result = await axios.post(url);
             console.log(result);
         }

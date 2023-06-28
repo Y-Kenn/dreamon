@@ -69,6 +69,7 @@ export default createStore({
         //パフォーマンスを取得
         async getPerformances(){
             // const url = 'http://localhost/twitter-data';
+            console.log('unko');
             const url = import.meta.env.VITE_URL_TWITTER_DATA;
             const result = await axios.get(url);
             this.state.performances = result.data;

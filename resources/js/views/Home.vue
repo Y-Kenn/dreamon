@@ -69,7 +69,7 @@ export default {
         const updateLockedFlag = async ()=>{
             const update_confirm = confirm('Twitterアカウントが凍結されていないことを確認しましたか？');
             if(update_confirm){
-                const url = 'http://localhost/locked/1'
+                const url = import.meta.env.VITE_URL_LOCKED + '/1'
                 const result = await axios.put(url, {locked_flag: false})
                                 .then(res =>{
                                     store.dispatch('getLockedFlag');
