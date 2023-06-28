@@ -66,7 +66,10 @@ export default {
         }
         const logout = async ()=>{
             const url = import.meta.env.VITE_URL_LOGOUT;
-            let result = await axios.post(url);
+            let result = await axios.post(url)
+                                .then(res =>{
+                                    window.location.href = import.meta.env.VITE_URL_LOGIN;
+                                });
             console.log(result);
         }
         const displayInfo = ()=>{

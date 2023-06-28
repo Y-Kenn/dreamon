@@ -142,6 +142,7 @@
         }
         &:hover{
             background-color: $background-color_hover;
+            cursor: pointer;
         }
     }
 }

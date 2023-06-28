@@ -14,7 +14,7 @@ export const axiosErrorHandle = ()=>{
           return Promise.reject(error.response?.data);
         case 401:
   　　　　　console.log('axios error status : 401');// ステータスコード別の処理
-            window.location.href = 'http://localhost/login';
+            window.location.href = window.location.href = import.meta.env.VITE_URL_LOGIN;
   
           return Promise.reject(error.response?.data);
         default:
