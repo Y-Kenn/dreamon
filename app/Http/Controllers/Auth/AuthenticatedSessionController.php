@@ -43,7 +43,7 @@ class AuthenticatedSessionController extends Controller
         Session::put('twitter_id', $data['twitter_id']);
 
         // return redirect()->intended(RouteServiceProvider::HOME);
-        return redirect('/');
+        return redirect('/home');
     }
 
     /**

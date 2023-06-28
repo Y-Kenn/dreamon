@@ -36,7 +36,7 @@ class ThrowJobChainsCommand extends Command
         if(!$twitter_accounts_builder->exists()){
             Log::debug('ALL TWITTER ACCOUNTS BUSY');
             return;
-        } 
+        }
 
         $twitter_accounts = $twitter_accounts_builder->get();
         foreach($twitter_accounts as $account){
