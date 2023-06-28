@@ -30,7 +30,7 @@ Log::debug('LOADING');
 
         var form = document.createElement('form');
         form.method = 'POST';
-        form.action = env('TWITTER_REGISTER_URL');
+        form.action = 'http://localhost/twitter-register';
         
         var request_verify = document.createElement('input');
         request_verify.type = 'hidden'; 
@@ -72,7 +72,7 @@ Log::debug('LOADING');
             };
             var token = document.getElementsByName('csrf-token').item(0).content; // 追加
             xhr.responseType = 'json';
-            xhr.open('POST', env('TWITTER_REGISTER_URL'), true);
+            xhr.open('POST', 'http://localhost/twitter-register', true);
             xhr.setRequestHeader('X-CSRF-Token', token); // 追加
             xhr.setRequestHeader("Content-Type", "application/json");
             request_data = JSON.stringify({code_verifier: verify, code: code});

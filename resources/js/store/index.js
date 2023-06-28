@@ -68,19 +68,22 @@ export default createStore({
     actions: {
         //パフォーマンスを取得
         async getPerformances(){
-            const url = 'http://localhost/twitter-data';
+            // const url = 'http://localhost/twitter-data';
+            const url = import.meta.env.VITE_URL_TWITTER_DATA;
             const result = await axios.get(url);
             this.state.performances = result.data;
         },
         //Twitterアカウント凍結フラグを取得
         async getLockedFlag(){
-            const url = 'http://localhost/locked';
+            // const url = 'http://localhost/locked';
+            const url = import.meta.env.VITE_URL_LOCKED;
             const result = await axios.get(url);
             this.state.locked_flag = result.data.locked_flag;
         },
         //自動機能の稼働状況を取得
         async getProcessStatuses(){
-            const url = 'http://localhost/process-status';
+            // const url = 'http://localhost/process-status';
+            const url = import.meta.env.VITE_URL_PROCESS_STATUS;
             const result = await axios.get(url);
             this.state.process_statuses = result.data;
             console.log('process_statuses');
@@ -88,29 +91,34 @@ export default createStore({
         },
         //メンション取得
         async getMentions(){
-            const url = 'http://localhost/mention';
+            // const url = 'http://localhost/mention';
+            const url = import.meta.env.VITE_URL_MENTION;
             const result = await axios.get(url);
             this.state.mentions = result.data;
         },
         //フォローキーワードを取得
         async getFollowKeywords(){
-            let result = await axios.get('http://localhost/follow-keywords');
+            const url = import.meta.env.VITE_URL_FOLLOW_KEYWORDS;
+            let result = await axios.get(url);
             this.state.follow_keywords = result.data;
         },
         //いいねキーワードを取得
         async getLikeKeywords(){
-            let result = await axios.get('http://localhost/like-keywords');
+            const url = import.meta.env.VITE_URL_LIKE_KEYWORDS;
+            let result = await axios.get(url);
             this.state.like_keywords = result.data;
         },
         //予約済かつ未投稿のツイートを取得
         async getReservedTweets(){
-            const url = 'http://localhost/reserved-tweet';
+            // const url = 'http://localhost/reserved-tweet';
+            const url = import.meta.env.VITE_URL_RESERVED_TWEET;
             const result = await axios.get(url);
             this.state.reserved_tweets = result.data
         },
         //現在使用中のアカウントのプロフィイール情報を取得
         async getActiveAccount(context, payload){
-            const url = 'http://localhost/change-account' + '/' + payload;
+            // const url = 'http://localhost/change-account' + '/' + payload;
+            const url = import.meta.env.VITE_URL_CHANGE_ACCOUNT + '/' + payload;
             const result = await axios.get(url, payload);
             console.log('action');
             
@@ -119,7 +127,8 @@ export default createStore({
         },
         //登録済の全てのアカウントのプロフィール情報を取得
         async getMyAccounts(context){
-            const url = 'http://localhost/change-account';
+            // const url = 'http://localhost/change-account';
+            const url = import.meta.env.VITE_URL_CHANGE_ACCOUNT;
             const result = await axios.get(url);
             if(result.data){
                 this.state.my_accounts = result.data;
@@ -133,7 +142,8 @@ export default createStore({
         },
         //アクティブアカウントに対する全自動機能の稼働状態を取得
         async getProcessStatus(){
-            const url = 'http://localhost/process-status';
+            // const url = 'http://localhost/process-status';
+            const url = import.meta.env.VITE_URL_PROCESS_STATUS;
             let result = await axios.get(url);
             this.state.process_status = result.data;
             console.log('process-status');
@@ -141,7 +151,8 @@ export default createStore({
         },
         //フォロワー参照アカウントを取得
         async getFollowBases(){
-            const url = 'http://localhost/target-base';
+            // const url = 'http://localhost/target-base';
+            const url = import.meta.env.VITE_URL_TARGET_BASE;
             const result = await axios.get(url);
             this.state.follow_bases = result.data;
             console.log('get follow bases');
@@ -149,7 +160,8 @@ export default createStore({
         },
         //アンフォロー対象外アカウントの取得
         async getProtectedAccounts(){
-            const url = 'http://localhost/protected-account';
+            // const url = 'http://localhost/protected-account';
+            const url = import.meta.env.VITE_URL_PROTECTED_ACCOUNT;
             const result = await axios.get(url);
             this.state.protected_accounts = result.data;
             console.log('get protected accounts');
@@ -157,13 +169,15 @@ export default createStore({
         },
         //パスワードが登録されているか確認
         async checkExistPassword(){
-            const url = 'http://localhost/regist-password';
+            // const url = 'http://localhost/regist-password';
+            const url = import.meta.env.VITE_URL_REGIST_PASSWORD;
             const result = await axios.get(url);
             this.state.password_exist_flag = result.data;
         },
         //メールアドレスを取得
         async getEmailAddress(){
-            const url = 'http://localhost/email';
+            // const url = 'http://localhost/email';
+            const url = import.meta.env.VITE_URL_EMAIL;
             const result = await axios.get(url);
             this.state.email_address = result.data.email;
             console.log(result.data)
