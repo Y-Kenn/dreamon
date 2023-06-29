@@ -25,6 +25,7 @@ class TwitterAccount extends Model
         'last_chain_at',
         'waiting_chain_flag',
         'locked_flag',
+        'twitter_username',
     ];
 
     public function user()

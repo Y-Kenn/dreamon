@@ -46,8 +46,8 @@ class TwitterRegisterController extends Controller
 
         //アクセストークンを正常取得できた場合
         if(isset($tokens['access_token']) && isset($tokens['refresh_token'])){
-            
-            
+
+
             $TwitterApi->setTokenToHeader($tokens['access_token']);
             $account_info = $TwitterApi->getMyInfo();
 
@@ -74,7 +74,7 @@ class TwitterRegisterController extends Controller
                                     ->update(['active_flag' => false]);
                     TwitterAccount::where('twitter_id', $twitter_id)->update(['active_flag' => true]);
 
-                    
+
                     Session::put('twitter_id', $twitter_id);
                     return redirect('/home');
                 //未登録アカウントの場合
@@ -96,6 +96,7 @@ class TwitterRegisterController extends Controller
                         $twitter_account = TwitterAccount::create([
                             'twitter_id' => $twitter_id,
                             'user_id' => Auth::id(),
+                            'twitter_username' => $account_info['data']['username'],
                             'active_flag' => true,
                             'access_token' => $tokens['access_token'],
                             'refresh_token' => $tokens['refresh_token'],
@@ -106,18 +107,19 @@ class TwitterRegisterController extends Controller
                         ]);
 
                         Session::put('twitter_id', $twitter_id);
-                        
+
                     }else{
                         // //usersレコードを生成
                         //$user = User::create(['active_twitter_id' => $twitter_id]);
                         $user = User::create();
                         event(new Registered($user));
-                        
+
                         Log::debug('ACCOUNT INFO : ' .print_r($account_info['data']['id'], true));
                         // //Twitterアカウントレコードを生成
                         $twitter_account = TwitterAccount::create([
                             'twitter_id' => $twitter_id,
                             'user_id' => $user->id,
+                            'twitter_username' => $account_info['data']['username'],
                             'active_flag' => true,
                             'access_token' => $tokens['access_token'],
                             'refresh_token' => $tokens['refresh_token'],
@@ -129,17 +131,17 @@ class TwitterRegisterController extends Controller
                         Auth::login($user);
                         Session::put('twitter_id', $twitter_id);
                     }
-                    
+
                 }
 
-                
+
                 return redirect('/home');
             }else{
                 return redirect('/login');
             }
-            
 
-            
+
+
         }else{
             return redirect('/login');
         }

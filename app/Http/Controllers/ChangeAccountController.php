@@ -36,8 +36,8 @@ class ChangeAccountController extends Controller
         //     $message->to($email)
         //         ->subject('テストタイトル');
         // });
-        
-        
+
+
         Log::debug('USER : ' .print_r(Auth::id(), true));
 
         $data_builder = Auth::user()->twitterAccounts()
@@ -51,11 +51,11 @@ class ChangeAccountController extends Controller
 
         $ids = array_column($data->toArray(), 'twitter_id');
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken(Session::get('twitter_id'));
         $TwitterApi->setTokenToHeader($access_token);
@@ -67,6 +67,12 @@ class ChangeAccountController extends Controller
             return false;
         }
 
+        foreach($result['data'] as $account){
+            TwitterAccount::where('twitter_id', $account['id'])->update([
+                'twitter_username' => $account['username'],
+            ]);
+        }
+
         for($i = 0; $i < count($result['data']); $i++){
             foreach($data as $account){
                 if($result['data'][$i]['id'] == (string)$account['twitter_id']){
@@ -75,7 +81,7 @@ class ChangeAccountController extends Controller
                 }
             }
         }
-        
+
         //Log::debug('CHANGE ACCOUNT - INDEX' .print_r($result['data'], true));
         return $result['data'];
     }
@@ -105,15 +111,15 @@ class ChangeAccountController extends Controller
                             ->where('twitter_id', $id)
                             ->select('twitter_id')
                             ->get();
-        
+
         // $ids = array_column($data->toArray(), 'twitter_id');
         $ids = [$id];
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken(Session::get('twitter_id'));
         $TwitterApi->setTokenToHeader($access_token);
@@ -133,7 +139,7 @@ class ChangeAccountController extends Controller
      */
     public function edit(string $id)
     {
-          
+
     }
 
     /**

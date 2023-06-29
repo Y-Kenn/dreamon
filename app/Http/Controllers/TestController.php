@@ -25,19 +25,22 @@ class TestController extends Controller
         // $user = TwitterAccount::find('924353116937392128')
         //                         ->user()->first();
         // Log::debug('TEST : ' . print_r($user->get(), true));
-        Mail::send(new LockedNotificationMail('924353116937392128'));
-        
-        
+
+        $data = TwitterAccount::where('twitter_id','924353116937392128')->select('locked_flag')->;
+        Log::debug('TEST : ' . print_r($data, true));
+        //Mail::send(new LockedNotificationMail('924353116937392128'));
+
+
     }
 
     public function test14(){
         $user_twitter_id = '1637080537054711808';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $access_token = $TwitterApi->checkRefreshToken($user_twitter_id);
@@ -51,7 +54,7 @@ class TestController extends Controller
         $user_twitter_id = '895207804469772288';
         UpdateFollowedAccountsJob::dispatch($user_twitter_id);
     }
-    
+
     public function test12(){
         $user_twitter_id = '895207804469772288';
         $followed_accounts_builder = FollowedAccount::where('user_twitter_id', $user_twitter_id)
@@ -65,11 +68,11 @@ class TestController extends Controller
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
@@ -100,11 +103,11 @@ class TestController extends Controller
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
         $access_token = $twitter_account_info->access_token;
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $TwitterApi->setTokenToHeader($access_token);
@@ -124,11 +127,11 @@ class TestController extends Controller
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
         $access_token = 'MlRZTmJJemlCcFk1MWZGbFdtZUZqRXlNSHFvZUg2YmRUSzhVVFdTN3RLNnNYOjE2ODYzMjAzNTI3MzU6MTowOmF0OjE';
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $TwitterApi->setTokenToHeader($access_token);
@@ -144,11 +147,11 @@ class TestController extends Controller
 
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
@@ -164,17 +167,17 @@ class TestController extends Controller
         Log::debug('BASE64 IMG: ' . print_r($result, true));
 
     }
-    
+
     public function test6()
     {
 
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $str = '阿伊宇aiueo';
@@ -187,11 +190,11 @@ class TestController extends Controller
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $start_time = $TwitterApi->toTwitterTime('2023-05-28 09:00:00');
@@ -203,16 +206,16 @@ class TestController extends Controller
         Log::debug('WORDS QUERY : ' . print_r($words_query, true));
         Log::debug('SEARCH TWEETS : ' . print_r($result, true));
     }
-    
+
     public function test4()
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
@@ -226,16 +229,16 @@ class TestController extends Controller
         // Log::debug('TEST LAST ACTIVE : ' . print_r(strtotime($result), true));
 
     }
-    
+
     public function test3()
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
@@ -253,11 +256,11 @@ class TestController extends Controller
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
@@ -272,16 +275,16 @@ class TestController extends Controller
         Log::debug('LIKING : ' . print_r($result, true));
         //Log::debug('LIKING MAX : ' . print_r(max($result_column), true));
     }
-    
+
     public function test1()
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $twitter_account_info = TwitterAccount::find($user_twitter_id);
@@ -296,11 +299,11 @@ class TestController extends Controller
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $twitter_account_info = TwitterAccount::find($user_twitter_id);

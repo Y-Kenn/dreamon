@@ -11,7 +11,7 @@ use DateTime;
 use DateTimeZone;
 
 class TwitterApi
-{   
+{
 
     public function __construct($key, $secret, $bearer, $client_id, $client_secret, $redirect_uri){
         $this->key = $key;
@@ -66,7 +66,7 @@ class TwitterApi
         if($query){
             curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($query));
         }
-        
+
 
         $response = curl_exec($curl);
         $result = json_decode($response, true);
@@ -104,10 +104,14 @@ class TwitterApi
     public function checkAccountLocked($result, $twitter_id){
         if(isset($result['status'])){
             if($result['status'] === 403){
-                Log::notice('ACCOUNT LOCKED : ' .print_r($result, true));
-                TwitterAccount::find($twitter_id)->update(['locked_flag' => true]);
-                Mail::send(new LockedNotificationMail($twitter_id));
-                return true;
+                $data = TwitterAccount::where('twitter_id', $twitter_id)->select('locked_flag')->first()->toArray();
+                //凍結後の処理未実施の場合
+                if(!$data['locked_flag']){
+                    Log::notice('ACCOUNT LOCKED : ' .print_r($result, true));
+                    TwitterAccount::where('twitter_id', $twitter_id)->update(['locked_flag' => true]);
+                    Mail::send(new LockedNotificationMail($twitter_id));
+                    return true;
+                }
             }
         }
         return false;
@@ -118,7 +122,7 @@ class TwitterApi
         $this->header = ['Authorization: Bearer ' . $access_token,
                         'Content-Type: application/json'
                     ];
-        
+
         return $this->header;
     }
 
@@ -164,12 +168,12 @@ class TwitterApi
         curl_setopt($curl, CURLOPT_USERPWD, sprintf('%s:%s', env('CLIENT_ID'), env('CLIENT_SECRET')));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($query));
-        
+
         $response = curl_exec($curl);
         $result = json_decode($response, true);
 
         curl_close($curl);
-        
+
         return $result;
     }
 
@@ -189,13 +193,13 @@ class TwitterApi
         curl_setopt($curl, CURLOPT_USERPWD, sprintf('%s:%s', $this->client_id, $this->client_secret));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($query));
-        
+
         $response = curl_exec($curl);
         $result = json_decode($response, true);
 
         curl_close($curl);
 
-        
+
         return json_decode($response, true);
     }
 
@@ -205,7 +209,7 @@ class TwitterApi
         $account = $account_builder->first();
         Log::debug('TOKEN GENERATED TIME : ' .print_r(strtotime($account['token_generated_time']), true));
         if(time() - strtotime($account['token_generated_time']) > env('TOKEN_LIFETIME')){
-            
+
             Log::debug('REFRESH : ' .print_r($twitter_id, true));
             $refreshed_tokens = $this->refreshToken($account['refresh_token']);
 
@@ -246,9 +250,11 @@ class TwitterApi
             return $result;
         }
 
+        Log::debug('GET MY INFO : ' . print_r($result, true));
+
         return $result;
     }
-    
+
     //ユーザネーム(＠〜〜)からTwitterアカウント情報を取得
     public function getUserInfoByName($name){
         $base_url = 'https://api.twitter.com/2/users/by/username/:username';
@@ -256,7 +262,7 @@ class TwitterApi
             ':username' => $name,
         ];
         $inserted_url = $this->insertParam($base_url, $data);
-        
+
         $result = $this->request($inserted_url, 'GET');
 
         $this->registApiHist('getUserInfoByName', $result);
@@ -324,7 +330,7 @@ class TwitterApi
             Log::debug('ERROR - GET FOLLOWERS : ' . print_r($result, true));
             return $result;
         }
-        
+
         $followers = array();
         for($i = 0; $i < count($result['data']); $i++){
             $followers['data'][$i] = $result['data'][$i];
@@ -337,7 +343,7 @@ class TwitterApi
             for($i = 0; $i < 15; $i++){
 
                 if(!$next_token) break;
-                
+
                 $query = [
                     'pagination_token' => $next_token,
                     'max_results' => 1000,
@@ -382,7 +388,7 @@ class TwitterApi
             Log::debug('ERROR - GET FOLLOWING : ' . print_r($result, true));
             return $result;
         }
-        
+
         $following = array();
         foreach($result['data'] as $one_following){
             $following['data'][] = $one_following;
@@ -395,7 +401,7 @@ class TwitterApi
 
             for($i = 0; $i < 15; $i++){
                 if(!isset($next_token)) break;
-                
+
                 $query = [
                     'pagination_token' => $next_token,
                     'max_results' => 1000,
@@ -430,7 +436,7 @@ class TwitterApi
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $json_body);       
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $json_body);
 
         $response = curl_exec($curl);
         $result = json_decode($response, true);
@@ -460,7 +466,7 @@ class TwitterApi
         curl_setopt($curl, CURLOPT_URL, $inserted_url);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->header);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);    
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $response = curl_exec($curl);
         $result = json_decode($response, true);
@@ -474,7 +480,7 @@ class TwitterApi
         }
 
         return $result;
-    }    
+    }
 
     //ツイート検索 //いつのツイートから取得するか引数で指定(YYYY-MM-DDTHH:mm:ssZ (ISO 8601/RFC 3339))
     public function searchTweets($words_query, $start_time, $max_results = 10){ //検索ワードは複数可、スペースで区切る
@@ -504,7 +510,7 @@ class TwitterApi
             ':id' => $twitter_id,
         ];
         $inserted_url = $this->insertParam($base_url,$data);
-        
+
         $json_body = json_encode(array(
             'tweet_id' => $tweet_id
         ));
@@ -514,7 +520,7 @@ class TwitterApi
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $json_body);       
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $json_body);
 
         $response = curl_exec($curl);
         $result = json_decode($response, true);
@@ -558,12 +564,12 @@ class TwitterApi
 
         if($paging === true && isset($result['meta']['next_token'])){
             $next_token = $result['meta']['next_token'];
-            
+
             //2回目以降のリクエスト
             for($i = 0; $i < 10; $i++){
                 //Log::debug('PAGENATION');
                 if(!$next_token) break;
-                
+
                 $query = [
                     'pagination_token' => $next_token,
                     'max_results' => 100,
@@ -580,11 +586,11 @@ class TwitterApi
                 }else{
                     $next_token = false;
                 }
-                
-                
+
+
             }
         }
- 
+
         return $liking;
     }
 
@@ -615,11 +621,11 @@ class TwitterApi
                 'tweet.fields' => 'created_at,public_metrics',
             ];
         }
-        
-        
-        $url = $this->makeUrl($inserted_url, $query);      
+
+
+        $url = $this->makeUrl($inserted_url, $query);
         $result = $this->request($url, 'GET');
-        
+
 
         //取得に失敗した場合
         if(!isset($result['data'])){
@@ -641,7 +647,7 @@ class TwitterApi
                 $tweets['includes']['users'][] = $one_tweet;
             }
         }
-        
+
         //2回目以降のリクエスト
         if($paging === true && isset($result['meta']['next_token'])){
             $next_token = $result['meta']['next_token'];
@@ -732,12 +738,12 @@ class TwitterApi
 
         if($paging === true && isset($result['meta']['next_token'])){
             $next_token = $result['meta']['next_token'];
-            
+
             //2回目以降のリクエスト
             for($i = 0; $i < 10; $i++){
                 //Log::debug('PAGENATION');
                 if(!$next_token) break;
-                
+
                 $query = [
                     'pagination_token' => $next_token,
                     'max_results' => $max,
@@ -767,10 +773,10 @@ class TwitterApi
                         $mentions['includes']['users'][] = $one_tweet;
                     }
                 }
-                
+
             }
         }
-        
+
         return $mentions;
     }
 
@@ -793,7 +799,7 @@ class TwitterApi
 
     //ツイート実行
     public function tweet($text){
-        
+
         $base_url = 'https://api.twitter.com/2/tweets';
         $method = 'POST';
         $json_body = json_encode(array(
@@ -805,7 +811,7 @@ class TwitterApi
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $json_body);       
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $json_body);
 
         $response = curl_exec($curl);
         $result = json_decode($response, true);
@@ -823,7 +829,7 @@ class TwitterApi
     //いいねによる抽出日時はいいね先ツイートの発行日時
     public function checkLastActiveTime($twitter_id){
 
-        $created_at_list = array();        
+        $created_at_list = array();
 
         $tweets = $this->getTweets($twitter_id, false, false);
         if(isset($tweets['data'])){
@@ -886,7 +892,7 @@ class TwitterApi
         );
 
         $boundary = 'p-a-h-o-o---------------' . md5(mt_rand());
- 
+
         //POSTフィールド生成
         $request_body  = '';
         $request_body .= '--' . $boundary . "\r\n";
@@ -894,17 +900,17 @@ class TwitterApi
         $request_body .= "\r\n";
         $request_body .= "\r\n" . $base64_image . "\r\n";
         $request_body .= '--' . $boundary . '--' . "\r\n\r\n";
-    
+
         //リクエストヘッダー生成
         $request_header = "Content-Type: multipart/form-data; boundary=p-a-h-o-o---------------";
-        
+
         //multipart/form-data
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $base_url);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($curl, CURLOPT_HTTPHEADER, $this->header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $request_body);       
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $request_body);
 
         $response = curl_exec($curl);
         $result = json_decode($response, true);
