@@ -1,14 +1,21 @@
 
-# Introduction
+{{--# Introduction--}}
 
-{{$url}}
+{{--{{$url}}--}}
 
-The body of your message.
-
-
-Button Text
+{{--The body of your message.--}}
 
 
-Thanks,
-{{ config('app.name') }}
+{{--Button Text--}}
+
+
+{{--Thanks,--}}
+{{--{{ config('app.name') }}--}}
+
+下記URLより、パスワードの再設定をお願いいたします。
+このURLの有効期限は、本メールが送信されてから60分間です。
+
+------------------------------------------------------------
+URL：  {{$reset_url}}
+------------------------------------------------------------
 

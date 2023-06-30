@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Library\TwitterApi;
 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ContactMail;
 
 
 class ChangeAccountController extends Controller
@@ -20,24 +18,6 @@ class ChangeAccountController extends Controller
      */
     public function index()
     {
-        // mb_language('Japanese');
-        // $to = "to@example.com";
-        // $subject = "TEST";
-        // $message = "This is TEST.\r\nHow are you?";
-        // $headers = "From: from@example.com";
-        // $mail = mb_send_mail($to, $subject, $message, $headers);
-        //Mail::send(new ContactMail);
-        // $name = 'テスト ユーザー';
-        // $email = 'test@example.com';
-
-        // Mail::send('test.mail', [
-        //     'name' => $name,
-        // ], function ($message) use ($email) {
-        //     $message->to($email)
-        //         ->subject('テストタイトル');
-        // });
-
-
         Log::debug('USER : ' .print_r(Auth::id(), true));
 
         $data_builder = Auth::user()->twitterAccounts()

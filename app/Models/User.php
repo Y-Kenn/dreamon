@@ -49,4 +49,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\TwitterAccount');
     }
+
+    //パスワードリセットメールのカスタマイズのため追加
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new  \App\Notifications\PasswordResetUserNotification($token));
+    }
 }

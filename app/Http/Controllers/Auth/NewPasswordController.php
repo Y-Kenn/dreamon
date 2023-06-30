@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Library\TwitterApi;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,10 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): View
     {
-        return view('auth.reset-password', ['request' => $request]);
+        $TwitterApi = new TwitterApi(env('API_KEY'), env('API_SECRET'), env('BEARER'), env('CLIENT_ID'), env('CLIENT_SECRET'), env('REDIRECT_URI'));
+        $authorize_url = $TwitterApi->makeAuthorizeUrl();
+
+        return view('auth.reset-password', ['request' => $request, 'authorize_url' => $authorize_url]);
     }
 
     /**
@@ -33,6 +37,10 @@ class NewPasswordController extends Controller
             'token' => ['required'],
             'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ],
+        [
+            'password.confirmed' => '確認用パスワードと一致しません',
+            'password.min' => 'パスワードは８文字以上で入力してください',
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
