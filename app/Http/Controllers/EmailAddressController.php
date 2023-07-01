@@ -14,7 +14,7 @@ class EmailAddressController extends Controller
      */
     public function index()
     {
-        $data = Auth::user()->select('email')->first()->toArray();
+        $data = Auth::user()->toArray();
 
         return $data;
     }
@@ -60,7 +60,7 @@ class EmailAddressController extends Controller
         $request->validate([
             'email' => 'required|email:filter',
         ]);
-        
+
 
         Auth::user()->update([
             'email' => $request->email,

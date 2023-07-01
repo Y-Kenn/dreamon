@@ -8,7 +8,7 @@
     </div>
     <div class="p-setting__password">
         <span class="p-setting__password__name">新しいパスワード(確認)</span>
-        <input v-model="password.password_confirmation" id="password_confirmation" name="password_confirmation" type="password" class="p-setting__password__input c-input" autocomplete="new-password">    
+        <input v-model="password.password_confirmation" id="password_confirmation" name="password_confirmation" type="password" class="p-setting__password__input c-input" autocomplete="new-password">
         <button @click="updatePassword" class="p-setting__submit c-button--submit">登録</button>
     </div>
     <div v-if="error.password_confirmation" class="p-setting__error">
@@ -34,7 +34,7 @@ export default {
             error02: 'パスワードが間違っています',
             error03: '確認用パスワードが一致しません',
             error04: '半角英数字記号で入力してください',
-            error05: '6文字以上、20文字以下で入力してください',
+            error05: '8文字以上、20文字以下で入力してください',
         });
         const checkPassword = ()=>{
             console.log('check password');
@@ -51,7 +51,7 @@ export default {
                 error.password_confirmation = '';
             }
 
-            if(password.password.length < 6 || password.password.length > 20){
+            if(password.password.length < 8 || password.password.length > 20){
                 error.password = message.error05;
                 return false;
             }else{
@@ -64,7 +64,7 @@ export default {
             }else{
                 error.password = '';
             }
-            
+
             if(password.password === password.password_confirmation){
                 error.password_confirmation = '';
                 return true;
@@ -86,6 +86,7 @@ export default {
                                         password.password = '';
                                         password.password_confirmation = '';
                                         context.emit('firstRegist');
+                                        context.emit('successRegist');
                                     });
             console.log(result);
         }

@@ -72,7 +72,7 @@ class RegistPasswordController extends Controller
         }else{
             $validated = $request->validate([
                 'current_password' => ['required', 'current_password'],
-                'password' => 'required|min:6|max:20|confirmed:password|regex:/^[!-~]+$/',//^[!-~]+$
+                'password' => 'required|min:8|max:20|confirmed:password|regex:/^[!-~]+$/',//^[!-~]+$
 
             ]);
 
@@ -92,7 +92,7 @@ class RegistPasswordController extends Controller
             ]);
         }
 
-        
+
     }
 
     /**

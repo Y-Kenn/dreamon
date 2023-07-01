@@ -15,6 +15,7 @@ use App\Jobs\UpdateTwitterAccountDataJob;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FinishFollowMail;
 use App\Mail\LockedNotificationMail;
+use Illuminate\Support\Facades\Session;
 
 use DateTime;
 use DateTimeZone;
@@ -22,11 +23,30 @@ use DateTimeZone;
 class TestController extends Controller
 {
     public function test(){
+//        $twitter_accounts = array_column(Auth::user()->twitterAccounts()->select('twitter_id')->get()->toArray(), 'twitter_id');
+//
+//        foreach ($twitter_accounts as $account){
+//            Log::debug('TEST : ' . print_r($account, true));
+//        }
+//        try{
+//            throw new \Exception("エラーだよ");
+//        } catch(\Exception $e){
+//            Log::debug($e->getMessage());
+//        }
+        //Session::flush();
+
+    Log::debug('TEST : ' . print_r(Auth::id(), true));
+
+
+
+
+    }
+    public function test15(){
         // $user = TwitterAccount::find('924353116937392128')
         //                         ->user()->first();
         // Log::debug('TEST : ' . print_r($user->get(), true));
 
-        $data = TwitterAccount::where('twitter_id','924353116937392128')->select('locked_flag')->;
+        $data = TwitterAccount::where('twitter_id','924353116937392128')->select('locked_flag')->
         Log::debug('TEST : ' . print_r($data, true));
         //Mail::send(new LockedNotificationMail('924353116937392128'));
 

@@ -41,9 +41,11 @@ class ChangeAccountController extends Controller
         $TwitterApi->setTokenToHeader($access_token);
 
         $result = $TwitterApi->getUserInfoByIds($ids);
+        $result['user_id'] = Auth::id();
 
         //リクエスト失敗時
         if(!isset($result['data'])){
+            $result['data'] = array();
             return false;
         }
 
@@ -62,8 +64,10 @@ class ChangeAccountController extends Controller
             }
         }
 
+
+
         //Log::debug('CHANGE ACCOUNT - INDEX' .print_r($result['data'], true));
-        return $result['data'];
+        return $result;
     }
 
     /**

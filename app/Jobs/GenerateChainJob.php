@@ -64,7 +64,7 @@ class GenerateChainJob implements ShouldQueue
         $followed_accounts_builder = FollowedAccount::where('user_twitter_id', $this->user_twitter_id)
                                                     ->whereNotNull('followed_at');
         $followed_accounts = $followed_accounts_builder->get();
-        
+
         $now = time();
         $followed_num = 0;
         if($followed_accounts_builder->exists()){
@@ -75,7 +75,7 @@ class GenerateChainJob implements ShouldQueue
                 }
             }
         }
-        
+
         return $followed_num;
     }
 
@@ -168,7 +168,7 @@ class GenerateChainJob implements ShouldQueue
         //フォロー検索用のキーワードを取得
         $search_keywords_builder = FollowKeyword::where('twitter_id', $this->user_twitter_id)
                                                 ->where('not_flag', false);
-        
+
         //フォロー用の検索キーワードがDBにあればフォローターゲット生成
         if($search_keywords_builder->exists()){
 
@@ -178,11 +178,11 @@ class GenerateChainJob implements ShouldQueue
                                                 ->where('not_flag', true);
             $exclude_keywords_list = $this->makeKeywordsList($exclude_keywords_builder->get());
 
-            $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+            $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
             $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
@@ -213,7 +213,7 @@ class GenerateChainJob implements ShouldQueue
     {
         $follow_targets_builder = FollowTarget::where('user_twitter_id', $this->user_twitter_id)
                                                 ->whereNull('thrown_at');
-        
+
         //フォローターゲットの残数が指定値を下回っている場合
         if($follow_targets_builder->count() < env('FOLLOW_TARGET_THRESHOLD')){
             Log::debug('START GENERATE FOLLOW TARGET');
@@ -225,7 +225,7 @@ class GenerateChainJob implements ShouldQueue
                                                             ->whereNull('started_at');
             //ターゲットベース(フォローターゲット生成元のアカウント)がDB登録されている場合
             if($target_base_builder->exists()){
-                
+
                 $target_base = $target_base_builder->first();
 
                 //ターゲットのリストを生成
@@ -234,7 +234,7 @@ class GenerateChainJob implements ShouldQueue
                 $target_base->update(['started_at' => date("Y/m/d H:i:s")]);
                 Log::debug('NEW FOLLOW TARGETS : ' . print_r($new_targets, true));
                 if(!empty($new_targets)){
-                    
+
                     foreach($new_targets as $target){
                         FollowTarget::create([
                             'target_base_id' => $target_base['id'],
@@ -264,7 +264,7 @@ class GenerateChainJob implements ShouldQueue
         $liked_targets_builder = LikeTarget::where('user_twitter_id', $this->user_twitter_id)
                                                     ->whereNotNull('liked_at');
         $liked_targets = $liked_targets_builder->get();
-        
+
         $now = time();
         $liked_num = 0;
         if($liked_targets_builder->exists()){
@@ -275,7 +275,7 @@ class GenerateChainJob implements ShouldQueue
                 }
             }
         }
-        
+
         return $liked_num;
     }
 
@@ -324,11 +324,11 @@ class GenerateChainJob implements ShouldQueue
 
             $search_query = $this->makeSearchQuery($search_keywords_list, $exclude_keywords_list);
             Log::debug('SEARCH QUERY : ' . print_r($search_query, true));
-            $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+            $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
             $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
             $TwitterApi->setTokenToHeader($access_token);
@@ -355,7 +355,7 @@ class GenerateChainJob implements ShouldQueue
             Log::debug('NEW LIKE TARGETS : ' . print_r($new_targets, true));
 
             if(!empty($new_targets)){
-                    
+
                 foreach($new_targets as $target){
                     LikeTarget::create([
                         'user_twitter_id' => $this->user_twitter_id,
@@ -375,7 +375,7 @@ class GenerateChainJob implements ShouldQueue
         $unfollowed_accounts_builder = FollowedAccount::where('user_twitter_id', $this->user_twitter_id)
                                                     ->whereNotNull('unfollowed_at');
         $unfollowed_accounts = $unfollowed_accounts_builder->get();
-        
+
         $now = time();
         $unfollowed_num = 0;
         if($unfollowed_accounts_builder->exists()){
@@ -386,7 +386,7 @@ class GenerateChainJob implements ShouldQueue
                 }
             }
         }
-        
+
         return $unfollowed_num;
     }
 
@@ -406,11 +406,11 @@ class GenerateChainJob implements ShouldQueue
     //相手にフォローされているかチェック、されている場合は true、ない場合は false を返す
     protected function checkFriendship($target_twitter_id){
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                        env('API_SECRET'), 
-                                        env('BEARER'), 
-                                        env('CLIENT_ID'), 
-                                        env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                        env('API_SECRET'),
+                                        env('BEARER'),
+                                        env('CLIENT_ID'),
+                                        env('CLIENT_SECRET'),
                                         env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
         $TwitterApi->setTokenToHeader($access_token);
@@ -427,7 +427,7 @@ class GenerateChainJob implements ShouldQueue
             }
             //フォローされていなかった場合
             return 'stranger';
-        
+
         //Twitter APIからの異常のレスポンスがあった場合
         }elseif(isset($target_followings['status'])){
             //回数制限エラーの場合
@@ -448,20 +448,20 @@ class GenerateChainJob implements ShouldQueue
         $followed_accounts_builder = FollowedAccount::where('user_twitter_id', $this->user_twitter_id)
                                                         ->whereNull('unfollowed_at')
                                                         ->inRandomOrder();
-        
+
         //アンフォロー開始基準のフォロー数より少ない場合、終了
         if($followed_accounts_builder->count() < env('START_BASELINE_UNFOLLOW')){
             Log::debug('UNDER BASELINE UNFOLLOW : ' .print_r($followed_accounts_builder->count(), true));
             return;
         }
-        Log::debug('START GENERATE UNFOLLOW TARGET : ' .print_r($this->user_twitter_id, true));  
-        
+        Log::debug('START GENERATE UNFOLLOW TARGET : ' .print_r($this->user_twitter_id, true));
+
         $now = time();
         //フォロー中のアカウント
         $followed_accounts = $followed_accounts_builder->get();
         //アンフォロー除外登録されたアカウント
         $protected_accounts = ProtectedFollowedAccount::where('user_twitter_id', $this->user_twitter_id)->get();
-        
+
         $unfollow_targets = array();
         $for_check_friendship = array();
 
@@ -488,9 +488,9 @@ class GenerateChainJob implements ShouldQueue
             }
             //非アクティブ期間が指定期間より短い場合
             // if($now - strtotime($followed_account['last_active_at']) < env('INACTIVE_BASELINE_UNFOLLOW')){
-                
+
             //     $relation = $this->checkFriendship($followed_account['target_twitter_id']);
-                
+
             //     //相手からフォローされていれば除外
             //     if($relation === 'friend'){
             //         Log::debug('FRIEND ACCOUNT : ' .print_r($followed_account['target_twitter_id'], true));
@@ -541,7 +541,7 @@ class GenerateChainJob implements ShouldQueue
             UnfollowTarget::create([
                 'followed_accounts_id' => $unfollow_target['followed_accounts_id'],
                 'user_twitter_id' => $this->user_twitter_id,
-                'target_twitter_id' => $unfollow_target['target_twitter_id'],                
+                'target_twitter_id' => $unfollow_target['target_twitter_id'],
             ]);
         }
     }
@@ -556,23 +556,23 @@ class GenerateChainJob implements ShouldQueue
         $follow_targets_builder = FollowTarget::where('user_twitter_id', $this->user_twitter_id)
                                                 ->whereNull('thrown_at')
                                                 ->limit(env('CONSECUTIV_FOLLOW_LIMIT'));
-        $jobs = array();                                        
+        $jobs = array();
         if($follow_targets_builder->exists()){
             $follow_targets = $follow_targets_builder->get();
             foreach($follow_targets as $target){
 
                 //API制限対策とフォロー効率のため機能OFF
-                // $TwitterApi = new TwitterApi(env('API_KEY'), 
-                //                         env('API_SECRET'), 
-                //                         env('BEARER'), 
-                //                         env('CLIENT_ID'), 
-                //                         env('CLIENT_SECRET'), 
+                // $TwitterApi = new TwitterApi(env('API_KEY'),
+                //                         env('API_SECRET'),
+                //                         env('BEARER'),
+                //                         env('CLIENT_ID'),
+                //                         env('CLIENT_SECRET'),
                 //                         env('REDIRECT_URI'));
 
                 // $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
                 // $TwitterApi->setTokenToHeader($access_token);
 
-            
+
                 // $last_active_time = $TwitterApi->checkLastActiveTime($target['target_twitter_id']);
                 // //API制限で取得できていなければジョブ生成終了
                 // if($last_active_time === strtotime("1980-01-01")){
@@ -594,7 +594,7 @@ class GenerateChainJob implements ShouldQueue
             }
             $follow_targets_builder->update(['thrown_at' => date("Y/m/d H:i:s")]);
         }
-        
+
         return $jobs;
     }
 
@@ -604,7 +604,7 @@ class GenerateChainJob implements ShouldQueue
         $like_targets_builder = LikeTarget::where('user_twitter_id', $this->user_twitter_id)
                                                 ->whereNull('thrown_at')
                                                 ->limit(env('CONSECUTIV_LIKE_LIMIT'));
-        $jobs = array();                                        
+        $jobs = array();
         if($like_targets_builder->exists()){
             $like_targets = $like_targets_builder->get();
             foreach($like_targets as $target){
@@ -613,7 +613,7 @@ class GenerateChainJob implements ShouldQueue
             }
             $like_targets_builder->update(['thrown_at' => date("Y/m/d H:i:s")]);
         }
-        
+
         return $jobs;
     }
 
@@ -623,7 +623,7 @@ class GenerateChainJob implements ShouldQueue
         $unfollow_targets_builder = UnfollowTarget::where('user_twitter_id', $this->user_twitter_id)
                                                 ->whereNull('thrown_at')
                                                 ->limit(env('CONSECUTIV_UNFOLLOW_LIMIT'));
-        $jobs = array();                                        
+        $jobs = array();
         if($unfollow_targets_builder->exists()){
             $unfollow_targets = $unfollow_targets_builder->get();
             foreach($unfollow_targets as $target){
@@ -632,7 +632,7 @@ class GenerateChainJob implements ShouldQueue
             }
             $unfollow_targets_builder->update(['thrown_at' => date("Y/m/d H:i:s")]);
         }
-        
+
         return $jobs;
     }
 
@@ -645,13 +645,13 @@ class GenerateChainJob implements ShouldQueue
 
         if(!$data_builder->exists()){
             $follow_limit = 50;
-            Log::debug('FOLLOW LIMIT NUM - NO TWITTER DATA : ' .print_r($follow_limit, true)); 
+            Log::debug('FOLLOW LIMIT NUM - NO TWITTER DATA : ' .print_r($follow_limit, true));
 
             return $follow_limit;
         }
 
         $data = $data_builder->first();
-        Log::debug('TWITTER DATA LATEST : ' .print_r($data, true)); 
+        Log::debug('TWITTER DATA LATEST : ' .print_r($data, true));
 
         if($data['following'] < 5000 ){
             //各アカウントのフォロワー数から計算したフォロー上限か、Kamitter規定の上限の小さい方を取得
@@ -660,7 +660,7 @@ class GenerateChainJob implements ShouldQueue
             //フォローが5000人を超えた場合、フォロー総数の上限をフォロワー総数の1.1倍までとして計算
             $follow_limit = (int)min([$data['followers'] * 1.1 - $data['following'], env('DAILY_FOLLOW_LIMIT')]);
         }
-        Log::debug('FOLLOW LIMIT NUM : ' .print_r($follow_limit, true)); 
+        Log::debug('FOLLOW LIMIT NUM : ' .print_r($follow_limit, true));
 
         return $follow_limit;
     }
@@ -678,28 +678,28 @@ class GenerateChainJob implements ShouldQueue
         $unfollow_jobs = array();
 
         //いいね稼働設定　かつ　今回のいいねを含めて１時間のいいねが指定値を超えない場合 　かつ　1日のいいねが指定値を超えない場合
-        if($liking_flag 
+        if($liking_flag
             && $this->countLikedNum(60*60*1) <= env('HOURLY_LIKE_LIMIT') - env('CONSECUTIV_LIKE_LIMIT')
             && $liked_num_24h <= env('DAILY_LIKE_LIMIT') - env('CONSECUTIV_LIKE_LIMIT'))
         {
             $like_jobs = $this->makeLikeJobs();
-        } 
+        }
         //自動フォロー稼働設定　かつ　今回のフォロー含めて１時間のフォローが指定値を超えない場合　かつ　1日のフォローが指定値が上限を超えない場合
-        if($following_flag 
+        if($following_flag
             && $this->countFollowedNum(60*60*1) <= env('HOURLY_FOLLOW_LIMIT') - env('CONSECUTIV_FOLLOW_LIMIT')
             && $folloewd_num_24h <= $this->calcFolloLimit24h() - env('CONSECUTIV_FOLLOW_LIMIT'))
         {
             $follow_jobs = $this->makeFollowJobs();
-        } 
+        }
         //自動アンフォロー稼働設定　かつ　今回のアンフォロー含めて１時間のアンフォローが指定値を超えない場合　かつ　1日のアンフォローが指定値が上限を超えない場合
-        if($unfollowing_flag 
+        if($unfollowing_flag
             && $this->countUNFollowedNum(60*60*1) <= env('HOURLY_UNFOLLOW_LIMIT') - env('CONSECUTIV_UNFOLLOW_LIMIT')
             //1日上限算出メソッドはフォロー用のメソッドを流用
             && $unfolloewd_num_24h <= $this->calcFolloLimit24h() - env('CONSECUTIV_UNFOLLOW_LIMIT'))
         {
             $unfollow_jobs = $this->makeUnfollowJobs();
-        } 
-        
+        }
+
         //全てのジョブが空だった場合はジョブチェーンを発行せず終了
         if(empty($follow_jobs) && empty($like_jobs) && empty($unfollow_jobs)){
             Log::debug('EMPTY ALL JOBS');
@@ -707,8 +707,12 @@ class GenerateChainJob implements ShouldQueue
         }
 
         $all_jobs = array_merge($redady_chain_job, $like_jobs, $follow_jobs, $unfollow_jobs);
+
         Bus::dispatchChain($all_jobs);
-        TwitterAccount::find($this->user_twitter_id)->update(['waiting_chain_flag' => true]);
+        TwitterAccount::find($this->user_twitter_id)
+                        //ジョブチェーンの実行失敗・異常終了に備えてここでもlast_chain_atを更新しておく
+                        ->update(['last_chain_at' => date("Y/m/d H:i:s"),
+                                'waiting_chain_flag' => true]);
     }
 
 
@@ -738,23 +742,23 @@ class GenerateChainJob implements ShouldQueue
         }else {
             Log::debug('FOLLOWING FLAG : FALSE');
         }
-        
+
         //アンフォローターゲット生成
         //自動アンフォローが稼働設定、かつ24時間の実行制限数を超えていない場合に実施
         if($account_status['unfollowing_flag']){
             $this->generateUnfollowTarget();
         }else {
-            Log::debug('UNFOLLOWING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));  
+            Log::debug('UNFOLLOWING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));
         }
-        
+
 
         //全ての自動機能がオフの場合はジョブチェーンを発行しない
         if($account_status['following_flag'] || $account_status['liking_flag'] || $account_status['unfollowing_flag']){
-            Log::debug('THROW JOB CHAIN : ' .print_r($this->user_twitter_id, true));  
+            Log::debug('THROW JOB CHAIN : ' .print_r($this->user_twitter_id, true));
             $this->throwJobChain($account_status['liking_flag'], $account_status['following_flag'], $account_status['unfollowing_flag']);
         }else{
-            Log::debug('ALL WORKING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));  
+            Log::debug('ALL WORKING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));
         }
-        
+
     }
 }

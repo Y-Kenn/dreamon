@@ -60,16 +60,36 @@
                 outline: none;
             }
         }
-        &__submit{
+        &__submit {
             width: 300px;
             height: 5rem;
+            line-height: 5rem;
             background-color: $font-color_link;
             border-radius: 4px;
             color: #fff;
             font-size: $font-size_m;
             margin: 2rem auto;
             display: block;
-            @include mq(sm){
+            &:hover{
+                color: #fff;
+                cursor: pointer;
+            }
+            @include mq(sm) {
+                width: 100%;
+            }
+        }
+        &__thin{
+            width: 300px;
+            height: 5rem;
+            line-height: 5rem;
+            background-color: #fff;
+            border-radius: 4px;
+            color: #999;
+            border: 2px solid #ddd;
+            font-size: $font-size_m;
+            margin: 2rem auto;
+            display: block;
+            @include mq(sm) {
                 width: 100%;
             }
         }
@@ -117,6 +137,9 @@
             margin: 0 auto 20px auto;
             @include mq(sm){
                 width: 100%;
+            }
+            &:hover{
+                color: #fff;
             }
             & > i{
                 font-size: 22px;

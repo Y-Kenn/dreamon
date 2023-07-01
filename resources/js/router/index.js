@@ -7,7 +7,7 @@ import Like from "../views/Like.vue";
 import Tweet from "../views/Tweet.vue";
 import TwitterAccount from "../views/TwitterAccount.vue";
 import Setting from "../views/Setting.vue";
-
+import Withdraw from "../views/Withdraw.vue";
 
 
 const router = createRouter({
@@ -69,7 +69,15 @@ const router = createRouter({
                 sidenav: Sidenav,
             },
         },
-        
+        {
+            path: '/withdraw',
+            name: 'withdraw',
+            components: {
+                default: Withdraw,
+                sidenav: Sidenav,
+            },
+        },
+
         // {
         //     path: '/login',
         //     name: 'login',

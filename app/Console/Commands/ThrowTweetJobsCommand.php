@@ -30,14 +30,12 @@ class ThrowTweetJobsCommand extends Command
      */
     public function handle()
     {
-        // $reserved_tweets_builder = ReservedTweet::whereNull('deleted_at')
-        //                                             ->whereNull('thrown_at')
-        //                                             ->inRandomOrder();//特定のアカウントのツイートが毎回遅延することを回避
+
         $reserved_tweets_builder = TwitterAccount::whereNull('twitter_accounts.deleted_at')
                                                     ->where('locked_flag', false)
                                                     ->join('reserved_tweets','twitter_accounts.twitter_id', '=', 'reserved_tweets.twitter_id')
                                                     ->whereNull('thrown_at')
-                                                    ->inRandomOrder();//特定のアカウントのツイートが毎回遅延することを回避; 
+                                                    ->inRandomOrder();//特定のアカウントのツイートが毎回遅延することを回避;
         //予約ツイートが無い場合は終了
         if(!$reserved_tweets_builder->exists()){
             Log::debug('NO RESERVED TWEET');

@@ -21,6 +21,7 @@ use App\Http\Controllers\MentionTweetController;
 use App\Http\Controllers\EmailAddressController;
 use App\Http\Controllers\RegistPasswordController;
 use App\Http\Controllers\LockedController;
+use App\Http\Controllers\WithdrawController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::apiResource('/email',EmailAddressController::class);
     Route::apiResource('/regist-password',RegistPasswordController::class);
     Route::apiResource('/locked',LockedController::class);
+    Route::apiResource('/withdraw-user',WithdrawController::class);
 
     Route::get('/home', function () {
         return view('app');
@@ -68,6 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/tweet', function () { return view('app'); });
     Route::get('/twitter-account', function () { return view('app'); });
     Route::get('/setting', function () { return view('app'); });
+    Route::get('/withdraw', function () { return view('app'); });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

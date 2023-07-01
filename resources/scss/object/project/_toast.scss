@@ -1,0 +1,40 @@
+.p-toast{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    width: 78%;
+
+    &__item{
+        min-width: 200px;
+        height: 60px;
+        line-height: 60px;
+        padding-left: 5rem;
+        padding-right: 5rem;
+        background-color: #ddd;
+        margin: 0 auto;
+        border-radius: 10px;
+        font-size: $font-size_m;
+        font-weight: bold;
+        color: #fff;
+        background-color: $lightBlue;
+        animation-name: fadein;
+        animation-duration: 4.4s;
+        animation-delay: 1s;
+        opacity: 0;
+    }
+}
+@keyframes fadein{
+    0% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

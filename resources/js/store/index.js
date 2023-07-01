@@ -2,6 +2,7 @@ import { createStore } from 'vuex';
 
 export default createStore({
     state: {
+        user_id: null,
         performances: [],
         locked_flag: false,
         process_statuses: [],
@@ -55,7 +56,7 @@ export default createStore({
                     username: ""
                 }
             }
-            
+
         },
         setMaxAccounts(state, payload){
             state.max_account = payload;
@@ -122,7 +123,7 @@ export default createStore({
             const url = import.meta.env.VITE_URL_CHANGE_ACCOUNT + '/' + payload;
             const result = await axios.get(url, payload);
             console.log('action');
-            
+
             this.state.active_account = result.data;
             console.log(this.state.active_account);
         },
@@ -131,12 +132,14 @@ export default createStore({
             // const url = 'http://localhost/change-account';
             const url = import.meta.env.VITE_URL_CHANGE_ACCOUNT;
             const result = await axios.get(url);
-            if(result.data){
-                this.state.my_accounts = result.data;
-            }else{
-                this.state.my_accounts = [];
-                console.log('empty');
-            }
+            // if(result.data){
+            //     this.state.my_accounts = result.data;
+            // }else{
+            //     this.state.my_accounts = [];
+            //     console.log('empty');
+            // }
+            this.state.my_accounts = result.data.data;
+            this.state.user_id = result.data.user_id;
             this.commit('findActiveAccount');
             console.log('action - getMyAccounts');
             console.log(result.data);
@@ -183,6 +186,6 @@ export default createStore({
             this.state.email_address = result.data.email;
             console.log(result.data)
         }
-        
+
     }
 })

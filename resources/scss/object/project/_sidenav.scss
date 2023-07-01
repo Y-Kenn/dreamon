@@ -138,7 +138,9 @@
         &--active{
             color: $mainBlue;
             font-weight: bold;
-            //background-color: #e3f3fc;
+            &:hover{
+                color: $mainBlue;
+            }
         }
         &:hover{
             background-color: $background-color_hover;

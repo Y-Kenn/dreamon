@@ -1,5 +1,12 @@
 <template>
     <div class="l-app__main">
+        <!--トースト-->
+        <div v-if="toast.show" class="p-toast">
+            <div class="p-toast__item">
+                送信されました
+            </div>
+        </div>
+
         <div class="p-page">
             <div class="p-page__title">
                 <i class="p-page__icon c-icon--shadow fa-solid fa-gear"></i>設定
@@ -11,18 +18,19 @@
             <div class="p-page__sub_title">
                 <i class="fa-solid fa-square"></i> メールアドレス
             </div>
-            <MailAddress />
+            <MailAddress @successRegist="showToast" />
             <div class="p-page__sub_title">
                 <i class="fa-solid fa-square"></i> パスワード
             </div>
-            <PasswordUpdate v-if="password_exist_flag" />
-            <Password v-else
-                        @firstRegist="checkExistPassword()" />
+            <PasswordUpdate v-if="password_exist_flag"
+                            @successRegist="showToast"/>
+            <Password v-else @firstRegist="checkExistPassword()"
+                            @successRegist="showToast" />
             <div class="p-page__sub_title">
                 <i class="fa-solid fa-square"></i> その他
             </div>
             <div class="p-page__discription">
-                <span>退会する</span>
+                <router-link to="/withdraw" class="u-font_color--link">退会はこちら</router-link>
             </div>
         </div>
     </div>
@@ -32,7 +40,7 @@
 import MailAddress from '../Components/MailAddress.vue';
 import Password from '../Components/Password.vue';
 import PasswordUpdate from '../Components/PasswordUpdate.vue';
-import {onBeforeMount, ref, reactive, computed} from 'vue';
+import {onBeforeMount, ref, reactive, computed, inject, onMounted} from 'vue';
 import { useStore } from "vuex";
 
 export default {
@@ -42,14 +50,18 @@ export default {
         let password_exist_flag = computed(()=> store.state.password_exist_flag);
         const checkExistPassword = ()=>{
             store.dispatch('checkExistPassword');
+        };
+        let toast = reactive({
+            show: false
+        });
+        const showToast = ()=>{
+            toast.show = true;
+            setTimeout(()=>toast.show = false, 5500)
         }
-        // onBeforeMount(()=>{
-        //    checkExistPassword();
-        //    store.commit('setActivePage', 6);
-        // });
 
-        return { password_exist_flag, checkExistPassword }
+        return { password_exist_flag, checkExistPassword, toast, showToast }
     }
-    
+
 }
 </script>
+

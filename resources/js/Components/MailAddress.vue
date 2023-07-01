@@ -7,9 +7,9 @@
         <div v-if="error.email" class="p-setting__error">
             <span>{{error.email}}</span>
         </div>
-        
+
     </div>
-    
+
 </template>
 
 <script>
@@ -17,7 +17,7 @@ import {onBeforeMount, reactive, ref } from 'vue';
 import { useStore } from "vuex";
 
 export default {
-    setup(){
+    setup(props, context){
         const store = useStore();
         let email = reactive({
             email: store.state.email_address,
@@ -30,10 +30,12 @@ export default {
             let result = await axios.put(url + '/1', email)
                                     .then(res =>{
                                         store.dispatch('getEmailAddress');
+                                        error.email = '';
+                                        context.emit('successRegist');
                                     }).catch(res=>{
                                             console.log(res);
                                             error.email = '有効なメールアドレスを入力してください';
-                                            
+
                                     });
 
         }
