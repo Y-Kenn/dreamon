@@ -723,33 +723,35 @@ class GenerateChainJob implements ShouldQueue
     {
         $account_status = TwitterAccount::where('twitter_id', $this->user_twitter_id)->first();
 
-        $liked_num_24h = $this->countlikedNum(60*60*24);
-        $folloewd_num_24h = $this->countFollowedNum(60*60*24);
-        $unfolloewd_num_24h = $this->countUnfollowedNum(60*60*24);
-
         //ライクターゲット生成
-        //自動いいねが稼働設定、かつ24時間の実行制限数を超えていない場合に実施
+        //自動いいねが稼働設定の場合に実施
         if($account_status['liking_flag']){
             $this->generateLikeTarget();
         }else {
             Log::debug('LIKING FLAG : FALSE');
         }
 
+        /*******************************
+         *TwitterApi一部削除により機能停止中*
+         ********************************/
         //フォローターゲット生成
-        //自動フォローが稼働設定、かつ24時間の実行制限数を超えていない場合に実施
-        if($account_status['following_flag']){
-            $this->generateFollowTarget();
-        }else {
-            Log::debug('FOLLOWING FLAG : FALSE');
-        }
+        //自動フォローが稼働設定の場合に実施
+//        if($account_status['following_flag']){
+//            $this->generateFollowTarget();
+//        }else {
+//            Log::debug('FOLLOWING FLAG : FALSE');
+//        }
 
+        /*******************************
+         *TwitterApi一部削除により機能停止中*
+         ********************************/
         //アンフォローターゲット生成
-        //自動アンフォローが稼働設定、かつ24時間の実行制限数を超えていない場合に実施
-        if($account_status['unfollowing_flag']){
-            $this->generateUnfollowTarget();
-        }else {
-            Log::debug('UNFOLLOWING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));
-        }
+        //自動アンフォローが稼働設定の場合に実施
+//        if($account_status['unfollowing_flag']){
+//            $this->generateUnfollowTarget();
+//        }else {
+//            Log::debug('UNFOLLOWING FLAG : FALSE : ' .print_r($this->user_twitter_id, true));
+//        }
 
 
         //全ての自動機能がオフの場合はジョブチェーンを発行しない
