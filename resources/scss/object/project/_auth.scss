@@ -1,12 +1,8 @@
 .p-auth{
     min-height: calc(100vh - 60px - 80px);
-    width: 450px;
     padding-top: 40px;
     padding-bottom: 80px;
-    margin: auto;
-    @include mq(sm){
-        width: 90%;
-    }
+    background-color: $background-color_soft;
     &__title{
         font-size: $font-size_xxl;
         font-weight: bold;
@@ -15,14 +11,24 @@
         position: relative;
     }
     & > p{
+        display: block;
         font-size: $font-size_m;
+        width: 450px;
+        margin: auto;
+        @include mq(sm){
+            width: 90%;
+        }
     }
     &__form{
         border: 1px solid #eee;
         border-radius: 10px;
         padding: 30px;
         background-color: #fff;
-        margin-top: 2rem;
+        width: 450px;
+        margin: 2rem auto 2rem auto;
+        @include mq(sm){
+            width: 90%;
+        }
         &__title{
             font-size: $font-size_l;
             font-weight: bold;

@@ -13,7 +13,7 @@
     <body>
        <?php
         use Illuminate\Support\Facades\Session;
-        
+
         var_dump(Session::all());
         ?>
         <div id="app"></div>

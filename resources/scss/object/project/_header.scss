@@ -20,6 +20,10 @@
         line-height: 3.5rem;
         text-align: center;
         color: $mainBlue;
+        &:hover{
+            color: $mainBlue;
+            cursor: pointer;
+        }
         &--regist{
             font-size: $font-size_s;
             background-color: #fff;

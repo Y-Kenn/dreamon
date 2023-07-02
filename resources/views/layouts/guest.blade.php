@@ -17,7 +17,7 @@
         <script src="https://kit.fontawesome.com/1329293142.js" crossorigin="anonymous"></script>
 
     </head>
-    <body class="u-bg_color--softGray">
+    <body>
 
 
             {{ $slot }}

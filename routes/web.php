@@ -77,6 +77,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('terms', function () {
+    $authorize_url = env('VITE_URL_TWITTER_OAUTH');
+    return view('pages/terms', compact('authorize_url'));
+})->name('terms');
+
 // Route::get('/loading', [TwitterRegisterController::class, 'create'])
 // ->name('twitter-register.create');
 Route::get('/loading', function () {

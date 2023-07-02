@@ -4,6 +4,7 @@
 $font-color_soft: #aaa;
 $font-color_default: #777;
 $font-color_dark: #656565;
+$font-color_black: #424242;
 $font-color_link: #1568e4;
 
 $background-color_hover: #f3f3f3;
@@ -44,7 +45,7 @@ color: $font-color_default;
 font-size: $font-size_default;
 line-height: 1.6;
 //font-family: 'Noto Sans JP', sans-serif;
-font-family:  'Noto Sans JP', sans-serif, Quicksand, 游ゴシック体, "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif; // TODO:リファクタ必要（変数にする）
+font-family:  sans-serif, Quicksand, 游ゴシック体, "Yu Gothic", YuGothic, "ヒラギノ角ゴシック Pro", "Hiragino Kaku Gothic Pro", メイリオ, Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif; // TODO:リファクタ必要（変数にする）
 text-size-adjust: 100%;
 letter-spacing: 0.1em;
 }
