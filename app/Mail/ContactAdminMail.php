@@ -8,17 +8,21 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class ContactMail extends Mailable
+class ContactAdminMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $email;
+    public $text;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($email, $text)
     {
-        //
+        $this->email = $email;
+        $this->text = $text;
     }
 
     /**
@@ -26,11 +30,11 @@ class ContactMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Contact Mail',
-            from: 'foo@example.net',
-            to: 'foo@example.net',
-        );
+        $envelope = new Envelope();
+
+        return $envelope->subject('お問合せを受信しました')
+            ->from(env('MAIL_ADDRESS_INFO'), 'Kamitter')
+            ->to(env('MAIL_ADDRESS_ADMIN'));
     }
 
     /**
@@ -39,8 +43,7 @@ class ContactMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.contact',
-            //text: 'emails.contact',
+            text: 'emails.contactAdmin',
         );
     }
 

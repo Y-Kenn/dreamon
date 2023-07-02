@@ -36,7 +36,7 @@ class LockedNotificationMail extends Mailable
     {
         $envelope = new Envelope();
 
-        return $envelope->subject('Twitterアカウントが凍結された可能性があります。')
+        return $envelope->subject('Twitterアカウントが凍結された可能性があります')
             ->from('foo@example.net', 'Kamitter')
             ->to($this->user->email);
     }

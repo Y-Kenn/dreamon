@@ -22,6 +22,7 @@ use App\Http\Controllers\EmailAddressController;
 use App\Http\Controllers\RegistPasswordController;
 use App\Http\Controllers\LockedController;
 use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/', function () {return view('pages/top');});
+Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('terms', function () {
     $authorize_url = env('VITE_URL_TWITTER_OAUTH');

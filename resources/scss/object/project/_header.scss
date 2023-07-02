@@ -2,6 +2,8 @@
     height: 60px;
     // background-color: #fff;
     background-image: linear-gradient(160deg,#54c2f9,#1e88f5);
+    position: relative;
+    z-index: 1;
     box-shadow: 0 1px 3px #cacaca;
     padding: 3px 100px;
     display: flex;

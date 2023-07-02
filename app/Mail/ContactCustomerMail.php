@@ -9,16 +9,20 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContestMail extends Mailable
+class ContactCustomerMail extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public $email;
+    public $text;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($email, $text)
     {
-        //
+        $this->email = $email;
+        $this->text = $text;
     }
 
     /**
@@ -26,9 +30,11 @@ class ContestMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Contest Mail',
-        );
+        $envelope = new Envelope();
+
+        return $envelope->subject('お問合せを受け付けました')
+            ->from(env('MAIL_ADDRESS_INFO'), 'Kamitter')
+            ->to($this->email);
     }
 
     /**
@@ -37,7 +43,7 @@ class ContestMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.contact',
+            text: 'emails.contactCustomer',
         );
     }
 
