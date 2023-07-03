@@ -1,0 +1,226 @@
+.p-top{
+    font-size: $font-size_m;
+    width: 100%;
+    &__section{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        padding-top: 30px;
+        padding-bottom: 50px;
+        flex-wrap: wrap;
+        &__inner{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+    }
+    &__helo_copy{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 35%;
+        height: 500px;
+        &__inner{
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: center;
+            margin-right: 50px;
+        }
+
+    }
+    &__displays{
+        width: 50%;
+        height: 500px;
+        position: relative;
+        &__pc{
+            width: 350px;
+            border: 10px solid #eee;
+            border-radius: 7px;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+            -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+            &--front{
+                position: absolute;
+                top: 220px;
+                z-index: 1;
+            }
+            &--back{
+                position: absolute;
+                top: 20px;
+                left: 200px;
+                top: 50px;
+                left: 150px;
+            }
+        }
+        &__smapho{
+            width: 100px;
+            border: 10px solid #eee;
+            border-radius: 7px;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+            -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+            position: absolute;
+            top: 200px;
+            left: 520px;
+        }
+        &__icon{
+            font-size: 40px;
+            text-shadow: 2px 2px 2px #ddd, -1px 1px 1px #ddd, 1px -1px 1px #ddd, -1px -1px 1px #ddd;
+
+           &--like{
+               color: #ff758d;
+               position: absolute;
+               top: 130px;
+               left: 20px;
+           }
+            &--follow{
+                color: $mainBlue;//#40ee8b;//#70f55e;
+                position: absolute;
+                top: 360px;
+                left: 420px;
+
+            }
+            &--unfollow{
+                color: #d900a6;//#d900d9;
+                position: absolute;
+                top: 60px;
+                left: 540px;
+                font-size: 37px;
+            }
+            &--tweet{
+                color:  #0faaf8;
+                position: absolute;
+                top: 14px;
+                left: 230px;
+                font-size: 40px;
+            }
+        }
+
+    }
+    &__copy{
+        vertical-align: text-bottom;
+        &--middle{
+            color: $font-color_dark;
+            font-size: $font-size_xl;
+            font-weight: bold;
+        }
+        &--big{
+            color: $font-color_dark;
+            font-size: $font-size_3l;
+            font-weight: bold;
+        }
+        &--biggest{
+            color: #000;
+            font-size: 5.5rem;
+            font-weight: bold;
+        }
+    }
+    &__problem{
+        width: 30%;
+        margin-right: 20px;
+        margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        &__img{
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+    }
+    &__graph{
+        width: 60%;
+        border-radius: 10px;
+        box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+    }
+    &__text{
+        width: 70%;
+        font-size: $font-size_l;
+        color: $font-color_dark;
+    }
+    &__function{
+        width: 60%;
+        border: 1px solid $border-color_default;
+        border-radius: 10px;
+        margin-bottom: 50px;
+        box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        &__title{
+            display: inline-block;
+            font-size: $font-size_xl;
+            font-weight: bold;
+            color: $font-color_dark;
+            border-bottom: 2px solid $font-color_default;
+            vertical-align: middle;
+            padding-top: 0.5rem;
+            margin-left: 2rem;
+        }
+        &__text{
+            font-size: $font-size_l;
+            color: $font-color_dark;
+            padding: 0.5rem 2rem 1rem 2.5rem;
+        }
+        &--follow{
+            box-shadow: 0 2px 7px #77abe6;
+            -webkit-box-shadow: 0 2px 7px #77abe6;
+        }
+        &--unfollow{
+            box-shadow: 0 2px 7px #d900a6;
+            -webkit-box-shadow: 0 2px 7px #e090cd;
+        }
+        &--like{
+            box-shadow: 0 2px 7px #ff758d;
+            -webkit-box-shadow: 0 2px 7px #f6abb8;
+        }
+        &--reserve{
+            box-shadow: 0 2px 7px $lightBlue;
+            -webkit-box-shadow: 0 2px 7px #98d5f5;
+        }
+        &--accounts{
+            box-shadow: 0 2px 7px #40ee8b;
+            -webkit-box-shadow: 0 2px 7px #91e8b7;
+        }
+    }
+    &__qa{
+        width: 60%;
+        margin-bottom: 50px;
+        &__q{
+            font-size: $font-size_xl;
+            font-weight: bold;
+            color: $font-color_dark;
+        }
+        &__a{
+            font-size: $font-size_l;
+            color: $font-color_default;
+            margin: 1rem 0 0 4rem;
+        }
+    }
+    &__regist{
+        width: 230px;
+        height: 85px;
+        background-image: linear-gradient(160deg,$mainBlue, #54f4f9);
+        border-radius: 15px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+        box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        transition: 0.5s;
+        &:hover{
+            cursor: pointer;
+            color: #fff;
+            transform: translateY(3px);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+            -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
+        }
+    }
+}

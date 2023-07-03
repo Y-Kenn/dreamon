@@ -1,12 +1,18 @@
 .u-font_color{
     &--lightgreen{
-        color: lightgreen;
+        color: #40ee8b;
     }
     &--mainblue{
         color: $mainBlue;
     }
+    &--middleblue{
+        color: #0faaf8;
+    }
+    &--lightblue{
+        color: $lightBlue;
+    }
     &--lightpurple{
-        color: #d900d9;
+        color: #d900a6//#d900d9;
     }
     &--pink{
         color: #ff758d;

@@ -1,5 +1,5 @@
 <header class="p-header">
-    <a href="" class="p-header__logo">
+    <a href="{{ route('top') }}" class="p-header__logo">
         <img src="/img/header_logo.png" alt="logo">
     </a>
 
