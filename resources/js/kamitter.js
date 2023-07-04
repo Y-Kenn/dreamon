@@ -9,6 +9,8 @@ import App from './App.vue';
 import router from './router';
 import { axiosErrorHandle } from './axiosErrorHandler'
 
+
+
 axiosErrorHandle();
 
 const app = createApp(App);

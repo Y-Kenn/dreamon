@@ -1,6 +1,6 @@
 .p-profile{
     margin-left: 1rem;
-    
+
     &__input{
         display: inline-block;
         &__header{
@@ -107,7 +107,7 @@
             margin-left: 70px;
             @include mq(md){
                 margin: auto;
-                width: 170px;
+                width: 130px;
             }
             &--active{
                 background-image: linear-gradient(160deg,#7acdf3,#98d1be);

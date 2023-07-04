@@ -13,6 +13,7 @@
         "autoprefixer": "^10.4.12",
         "axios": "^1.1.2",
         "classnames": "^2.3.2",
+        "flatpickr": "^4.6.13",
         "laravel-vite-plugin": "^0.7.2",
         "nativescript-socket.io": "^0.11.1",
         "nativescript-toast": "^2.0.0",

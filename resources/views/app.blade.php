@@ -11,11 +11,6 @@
         @vite(['resources/js/kamitter.js', 'resources/scss/app.scss'])
     </head>
     <body>
-       <?php
-        use Illuminate\Support\Facades\Session;
-
-        var_dump(Session::all());
-        ?>
         <div id="app"></div>
     </body>
 </html>

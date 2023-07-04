@@ -13,7 +13,7 @@
         resize: none;
         background-color: $background-color_soft;
         overflow-wrap: anywhere;
-        
+
     }
     &__inner{
         display: flex;
@@ -23,37 +23,37 @@
         @include mq(){
             flex-direction: column;
             align-items: flex-end;
-            
+
         }
     }
     &__datetime{
+        vertical-align: middle;
+        text-align: center;
         margin-right: 1rem;
         align-items: center;
-        &::-webkit-datetime-edit{
-            font-size: $font-size_m;
-            border-bottom: 1px solid #ddd;
-            margin-left: 1rem;
-            margin-right: 1rem;
-            //border-radius: 4px;
-            padding-left: 0.5rem;
-            // padding-right: 1rem;
-            padding-top: 0.1rem;
-            padding-bottom: 0.1rem;
-        }
-        &::-webkit-calendar-picker-indicator{
-            font-size: $font-size_xl;
-            margin-left: 0.5rem;
-            mix-blend-mode: difference;
-            background-color: #c87500;
-            border-radius: 4px;
-            box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
-            -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
-            :hover{
-                cursor: pointer;
-            }
+        -webkit-appearance: none;
+
+        font-size: $font-size_m;
+        border-bottom: 1px solid #ddd;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        //border-radius: 4px;
+        //padding-right: -3rem;
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+    }
+    &__icon{
+        vertical-align: middle;
+        font-size: $font-size_xl;
+        margin-left: 0.5rem;
+        color: $mainBlue;
+        border-radius: 4px;
+        :hover{
+            cursor: pointer;
         }
     }
     &__text_count{
+        vertical-align: middle;
         font-size: $font-size_m;
         width: 110px;
         margin: auto 0;

@@ -4,9 +4,9 @@
     display: inline-block;
     box-sizing: border-box;
     background-color: $background-color_soft;
-    &:focus{
-      outline: 2px solid $mainBlue;
-    }
+    //&:focus{
+    //  outline: 2px solid $mainBlue;
+    //}
     &--submit{
         width: 50px;
     }
@@ -19,7 +19,7 @@
 
         &::before,&::after {
           content: "";
-          display: block; 
+          display: block;
           position: absolute;
         }
         &::before {
