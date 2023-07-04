@@ -22,13 +22,13 @@
                     </div>
                     <div class="p-top__displays">
                         <div class="p-top__displays__pc p-top__displays__pc--front">
-                            <img src="/img/display.png" alt="logo">
+                            <img src="/img/display1.png" alt="logo">
                         </div>
                         <div class="p-top__displays__pc p-top__displays__pc--back">
-                            <img src="/img/display.png" alt="logo">
+                            <img src="/img/display2.png" alt="logo">
                         </div>
                         <div class="p-top__displays__smapho">
-                            <img src="/img/smapho.png" alt="logo">
+                            <img src="/img/smapho1.png" alt="logo">
                         </div>
                         <i class="p-top__displays__icon p-top__displays__icon--like fa-solid fa-heart"></i>
                         <i class="p-top__displays__icon p-top__displays__icon--follow fa-solid fa-user-plus"></i>
@@ -58,7 +58,8 @@
             </div>
             <div class="p-top__section">
                 <div class="p-top__section__inner">
-                    <span class="p-top__copy p-top__copy--big">Kamitterなら 自動運用で圧倒的パフォーマンス</span>
+                    <span class="p-top__copy p-top__copy--big">Kamitterなら自動運用で</span>
+                    <span class="u-highlight--blue p-top__copy p-top__copy--big">圧倒的パフォーマンス</span>
                 </div>
                 <div class="p-top__section__inner">
                     <img src="img/graph.png" class="p-top__graph">

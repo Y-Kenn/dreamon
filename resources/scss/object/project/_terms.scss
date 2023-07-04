@@ -9,6 +9,10 @@
         padding: 3rem 5rem;
         background-color: #fff;
         border-radius: 10px;
+        @include mq(sm){
+            width: 90%;
+            padding: 3rem 1rem;
+        }
         &__title{
             font-size: $font-size_xxl;
             font-weight: bold;
@@ -22,11 +26,17 @@
             color: $font-color_black;
             text-align: left;
             margin-bottom: 1.5rem;
+            @include mq(sm){
+                font-size: $font-size_l;
+            }
         }
         &__text{
             font-size: $font-size_m;
             color: $font-color_black;
             margin-bottom: 1rem;
+            @include mq(sm){
+                font-size: $font-size_s;
+            }
         }
 
     }

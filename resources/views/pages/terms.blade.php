@@ -33,15 +33,17 @@
                 <p class="p-terms__document__text">登録ユーザーとその他の者とを識別するために、当サービスが登録し、登録ユーザーに対して発行しているユーザーID及びユーザーパスワードをいいます。</p>
                 <p class="p-terms__document__text">9.「当サービスウェブサイト」</p>
                 <p class="p-terms__document__text">そのドメインが「autolikes.biz」である、当サービスが運営するウェブサイト（理由の如何を問わず、当サービスのウェブサイトのドメイン又は内容が変更された場合は、当該変更後のドメインを含みます。）をいいます。</p>
-                <p class="p-terms__document__text"></p>
-                <p class="p-terms__document__text"></p>
-                <p class="p-terms__document__text"></p>
-                <p class="p-terms__document__text"></p>
+                <h2 class="p-terms__document__subtitle">第3条 登録ユーザーの登録</h2>
+                <p class="p-terms__document__text">1. 利用希望者は、本規約を遵守することに同意し、かつ登録情報を当サービスの定める方法で当サービスに提供することにより、当サービスに対し、本サービスの利用の登録を申請することができます。</p>
+                <p class="p-terms__document__text">2. 当サービスは、当サービスの基準に従って、利用希望者の登録の可否を判断し、当サービスが登録を認める場合にはその旨を利用希望者に通知し、この通知により利用希望者の登録ユーザーとしての登録が完了したものとします。</p>
+                <p class="p-terms__document__text">3. 前項に定める登録の完了時に、本規約の諸規定に従ったサービス利用契約が登録ユーザーと当サービスの間に成立し、登録ユーザーは本サービスを当サービスの定める方法で利用することができるようになります。</p>
+                <p class="p-terms__document__text">4. 当サービスは、第１項に基づき登録を申請した者が、以下の各号のいずれかの事由に該当する場合は、登録を拒否することがあります。</p>
 
             </div>
-
+            {{--コピペ部品--}}
             <p class="p-terms__document__text"></p>
             <h2 class="p-terms__document__subtitle"></h2>
+            {{--コピペ部品--}}
 
         </div>
     </main>
