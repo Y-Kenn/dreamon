@@ -27,6 +27,9 @@ class Kernel extends ConsoleKernel
         //followed_accounts table の更新
         //$schedule->command('throw-update-following')->hourly();
 
+        //アカウントのフォロー数・フォロワー数等更新
+        $schedule->command('throw-update-twitter-data')->daily();
+
         //ジョブチェーン処理失敗でジョブチェーン処理中のフラグが経ち続けるスタックを解消
         $schedule->command('check-stuck-accounts')->hourly();
     }
