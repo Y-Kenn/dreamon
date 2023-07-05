@@ -87,7 +87,7 @@ export default {
 
 <style lang="scss">
 
-@import 'flatpickr/dist/flatpickr.css';
+@import './node_modules/flatpickr/dist/flatpickr.css';
 
 $red        : #f00;
 $blue       : #25bdcf;
