@@ -33,9 +33,9 @@ class TestController extends Controller
 //        } catch(\Exception $e){
 //            Log::debug($e->getMessage());
 //        }
-        //Session::flush();
+        Session::flush();
 
-    Log::debug('TEST : ' . print_r(Auth::id(), true));
+    //Log::debug('TEST : ' . print_r(Auth::id(), true));
 
 
 

@@ -39,7 +39,7 @@
 import {onBeforeMount, reactive, computed, onMounted} from 'vue';
 import { useStore } from "vuex";
 import flatpickr from 'flatpickr/dist/flatpickr.min.js';
-import { Japanese } from "flatpickr/dist/l10n/ja.js"
+import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import ReservedTweet from '../Components/ReservedTweet.vue';
 
 export default {
@@ -87,7 +87,7 @@ export default {
 
 <style lang="scss">
 
-@import './node_modules/flatpickr/dist/flatpickr.css';
+@import 'flatpickr/dist/flatpickr.css';
 
 $red        : #f00;
 $blue       : #25bdcf;

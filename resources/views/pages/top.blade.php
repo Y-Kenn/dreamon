@@ -62,7 +62,7 @@
                     <span class="u-highlight--blue p-top__copy p-top__copy--big">圧倒的パフォーマンス</span>
                 </div>
                 <div class="p-top__section__inner">
-                    <img src="img/graph.png" class="p-top__graph">
+                    <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/graph.png" class="p-top__graph">
                 </div>
                 <div class="p-top__section__inner">
                     <div class="p-top__text">

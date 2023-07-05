@@ -3,6 +3,18 @@
         vertical-align: middle;
         font-weight: bold;
         display: inline-block;
+        transition: 0.5s;
+        &:hover{
+            transform: translateY(3px);
+        }
+        @include mq(sm){
+            &:hover{
+                pointer-events: none;
+            }
+            &:active{
+                transform: translateY(3px);
+            }
+        }
     &--submit{
         //display: block;
         //text-decoration: none;
@@ -16,7 +28,18 @@
             color: #fff;
             background: #4a9ff3;//#27acd9;
             border-bottom: 2px solid #fff;
-            transform: translateY(3px);
+
+        }
+        @include mq(sm){
+            &:hover{
+                pointer-events: none;
+            }
+            &:active{
+                color: #fff;
+                background: #4a9ff3;//#27acd9;
+                border-bottom: 2px solid #fff;
+                transform: translateY(3px);
+            }
         }
     }
 

@@ -7,13 +7,13 @@
                     </div>
                     <div class="p-page__discription">
                         <p>キーワードのいずれかにヒットするツイートを抽出して自動でいいねします。</p>
-                        
+
                     </div>
                 </div>
             <div class="p-activate">
-                <button @click="toggleStatus" v-bind:class="{ 'p-activate__button--active': status.status }" class="p-activate__button">{{ (status.status) ? '自動いいね中' : '自動いいね開始' }}</button>
+                <button @click="toggleStatus" v-bind:class="{ 'p-activate__button--active': status.status }" class="c-button p-activate__button">{{ (status.status) ? '自動いいね中' : '自動いいね開始' }}</button>
             </div>
-            
+
             <div class="p-page__sub_title">
                 <i class="fa-solid fa-square"></i> キーワード
             </div>
@@ -23,7 +23,7 @@
             </div>
             <LikeKeyword />
         </div>
-        
+
     </div>
 </template>
 

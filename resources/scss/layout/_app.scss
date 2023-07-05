@@ -3,6 +3,11 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    overflow: hidden;
+    @include mq(){
+        min-height: 695px;
+        justify-content: flex-start;
+    }
     @include mq(){
         flex-direction: column;
     }

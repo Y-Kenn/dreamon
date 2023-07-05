@@ -8,21 +8,21 @@
                 <div class="p-page__discription">
                     <p>フォローが5000人を超えている場合に自動でアンフォローします。<br>
                     保護アカウントに登録したアカウントはアンフォローしません。</p>
-                    
+
                 </div>
             </div>
 
             <div class="p-activate">
-                <button @click="toggleStatus" v-bind:class="{ 'p-activate__button--active': status.status }" class="p-activate__button">{{ (status.status) ? '自動アンフォロー中' : '自動アンフォロー開始' }}</button>
+                <button @click="toggleStatus" v-bind:class="{ 'p-activate__button--active': status.status }" class="c-button p-activate__button">{{ (status.status) ? '自動アンフォロー中' : '自動アンフォロー開始' }}</button>
             </div>
-            
-            
+
+
             <div class="p-page__sub_title">
                 <i class="fa-solid fa-square"></i> 保護アカウント
             </div>
             <UnfollowProtect />
         </div>
-        
+
     </div>
 </template>
 
