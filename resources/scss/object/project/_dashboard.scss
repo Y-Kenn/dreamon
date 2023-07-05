@@ -5,9 +5,10 @@
         height: 6rem;
         display: flex;
         align-items: baseline;
-        font-size: $font-size_l;
+        font-size: $font-size_xl;
         font-weight: bold;
         margin-left: 1.2rem;
+        font-weight: bold;
     }
     &__inner{
         width: 100%;
@@ -25,7 +26,7 @@
             width: 50%;
         }
         &__title{
-            
+
             height: 3rem;
             font-size: 1.8rem;
         }
@@ -33,8 +34,8 @@
             margin-right: 0.5rem;
         }
         &__num{
-            height: 9rem;
-            line-height: 9rem;
+            height: 12rem;
+            line-height: 11rem;
             width: 100%;
             text-align: center;
             font-size: 4rem;

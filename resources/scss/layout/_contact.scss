@@ -1,5 +1,7 @@
 .l-contact{
     width: 650px;
     margin: auto;
-
+    @include mq(sm){
+        width: 100%;
+    }
 }

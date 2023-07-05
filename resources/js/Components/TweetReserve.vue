@@ -77,7 +77,7 @@ export default {
                                 new_tweet.text = '';
                             });
         };
-        return { now, new_tweet, reserved_tweets, getTweets, createTweet };
+        return { new_tweet, reserved_tweets, getTweets, createTweet };
     }
 
 
