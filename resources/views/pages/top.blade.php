@@ -13,7 +13,7 @@
                                 <i class="u-font_color--mainblue p-top__copy--biggest fa-regular fa-circle-check"></i>
                             </div>
                             <!--登録ボタン-->
-                            <a class="p-top__regist c-button" href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id=VTgzWHhNVGk0Z3FqN29ZcEZLYlk6MTpjaQ&redirect_uri=http%3A%2F%2Flocalhost%2Floading&scope=users.read+tweet.read+list.read+like.read+follows.read+follows.write+tweet.write+like.write+offline.access&state=dF58mHRuiDFlFRUotS5Sr2QjujqoYb1W2M0zG0OkvUk&code_challenge=A8d421lLi59qtj0NGUXJRLDc2TF50ME__F5zd7_18vg&code_challenge_method=s256">
+                            <a class="p-top__regist c-button" href="{{env('VITE_URL_TWITTER_OAUTH')}}">
                                 <span class="u-font_size--l">Twitterアカウントで</span>
                                 <span class="u-font_size--xl">無料登録</span>
                             </a>
@@ -132,7 +132,7 @@
                     </p>
                 </div>
                 <!--登録ボタン-->
-                <a class="p-top__regist c-button" href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id=VTgzWHhNVGk0Z3FqN29ZcEZLYlk6MTpjaQ&redirect_uri=http%3A%2F%2Flocalhost%2Floading&scope=users.read+tweet.read+list.read+like.read+follows.read+follows.write+tweet.write+like.write+offline.access&state=dF58mHRuiDFlFRUotS5Sr2QjujqoYb1W2M0zG0OkvUk&code_challenge=A8d421lLi59qtj0NGUXJRLDc2TF50ME__F5zd7_18vg&code_challenge_method=s256">
+                <a class="p-top__regist c-button" href="{{env('VITE_URL_TWITTER_OAUTH')}}">
                     <span class="u-font_size--l">Twitterアカウントで</span>
                     <span class="u-font_size--xl">無料登録</span>
                 </a>
@@ -164,7 +164,7 @@
                         ブラウザ上で起動や設定をしていただき、自動機能等の処理はKamitterのサーバー上で実行されますので、24時間自動で運用することが可能です。
                 </div>
                 <!--登録ボタン-->
-                <a class="p-top__regist c-button" href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id=VTgzWHhNVGk0Z3FqN29ZcEZLYlk6MTpjaQ&redirect_uri=http%3A%2F%2Flocalhost%2Floading&scope=users.read+tweet.read+list.read+like.read+follows.read+follows.write+tweet.write+like.write+offline.access&state=dF58mHRuiDFlFRUotS5Sr2QjujqoYb1W2M0zG0OkvUk&code_challenge=A8d421lLi59qtj0NGUXJRLDc2TF50ME__F5zd7_18vg&code_challenge_method=s256">
+                <a class="p-top__regist c-button" href="{{env('VITE_URL_TWITTER_OAUTH')}}">
                     <span class="u-font_size--l">Twitterアカウントで</span>
                     <span class="u-font_size--xl">無料登録</span>
                 </a>

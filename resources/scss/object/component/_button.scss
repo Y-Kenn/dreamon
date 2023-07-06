@@ -29,16 +29,17 @@
         box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
         -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
         transition: 0.5s;
-        &:hover{
-            color: #fff;
-            background: #4a9ff3;//#27acd9;
-            border-bottom: 2px solid #fff;
-
+        @media(hover: hover) {
+            &:hover {
+                color: #fff;
+                background: #4a9ff3;//#27acd9;
+                border-bottom: 2px solid #fff;
+            }
         }
         @include mq(sm){
-            &:hover{
-                pointer-events: none;
-            }
+            //&:hover{
+            //    pointer-events: none;
+            //}
             &:active{
                 color: #fff;
                 background: #4a9ff3;//#27acd9;
