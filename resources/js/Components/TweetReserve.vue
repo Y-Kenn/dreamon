@@ -41,17 +41,19 @@ import { useStore } from "vuex";
 import flatpickr from 'flatpickr/dist/flatpickr.min.js';
 import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import ReservedTweet from '../Components/ReservedTweet.vue';
+import moment from 'moment';
 
 export default {
     components: {ReservedTweet},
 
     setup(props){
+        const now_plus = moment().add(10,'minute').format('YYYY-MM-DD HH:mm');
         onMounted(()=>{
             flatpickr('#js-datepicker', {
                 locale      : Japanese,
                 dateFormat  : 'Y/m/d H:i',
-                defaultDate : new Date(),
-                minDate     : new Date(),
+                defaultDate : now_plus,
+                minDate     : now_plus,
                 enableTime  : true,
             });
         })
@@ -59,7 +61,7 @@ export default {
         const store = useStore();
         let reserved_tweets = computed(()=> store.state.reserved_tweets);
         let new_tweet = reactive({
-            reserved_date: new Date(),
+            reserved_date: now_plus,
             text: "",
         });
         const getTweets = async ()=>{
