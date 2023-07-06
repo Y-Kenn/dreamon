@@ -1,6 +1,8 @@
 .p-profile{
     margin-left: 1rem;
-
+    @include mq(sm){
+        margin-left: 0;
+    }
     &__input{
         display: inline-block;
         &__header{
@@ -29,7 +31,7 @@
             padding-left: 1.5rem;
             background-color: $background-color_soft;
             @include mq(sm){
-                width: 210px;
+                width: calc(100vw - 150px);
             }
         }
     }

@@ -17,13 +17,18 @@
         box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
         -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
         opacity: 0.6;
-        &:hover{
-            opacity: 0.8;
-        }
-        @include mq(sm){
-            &:hover{
-                pointer-events: none;
+        @media(hover: hover) {
+            &:hover {
+                transform: translateY(3px);
             }
+        }
+        //&:hover{
+        //    opacity: 0.8;
+        //}
+        @include mq(sm){
+            //&:hover{
+            //    pointer-events: none;
+            //}
             &:active{
                 opacity: 0.8;
             }

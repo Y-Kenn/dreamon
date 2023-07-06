@@ -18,9 +18,9 @@
 
     &__inner{
         margin-bottom: 2rem;
-        
+
     }
-    
+
     &__input{
         height: 4rem;
         width: 250px;
@@ -31,10 +31,10 @@
         vertical-align: middle;
         background-color: $background-color_soft;
         @include mq(sm){
-            width: 200px;
+            width: calc(100% - 150px);
             margin-left: 0;
         }
-        
+
     }
     &__exclude{
         vertical-align: middle;
