@@ -2,7 +2,7 @@
     <div class="p-sidenav">
         <div class="p-sidenav__header">
             <div class="p-sidenav__logo">
-                <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/header_logo.png" alt="logo">
+                <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/logo.png" alt="logo">
             </div>
             <div @click="slideSidenav" :class="{'p-sidenav__header__triggar--active': sidenav.show}" class="p-sidenav__header__triggar">
                 <span></span>
