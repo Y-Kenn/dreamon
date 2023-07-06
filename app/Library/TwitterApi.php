@@ -4,7 +4,6 @@ namespace App\Library;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Models\TwitterAccount;
-use App\Models\ApiHist;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LockedNotificationMail;
 use DateTime;
@@ -22,23 +21,6 @@ class TwitterApi
         $this->client_id = $client_id;
         $this->client_secret = $client_secret;
         $this->redirect_uri = $redirect_uri;
-    }
-
-    public function registApiHist($func_name, $result){
-        //[status] => 429
-        $limited = false;
-        if(isset($result['status'])){
-            if($result['status'] === 429) $limited = true;
-        }
-
-        $twitter_id = Session::get('twitter_id');
-        ($twitter_id) ? true : $twitter_id = 'test';
-
-        ApiHist::create([
-            'twitter_id' => $twitter_id,
-            'func' => $func_name,
-            'limited' => $limited,
-        ]);
     }
 
     //URL末尾にクエリパラメータ追加
@@ -243,8 +225,6 @@ class TwitterApi
 
         $result = $this->request($url, 'GET');
 
-        $this->registApiHist('getMyInfo', $result);
-
         if(!isset($result['data'])){
             Log::debug('ERROR - GET MY INFO : ' . print_r($result, true));
             return $result;
@@ -264,8 +244,6 @@ class TwitterApi
         $inserted_url = $this->insertParam($base_url, $data);
 
         $result = $this->request($inserted_url, 'GET');
-
-        $this->registApiHist('getUserInfoByName', $result);
 
         //取得に失敗した場合
         if(!isset($result['data'])){
@@ -293,8 +271,6 @@ class TwitterApi
         ];
         $url = $this->makeUrl($base_url, $query);
         $result = $this->request($url, 'GET');
-
-        $this->registApiHist('getUserInfoByN', $result);
 
         //取得に失敗した場合
         if(!isset($result['data'])){
