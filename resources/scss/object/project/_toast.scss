@@ -3,9 +3,9 @@
     display: flex;
     justify-content: center;
     width: 78%;
+    margin-top: 10px;
     @include mq(sm){
         width: 100%;
-        margin-top: 10px;
     }
     &__item{
         min-width: 200px;
