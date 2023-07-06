@@ -58,7 +58,7 @@
 
                         @if (Route::has('password.request'))
                             <a class="p-auth__form__twitter"
-                               href="{{ $authorize_url }}">
+                               href="{{ env('VITE_URL_TWITTER_OAUTH') }}">
                                 <i class="fa-brands fa-twitter"></i>
                                 Twitter
                             </a>
