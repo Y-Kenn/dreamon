@@ -25,7 +25,7 @@
                             <textarea id="text" class="c-input" name="text" required autofocus>{{ old('text') }}</textarea>
                             <x-input-error :messages="$errors->get('text')" class="p-auth__form__error" />
                         </div>
-                        <x-primary-button class="p-auth__form__submit c-button">
+                        <x-primary-button class="p-auth__form__submit">
                             {{ __('送信') }}
                         </x-primary-button>
                     </form>
