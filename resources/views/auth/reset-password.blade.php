@@ -1,7 +1,5 @@
 <x-guest-layout>
-    <x-header title="ResetPssword">
-        {{ $authorize_url }}
-    </x-header>
+    <x-header title="ResetPssword" />
     <main class="u-bg_color--softGray">
         <div class="l-auth">
             <div class="p-auth">

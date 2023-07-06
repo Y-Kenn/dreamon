@@ -1,8 +1,6 @@
 
 <x-guest-layout>
-    <x-header title="Login">
-        {{ $authorize_url }}
-    </x-header>
+    <x-header title="Login" />
     <main class="u-bg_color--softGray">
         <div class="l-auth">
             <div class="p-auth">
