@@ -86,7 +86,7 @@ class ProtectedAccountController extends Controller
         //正常取得できた場合
         if(isset($result['data'])){
 
-            $exist_flag = ProtectedFollowedAccount::where('protected_tw０itter_id', $result['data']['id'])
+            $exist_flag = ProtectedFollowedAccount::where('protected_twitter_id', $result['data']['id'])
                                             ->where('user_twitter_id', $user_twitter_id)
                                             ->exists();
             //未処理のターゲットベースアカウントと重複していない場合、DB登録
