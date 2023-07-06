@@ -82,10 +82,8 @@ Route::get('/', function () {return view('pages/top');})->name('top');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-Route::get('terms', function () {
-    $authorize_url = env('VITE_URL_TWITTER_OAUTH');
-    return view('pages/terms', compact('authorize_url'));
-})->name('terms');
+Route::get('terms', function () {return view('pages/terms');})->name('terms');
+Route::get('privacy-policy', function () {return view('pages/privacy-policy');})->name('privacy-policy');
 
 // Route::get('/loading', [TwitterRegisterController::class, 'create'])
 // ->name('twitter-register.create');

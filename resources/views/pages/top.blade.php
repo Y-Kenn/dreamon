@@ -22,13 +22,13 @@
                     </div>
                     <div class="p-top__displays">
                         <div class="p-top__displays__pc p-top__displays__pc--front">
-                            <img src="/img/display1.png" alt="logo">
+                            <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/display1.png" alt="logo">
                         </div>
                         <div class="p-top__displays__pc p-top__displays__pc--back">
-                            <img src="/img/display2.png" alt="logo">
+                            <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/display2.png" alt="logo">
                         </div>
                         <div class="p-top__displays__smapho">
-                            <img src="/img/smapho1.png" alt="logo">
+                            <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/smapho1.png" alt="logo">
                         </div>
                         <i class="p-top__displays__icon p-top__displays__icon--like fa-solid fa-heart"></i>
                         <i class="p-top__displays__icon p-top__displays__icon--follow fa-solid fa-user-plus"></i>
@@ -43,15 +43,15 @@
                 </div>
                 <div class="p-top__section__inner">
                     <div class="p-top__problem">
-                        <img src="img/busy.png" class="p-top__problem__img">
+                        <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/busy.png" class="p-top__problem__img">
                         <span class="p-top__copy--middle">運用の時間が確保できない</span>
                     </div>
                     <div class="p-top__problem">
-                        <img src="img/data.png" class="p-top__problem__img">
+                        <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/data.png" class="p-top__problem__img">
                         <span class="p-top__copy--middle">フォロワーが思うように増えない</span>
                     </div>
                     <div class="p-top__problem">
-                        <img src="img/money.png" class="p-top__problem__img">
+                        <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/money.png" class="p-top__problem__img">
                         <span class="p-top__copy--middle">顧客獲得に繋がらない</span>
                     </div>
                 </div>
