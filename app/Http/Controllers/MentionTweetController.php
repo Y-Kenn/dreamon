@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Library\TwitterApi;
 
+//@メンションツイート表示用コントローラ
 class MentionTweetController extends Controller
 {
     /**
@@ -17,11 +18,11 @@ class MentionTweetController extends Controller
     {
         $twitter_id = Session::get('twitter_id');
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken($twitter_id);
         $TwitterApi->setTokenToHeader($access_token);
@@ -31,12 +32,14 @@ class MentionTweetController extends Controller
             return array();
         }
 
+        //タイムスタンプのフォーマットを変更
         for($i = 0; $i < count($result['data']); $i++){
             $result['data'][$i]['created_at'] = $TwitterApi->toJapanTime($result['data'][$i]['created_at']);
         }
 
+        //取得したデータはツイートとユーザ情報が別れているためマージ
         $result_shaped = $TwitterApi->mergeUserData($result);
-        
+
         Log::debug('MENTIONS : ' .print_r($result_shaped, true));
         return $result_shaped['data'];
     }

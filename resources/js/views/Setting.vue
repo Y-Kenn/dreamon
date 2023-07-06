@@ -22,8 +22,10 @@
             <div class="p-page__sub_title">
                 <i class="fa-solid fa-square"></i> パスワード
             </div>
+            <!--パスワード登録済みの場合表示-->
             <PasswordUpdate v-if="password_exist_flag"
                             @successRegist="showToast"/>
+            <!--パスワード未登録の場合表示-->
             <Password v-else @firstRegist="checkExistPassword()"
                             @successRegist="showToast" />
             <div class="p-page__sub_title">
@@ -48,12 +50,14 @@ export default {
     setup(){
         const store = useStore();
         let password_exist_flag = computed(()=> store.state.password_exist_flag);
+        //パスワード登録の有無を確認
         const checkExistPassword = ()=>{
             store.dispatch('checkExistPassword');
         };
         let toast = reactive({
             show: false
         });
+        //送信成功のトーストを表示
         const showToast = ()=>{
             toast.show = true;
             setTimeout(()=>toast.show = false, 5500)

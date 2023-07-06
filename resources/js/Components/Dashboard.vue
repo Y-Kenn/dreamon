@@ -1,9 +1,9 @@
 <template>
     <div class="p-dashboard">
-        
+
         <div class="p-dashboard__header"><span class="u-font_size--xl">T</span>ODAY'S PARFORMANCE</div>
         <div class="p-dashboard__inner">
-            
+
             <div class="p-dashboard__item">
                 <div class="p-dashboard__item__titele">
                     <i class="p-dashboard__item__icon fa-solid fa-users"></i>増加フォロワー
@@ -70,26 +70,7 @@ export default {
     setup(){
         const store = useStore();
         const performances = computed(()=> store.state.performances);
-        //     data: {
-        //         following_today: 0,
-        //         following_30days: 0,
-        //         followers_today: 0,
-        //         followers_30days: 0,
-        //         unfollowing_today: 0,
-        //         unfollowing_30days: 0,
-        //         like_today: 0,
-        //         like_30days: 0,
-        //     }
-        // });
-        const getTwitterData = async ()=>{
-            store.dispatch('getPerformances');
-        //     const url = 'http://localhost/twitter-data';
-        //     const result = await axios.get(url);
-        //     performances.data = result.data;
-        };
-        // onBeforeMount(()=>{
-        //     getTwitterData();
-        // });
+
         return { performances }
     },
 }

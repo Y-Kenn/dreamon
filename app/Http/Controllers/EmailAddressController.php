@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
+//メールアドレス更新用コントローラ
 class EmailAddressController extends Controller
 {
     /**

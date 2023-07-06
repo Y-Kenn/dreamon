@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
+//フォローキーワード用コントローラ
 class FollowKeywordsController extends Controller
 {
     /**
@@ -41,9 +42,6 @@ class FollowKeywordsController extends Controller
             'not_flag' => 'required|boolean',
         ]);
         Log::debug('SESSION : ' .print_r($request->session()->all(), true));
-        //Session::put('test', 'test1');
-        // Log::debug('NEW KEYWORDS KEYWORDS : ' .print_r($request->keywords, true));
-        // Log::debug('NEW KEYWORDS NOT FLAG : ' .print_r($request->not_flag, true));
 
         FollowKeyword::create([
             'twitter_id' => Session::get('twitter_id'),

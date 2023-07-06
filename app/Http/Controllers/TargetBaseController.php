@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Library\TwitterApi;
 
+//ターゲットベースアカウント(フォロワー参照用アカウント)用コントローラ
 class TargetBaseController extends Controller
 {
     /**
@@ -25,20 +26,21 @@ class TargetBaseController extends Controller
         if(!$data_builder->exists()){
             return array();
         }
-        
+
         $data = $data_builder->get();
 
         $ids = array_column($data->toArray(), 'base_twitter_id');
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken(Session::get('twitter_id'));
         $TwitterApi->setTokenToHeader($access_token);
 
+        //ターゲットベースアカウントのTwitterアカウント情報を取得
         $result = $TwitterApi->getUserInfoByIds($ids);
         //リクエスト失敗時
         if(!isset($result['data'])){
@@ -67,6 +69,7 @@ class TargetBaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    //ターゲットベースアカウント登録
     public function store(Request $request)
     {
         $request->validate([
@@ -74,11 +77,11 @@ class TargetBaseController extends Controller
         ]);
 
         $user_twitter_id = Session::get('twitter_id');
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $access_token = $TwitterApi->checkRefreshToken($user_twitter_id);
@@ -101,8 +104,8 @@ class TargetBaseController extends Controller
             }else{
                 Log::debug('EXIST');
             }
-            
-            
+
+
             return true;
         }else{
 

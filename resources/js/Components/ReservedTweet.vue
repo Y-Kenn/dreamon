@@ -2,7 +2,7 @@
     <div class="p-tweet_bar__item u-bg_color--white--impotant">
         <div class="p-tweet_bar__item__date_header">
             {{ date }}
-            
+
             <i @click="deleteReservedTweet" class="p-tweet_bar__item__delete fa-solid fa-trash-can"></i>
         </div>
         <div class="c-account__header">
@@ -34,14 +34,15 @@ export default {
         reserved_date: String
     },
     emits: ['delete'],
+
     setup(props, context){
         const store = useStore();
         let active_account = computed(()=> store.state.active_account);
+        //表示用に日時のフォーマット調整
         const date = moment(props.reserved_date).format('YYYY/M/D HH:mm');
-        console.log(props.reserved_date);
+        //予約ツイートの削除をコントローラへリクエスト
         const deleteReservedTweet = async ()=>{
             const url = import.meta.env.VITE_URL_RESERVED_TWEET + '/' + props.id;
-            console.log('Delete');
             const result = await axios.delete(url, {
                                         data: props.id})
                                         .then(res =>{

@@ -26,6 +26,7 @@ export default {
         let error = reactive({
             email: '',
         });
+        //メールアドレスのDB登録をコントローラへリクエスト
         const updateEmail = async ()=>{
             const url = import.meta.env.VITE_URL_EMAIL;
             let result = await axios.put(url + '/1', email)
@@ -34,17 +35,16 @@ export default {
                                         error.email = '';
                                         context.emit('successRegist');
                                     }).catch(res=>{
-                                            console.log(res);
                                             error.email = '有効なメールアドレスを入力してください';
 
                                     });
 
         }
         onBeforeMount(()=>{
+            //登録済みのメールアドレスを表示するため、ストアから変数に格納
            email.email = store.state.email_address;
-           console.log('store')
-           console.log(store.state.email_address)
         });
+
         return { email, error, updateEmail }
     }
 }

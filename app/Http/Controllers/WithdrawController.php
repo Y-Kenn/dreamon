@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-
+//退会処理
 class WithdrawController extends Controller
 {
     /**
@@ -73,6 +73,8 @@ class WithdrawController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    //退会ユーザに紐づく全レコード削除
     public function destroy(string $id)
     {
         $twitter_ids = array_column(Auth::user()->twitterAccounts()->get()->toArray(), 'twitter_id');

@@ -37,12 +37,13 @@ export default {
     setup(props){
         const store = useStore();
         let status = computed(()=> store.state.process_statuses[2]);
+        //自動いいねの稼働状況(稼働中or停止中)を取得
         const getStatus = async ()=>{
             store.dispatch('getProcessStatuses');
         };
+        //稼働状況(稼働中or停止中)の切り替えをコントローラへリクエスト
         const toggleStatus = async ()=>{
             const url = import.meta.env.VITE_URL_PROCESS_STATUS + '/1';
-            console.log(status.value.status);
             const new_status = status.value.status ? false : true;
             const result = await axios.put(url, {flag_name: 'liking_flag',
                                                     status: new_status})

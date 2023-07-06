@@ -20,11 +20,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-
-//        $TwitterApi = new TwitterApi(env('API_KEY'), env('API_SECRET'), env('BEARER'), env('CLIENT_ID'), env('CLIENT_SECRET'), env('REDIRECT_URI'));
-//        $authorize_url = $TwitterApi->makeAuthorizeUrl();
-//        $page_name = 'login';
-//        return view('auth.login', compact('authorize_url'));
         return view('auth.login');
     }
 
@@ -43,7 +38,6 @@ class AuthenticatedSessionController extends Controller
 
         Session::put('twitter_id', $data['twitter_id']);
 
-        // return redirect()->intended(RouteServiceProvider::HOME);
         return redirect('/home');
     }
 

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
+//いいねキーワード用コントローラ
 class LikeKeywordsController extends Controller
 {
     /**
@@ -20,7 +21,7 @@ class LikeKeywordsController extends Controller
         $data = LikeKeyword::where('twitter_id', Session::get('twitter_id'))
                                 ->select('id', 'keywords', 'not_flag')
                                 ->get();
-                                
+
         return $data->toArray();
     }
 

@@ -8,11 +8,13 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
+//パスワード録用コントローラ
 class RegistPasswordController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    //パスワードが登録済みかどうかを返却
     public function index()
     {
         if(Auth::user()['password'] === null){
@@ -57,11 +59,13 @@ class RegistPasswordController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    //パスワード登録
     public function update(Request $request, string $id)
     {
+        //パスワード未登録の場合（初回登録）
         if(Auth::user()['password'] === null){
             $validated = $request->validate([
-                'password' => 'required|min:6|max:20|confirmed:password|regex:/^[!-~]+$/',
+                'password' => 'required|min:8|max:20|confirmed:password|regex:/^[!-~]+$/',
             ]);
 
             Log::debug('PASSWORD : ' .print_r(Auth::user()['password'], true));
@@ -69,6 +73,7 @@ class RegistPasswordController extends Controller
             $request->user()->update([
                 'password' => Hash::make($validated['password']),
             ]);
+        //パスワード登録済みの場合（パスワード変更の場合）
         }else{
             $validated = $request->validate([
                 'current_password' => ['required', 'current_password'],
@@ -79,14 +84,7 @@ class RegistPasswordController extends Controller
             Log::debug('PASSWORD2 : ' .print_r($request->all(), true));
 
             $current_password_db = $request->user()['password'];
-            // Log::debug('CURRENT PASSWORD : ' .print_r($current_password_db, true));
-            // Log::debug('CURRENT PASSWORD : ' .print_r(Hash::make($request->current_password), true));
-            // if($current_password_db !== Hash::make($request->current_password)){
-            //     Log::debug('NOT MATCH');
-            //     return false;
-            // }
 
-            // Log::debug('MATCH');
             $request->user()->update([
                 'password' => Hash::make($validated['password']),
             ]);

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import {onBeforeMount, reactive, ref} from 'vue';
 
 export default {
     props: {
@@ -21,10 +20,7 @@ export default {
     setup(props){
         let is_active = props.status;
         const class_active = 'p-process__item--active';
-        //console.log(is_active);
-        // reactive({
-        //     data: classNames({ 'p-process__item--active': props.status, 'p-process__item': true })
-        // });
+
         return { is_active, class_active }
     }
 }

@@ -47,8 +47,10 @@ export default {
     components: {ReservedTweet},
 
     setup(props){
+        //現在時刻より10分後以降の予約しかできないようにする
         const now_plus = moment().add(10,'minute').format('YYYY-MM-DD HH:mm');
         onMounted(()=>{
+            //日時指定用のカレンダーを生成
             flatpickr('#js-datepicker', {
                 locale      : Japanese,
                 dateFormat  : 'Y/m/d H:i',
@@ -64,13 +66,14 @@ export default {
             reserved_date: now_plus,
             text: "",
         });
+        //予約中のツイートを取得
         const getTweets = async ()=>{
             store.dispatch('getReservedTweets');
             store.dispatch('getProcessStatuses');
         };
+        //予約ツイートのDB登録をコントローラへリクエスト
         const createTweet = async ()=>{
             const url = import.meta.env.VITE_URL_RESERVED_TWEET;
-            console.log(new_tweet);
             const $datetime = document.getElementById('js-datepicker').value;
             new_tweet.reserved_date = $datetime;
             const result = await axios.post(url, new_tweet)
@@ -88,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+//日時指定用カレンダーのスタイル
 @import 'flatpickr/dist/flatpickr.css';
 
 $red        : #f00;

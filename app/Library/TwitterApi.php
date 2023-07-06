@@ -211,10 +211,6 @@ class TwitterApi
         }
     }
 
-    ////////////////////////////////
-    //
-    ////////////////////////////////
-
     //自身のTwitterアカウント情報を取得
     public function getMyInfo(){
         $base_url = "https://api.twitter.com/2/users/me";
@@ -335,10 +331,6 @@ class TwitterApi
                 }else{
                     $next_token = false;
                 }
-                // for($j = 0; $j < count($result['data']); $j++){
-                //     $followers['data'][$j] = $result['data'][$j];
-                // }
-                // $next_token = $result['meta']['next_token'];
             }
         }
 
@@ -814,16 +806,6 @@ class TwitterApi
             }
         }
 
-        //API制限の回数がgetTweetより少ないため使用しない方が良い
-        // $liking_tweets = $this->getLikingTweets($twitter_id, false);
-        // if(isset($liking_tweets['data'])){
-        //     foreach($liking_tweets['data'] as $tweet){
-        //         $created_at_list[] = strtotime($tweet['created_at']);
-        //     }
-        // }
-
-        //Log::debug('CREATED AT : ' . print_r($created_at_list, true));
-
         if(!empty($created_at_list)){
            return max($created_at_list);
         }else{
@@ -858,42 +840,5 @@ class TwitterApi
             //Log::debug('FOREIGN LANGAGE');
             return false;
         }
-    }
-
-    //封印ー絶対開けるな
-    public function uploadImage($base64_image){
-        $base_url = 'https://upload.twitter.com/1.1/media/upload.json';
-        $data = array(
-            'media_data' => $base64_image
-        );
-
-        $boundary = 'p-a-h-o-o---------------' . md5(mt_rand());
-
-        //POSTフィールド生成
-        $request_body  = '';
-        $request_body .= '--' . $boundary . "\r\n";
-        $request_body .= 'Content-Disposition: form-data; name="'  . '"; ';
-        $request_body .= "\r\n";
-        $request_body .= "\r\n" . $base64_image . "\r\n";
-        $request_body .= '--' . $boundary . '--' . "\r\n\r\n";
-
-        //リクエストヘッダー生成
-        $request_header = "Content-Type: multipart/form-data; boundary=p-a-h-o-o---------------";
-
-        //multipart/form-data
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $base_url);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $this->header);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $request_body);
-
-        $response = curl_exec($curl);
-        $result = json_decode($response, true);
-
-        curl_close($curl);
-
-        return $response;
-
     }
 }

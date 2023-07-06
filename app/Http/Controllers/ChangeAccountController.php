@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Library\TwitterApi;
 
 
-
+//アカウント切り替え用コントローラ
 class ChangeAccountController extends Controller
 {
     /**
@@ -20,6 +20,7 @@ class ChangeAccountController extends Controller
     {
         Log::debug('USER : ' .print_r(Auth::id(), true));
 
+        //ユーザに紐づけられたTwitterアカウントIDを全て取得
         $data_builder = Auth::user()->twitterAccounts()
                                     ->select('twitter_id', 'active_flag');
 
@@ -40,6 +41,7 @@ class ChangeAccountController extends Controller
         $access_token = $TwitterApi->checkRefreshToken(Session::get('twitter_id'));
         $TwitterApi->setTokenToHeader($access_token);
 
+        //各Twitterアカウントのアカウント情報取得
         $result = $TwitterApi->getUserInfoByIds($ids);
         $result['user_id'] = Auth::id();
 
@@ -49,12 +51,14 @@ class ChangeAccountController extends Controller
             return false;
         }
 
+        //取得した情報でtwitter_accounte_tableのtwitter_usernameを更新
         foreach($result['data'] as $account){
             TwitterAccount::where('twitter_id', $account['id'])->update([
                 'twitter_username' => $account['username'],
             ]);
         }
 
+        //取得した情報にtwitter_account_tableのレコードID(Twitter ID)と使用中フラグを付加
         for($i = 0; $i < count($result['data']); $i++){
             foreach($data as $account){
                 if($result['data'][$i]['id'] == (string)$account['twitter_id']){
@@ -64,9 +68,6 @@ class ChangeAccountController extends Controller
             }
         }
 
-
-
-        //Log::debug('CHANGE ACCOUNT - INDEX' .print_r($result['data'], true));
         return $result;
     }
 
@@ -96,7 +97,6 @@ class ChangeAccountController extends Controller
                             ->select('twitter_id')
                             ->get();
 
-        // $ids = array_column($data->toArray(), 'twitter_id');
         $ids = [$id];
 
         $TwitterApi = new TwitterApi(env('API_KEY'),
@@ -129,6 +129,7 @@ class ChangeAccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    //使用アカウントの切り替え処理
     public function update(Request $request, string $id)
     {
         $request->validate([

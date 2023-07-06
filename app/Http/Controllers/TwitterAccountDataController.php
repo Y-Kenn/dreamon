@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Library\TwitterApi;
 
+//Twitterアカウントの情報(フォロー・フォロワー等)の処理
 class TwitterAccountDataController extends Controller
 {
     /**
@@ -20,31 +21,35 @@ class TwitterAccountDataController extends Controller
     {
         $twitter_id = Session::get('twitter_id');
 
-        //followed_
+        //本日フォローした数
         $following_today =  FollowedAccount::where('user_twitter_id', $twitter_id)
                                             ->where('followed_at', '>', date("Y/m/d"))
                                             ->count();
+        //過去30日でフォローした数
         $following_30days =  FollowedAccount::where('user_twitter_id', $twitter_id)
                                             ->where('followed_at', '>', date("Y/m/d", time() - 60*60*24*30))
                                             ->count();
+        //本日アンフォローした数
         $unfollowing_today =  FollowedAccount::where('user_twitter_id', $twitter_id)
                                             ->where('unfollowed_at', '>', date("Y/m/d"))
                                             ->count();
+        //過去30日でフォローした数
         $unfollowing_30days =  FollowedAccount::where('user_twitter_id', $twitter_id)
                                             ->where('unfollowed_at', '>', date("Y/m/d", time() - 60*60*24*50))
                                             ->count();
+        //本日いいねした数
         $like_today =  LikeTarget::where('user_twitter_id', $twitter_id)
                                             ->where('liked_at', '>', date("Y/m/d"))
                                             ->count();
+        //過去30日でいいねした数
         $like_30days =  LikeTarget::where('user_twitter_id', $twitter_id)
                                             ->where('liked_at', '>', date("Y/m/d", time() - 60*60*24*50))
                                             ->count();
 
-        //60 × 60 × 24 × 30
 
         Log::debug('FOLLOWED ACCOUNTS: ' .print_r($like_today, true));
 
-        //////////////////////////////////////////////////////////
+        //返却データ整形
         $response = [
             'following_today' => $following_today,
             'following_30days' => $following_30days,
@@ -56,31 +61,33 @@ class TwitterAccountDataController extends Controller
             'like_30days' => $like_30days,
         ];
 
-        
 
+        //過去30日のフォロワー数の記録を取得
         $twitter_data = TwitterAccountData::where('twitter_id', $twitter_id)
-                                            ->latest()                            
+                                            ->latest()
                                             ->limit(30)
                                             ->get()->toArray();
-                                            
+
         if(empty($twitter_data)){
             return $response;
         }
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken($twitter_id);
         $TwitterApi->setTokenToHeader($access_token);
+        //現在のフォロワー数を取得
         $result = $TwitterApi->getUserInfoByIds([$twitter_id]);
         //リクエスト失敗時
         if(!isset($result['data'])){
             return $response;
         }
 
+        //現在のフォロワー数と比較して増加フォロワーを計算
         $response['followers_today'] = $result['data'][0]['public_metrics']['followers_count'] - $twitter_data[0]['followers'];
         $response['followers_30days'] = $result['data'][0]['public_metrics']['followers_count'] - $twitter_data[count($twitter_data) - 1]['followers'];
 

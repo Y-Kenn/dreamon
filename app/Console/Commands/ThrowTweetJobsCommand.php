@@ -28,6 +28,7 @@ class ThrowTweetJobsCommand extends Command
     /**
      * Execute the console command.
      */
+    //各Twitterアカウントの予約ツイートをツイートするジョブの発行
     public function handle()
     {
 
@@ -48,7 +49,7 @@ class ThrowTweetJobsCommand extends Command
             $reserved_datetime = new DateTime($tweet['reserved_date']);
             $now = new DateTime();
             $diff = $now->diff($reserved_datetime);
-            //結果がマイナスの場合()
+            //結果がマイナスの場合(投稿予定時間になっている場合)ツイートジョブ発行
             if($diff->invert){
                 Log::debug('PAST : ' . print_r($tweet, true));
                 TweetJob::dispatch($tweet['id'], $tweet['twitter_id'], $tweet['text'])

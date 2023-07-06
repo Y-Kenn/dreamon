@@ -30,20 +30,17 @@ export default {
             keywords: "",
             not_flag: false,
         });
+        //いいねキーワード一覧を取得
         const getKeywords = async ()=>{
             store.dispatch('getLikeKeywords');
-            // let data = await axios.get('http://localhost/like-keywords');
-            // keywords.data = data.data;
-            // console.log('axios');
-            // console.log(data);
         };
+        //除外キーワードに指定するかどうかのフラグを切り替える
         const toggleNotFlag = ()=>{
             new_keywords.not_flag = (new_keywords.not_flag) ? false : true;
         };
         const url_like_keyword = import.meta.env.VITE_URL_LIKE_KEYWORDS;
+        //キーワードのDB登録をコントローラへリクエスト
         const createKeywords = async ()=>{
-            console.log('POST');
-            console.log(new_keywords);
             new_keywords.keywords = new_keywords.keywords.replace(/　/g, ' ');
             const result = await axios.post(url_like_keyword, new_keywords)
                             .then(res =>{

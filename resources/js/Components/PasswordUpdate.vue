@@ -33,7 +33,6 @@
 
 <script>
 import {onBeforeMount, reactive} from 'vue';
-// import { Field, Form, ErrorMessage } from 'vee-validate';
 
 export default {
     // components: { Field, Form, ErrorMessage },
@@ -55,6 +54,7 @@ export default {
             error04: '半角英数字記号で入力してください',
             error05: '8文字以上、20文字以下で入力してください',
         });
+        //パスワードのバリデーション
         const checkPassword = ()=>{
             if(password.current_password === ''){
                 error.current_password = message.error01;
@@ -95,16 +95,14 @@ export default {
                 error.password_confirmation = message.error03;
                 return false;
             }
-        }
+        };
+        //パスワードの更新をコントローラへリクエスト
         const updatePassword = async ()=>{
             if(!checkPassword()){
-                console.log('not match');
                 return false;
             }else{
                 error.password_confirmation = '';
-                console.log('match');
             }
-            console.log(password);
             const url = import.meta.env.VITE_URL_REGIST_PASSWORD + '/1';
             let result = await axios.put(url, password)
                             .then(res =>{
@@ -117,8 +115,6 @@ export default {
                                     error.current_password = message.error02;
                                 }
                             });
-
-
         };
         const url_forget_password = import.meta.env.VITE_URL_FORGET_PASSWORD;
 

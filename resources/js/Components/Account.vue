@@ -9,7 +9,7 @@
                 <h3 class="c-account__header__screen_name">{{ info.username }}</h3>
             </div>
         </div>
-        
+
         <span class="p-profile__item__description c-account__description">
             {{ info.description }}
         </span>
@@ -27,9 +27,6 @@
                 <span>{{ Math.round((info.public_metrics.followers_count / info.public_metrics.following_count) * 100) / 100 }}</span>
             </div>
 
-            <!-- <span>フォロワー : {{ info.public_metrics.followers_count }}</span>
-            <span>　フォロー : {{ info.public_metrics.following_count }}</span>
-            <span> 　　ＦＦ比 : {{ Math.round((info.public_metrics.followers_count / info.public_metrics.following_count) * 100) / 100 }}</span> -->
         </div>
         <div>
             <i @click="deleteAccount" class="p-profile__item__delete fa-solid fa-xmark"></i>
@@ -48,9 +45,9 @@ export default {
     },
     setup(props, context){
         const account_url = 'https://twitter.com/' + props.info.username;
+        //アカウント情報をDBから削除（コントローラへリクエスト）
         const deleteAccount = async ()=>{
             const url = props.url+ '/' + props.info.record_id;
-            console.log('Delete');
             const result = await axios.delete(url)
                                         .then(res =>{
                                             context.emit('delete');

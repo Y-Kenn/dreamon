@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
+//Twitterアカウント凍結時の処理
 class LockedController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    //凍結の有無を送信
     public function index()
     {
         $data = Auth::user()->twitterAccounts()
@@ -58,6 +60,7 @@ class LockedController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    //フロント側からの復旧処理の受け付け（twitter_accountsテーブルのlocked_flagをfalseに更新）
     public function update(Request $request, string $id)
     {
         $request->validate([

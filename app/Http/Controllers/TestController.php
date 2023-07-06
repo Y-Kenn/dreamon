@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Session;
 use DateTime;
 use DateTimeZone;
 
+//開発用テストコントローラ
 class TestController extends Controller
 {
     public function test(){

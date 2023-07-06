@@ -20,10 +20,7 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request): View
     {
-        $TwitterApi = new TwitterApi(env('API_KEY'), env('API_SECRET'), env('BEARER'), env('CLIENT_ID'), env('CLIENT_SECRET'), env('REDIRECT_URI'));
-        $authorize_url = $TwitterApi->makeAuthorizeUrl();
-
-        return view('auth.reset-password', ['request' => $request, 'authorize_url' => $authorize_url]);
+        return view('auth.reset-password', ['request' => $request]);
     }
 
     /**

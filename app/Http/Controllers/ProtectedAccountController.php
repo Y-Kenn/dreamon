@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Library\TwitterApi;
 
+//自動アンフォローからのアカウント保護用コントローラ
 class ProtectedAccountController extends Controller
 {
     /**
@@ -15,6 +16,7 @@ class ProtectedAccountController extends Controller
      */
     public function index()
     {
+        //保護アカウントのTwitter ID取得
         $data_builder = ProtectedFollowedAccount::where('user_twitter_id', Session::get('twitter_id'))
                                     ->limit('100')
                                     ->orderBy('created_at', 'desc')
@@ -36,6 +38,7 @@ class ProtectedAccountController extends Controller
         $access_token = $TwitterApi->checkRefreshToken(Session::get('twitter_id'));
         $TwitterApi->setTokenToHeader($access_token);
 
+        //IDからTwitterアカウントの情報を取得
         $result = $TwitterApi->getUserInfoByIds($ids);
         //リクエスト失敗時
         if(!isset($result['data'])){
@@ -65,6 +68,7 @@ class ProtectedAccountController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    //保護アカウントを登録
     public function store(Request $request)
     {
         $request->validate([

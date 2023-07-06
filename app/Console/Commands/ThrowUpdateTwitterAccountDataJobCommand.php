@@ -27,6 +27,7 @@ class ThrowUpdateTwitterAccountDataJobCommand extends Command
     /**
      * Execute the console command.
      */
+    //各Twitterアカウントのフォロー・フォロワー数等の情報記録のジョブ発行
     public function handle()
     {
         $twitter_accounts_builder = TwitterAccount::whereNull('deleted_at')

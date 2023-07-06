@@ -15,11 +15,10 @@
             </div>
             <div v-else class="p-profile__item__status p-profile__item__status--inactive">
                 <button @click="changeActiveAccount">切り替える</button>
-                <!-- <i @click="deleteAccount" class="fa-solid fa-xmark"></i> -->
             </div>
         </div>
-        
-        
+
+
          <span class="p-profile__item__description c-account__description">
             {{ info.description }}
         </span>
@@ -37,7 +36,7 @@
                 <span>{{ Math.round((info.public_metrics.followers_count / info.public_metrics.following_count) * 100) / 100 }}</span>
             </div>
         </div>
-        
+
     </div>
 </template>
 
@@ -53,24 +52,16 @@ export default {
     setup(props, context){
         const store = useStore();
         const account_url = 'https://twitter.com/' + props.info.username;
-        console.log(account_url);
+        //操作するアカウントの切り替えをコントローラへリクエスト
         const changeActiveAccount = async ()=>{
             const url = props.url+ '/' + props.info.record_id;
-            console.log('PUT');
             const result = await axios.put(url, {active_flag: true})
                                         .then(res =>{
                                             context.emit('put');
                                         });
-        }
-        const deleteAccount = async ()=>{
-            const url = props.url+ '/' + props.info.record_id;
-            console.log('Delete');
-            const result = await axios.delete(url)
-                                        .then(res =>{
-                                            context.emit('delete');
-                                        });
         };
-        return { account_url, deleteAccount, changeActiveAccount };
+
+        return { account_url, changeActiveAccount };
     }
 }
 </script>

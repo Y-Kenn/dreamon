@@ -13,18 +13,17 @@
                 <a v-if=" my_accounts.length < max_accounts " class="p-change_account__add c-button c-button--submit" :href="url_twitter_oauth">アカウントを追加</a>
                 <span v-else class="p-change_account__reached c-button" >最大数に達しました</span>
             </div>
-            
-            
+
+
             <MyAccount v-for="account in my_accounts"
                         v-bind:key="account.record_id"
                         v-bind:info="account"
                         v-bind:url="url_change_account"
-                        @put="getAllData"
-                        @delete="getAccounts" />
+                        @put="getAllData" />
         </div>
-        
+
     </div>
-    
+
 </template>
 
 
@@ -34,9 +33,6 @@ import { useStore } from "vuex";
 import MyAccount from '../Components/MyAccount.vue';
 
 export default {
-    created: ()=>{
-        console.log('CREATED');
-    },
     components: { MyAccount },
     setup(props){
         const store = useStore();
@@ -44,9 +40,7 @@ export default {
         const url_change_account = import.meta.env.VITE_URL_CHANGE_ACCOUNT;
         let my_accounts = computed(()=> store.state.my_accounts);
         let max_accounts = computed(()=> store.state.max_accounts);
-        const getAccounts = ()=>{
-            store.dispatch('getMyAccounts');
-        }
+        //アカウント切り替えのエミットがあった場合は、他のページの情報も全て更新
         const getAllData = ()=>{
             store.dispatch('getPerformances');
             store.dispatch('getLockedFlag');
@@ -59,9 +53,9 @@ export default {
             store.dispatch('getMyAccounts');
             store.dispatch('getProtectedAccounts');
         }
-            
-        
-        return { getAccounts, getAllData, my_accounts, max_accounts, url_twitter_oauth, url_change_account };
+
+
+        return { getAllData, my_accounts, max_accounts, url_twitter_oauth, url_change_account };
     }
 }
 </script>

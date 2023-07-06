@@ -14,10 +14,10 @@
                     v-bind:url="url_follow_keyword"
                     @delete="getKeywords" />
     </div>
-    
 
-    
-    
+
+
+
 </template>
 
 <script>
@@ -35,20 +35,17 @@ export default {
             keywords: "",
             not_flag: false,
         });
+        //フォローキーワード一覧をDBから取得
         const getKeywords = async ()=>{
             store.dispatch('getFollowKeywords');
-            // let data = await axios.get('http://localhost/follow-keywords');
-            // keywords.data = data.data;
-            // console.log('axios');
-            // console.log(data);
         }
+        //除外キーワードに指定するかどうかのフラグを切り替える
         const toggleNotFlag = ()=>{
             new_keywords.not_flag = (new_keywords.not_flag) ? false : true;
         }
         const url_follow_keyword = import.meta.env.VITE_URL_FOLLOW_KEYWORDS;
+        //キーワードのDB登録をコントローラへリクエスト
         const createKeywords = async ()=>{
-            console.log('POST');
-            console.log(new_keywords);
             new_keywords.keywords = new_keywords.keywords.replace(/　/g, ' ');
             const result = await axios.post(url_follow_keyword, new_keywords)
                             .then(res =>{

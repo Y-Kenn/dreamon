@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
+//各自動機能の稼働ステータス管理用コントローラ
 class ProcessStatusController extends Controller
 {
     /**
@@ -88,6 +89,7 @@ class ProcessStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    //いいね、フォロー、アンフォローの稼働フラグを更新
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -98,14 +100,6 @@ class ProcessStatusController extends Controller
         Auth::user()->twitterAccounts()
                     ->where('twitter_id', Session::get('twitter_id'))
                     ->update([$request->flag_name => $request->status]);
-        
-        // }elseif($request->process === 'unfollowing'){
-        //     Auth::user()->twitterAccounts()
-        //                 ->where('twitter_id', Session::get('twitter_id'))
-        //                 ->update(['unfollowing_flag' => $request->status]);
-        // }elseif($request->process === 'liking'){
-
-        // }
     }
 
     /**

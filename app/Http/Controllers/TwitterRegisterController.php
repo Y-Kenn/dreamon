@@ -68,7 +68,7 @@ class TwitterRegisterController extends Controller
 
                     Auth::loginUsingId($user->first()['user_id']);
 
-                    //ユーザが操作するTwitterアカウントの切り替え
+                    //ユーザが操作するTwitterアカウントを認証するアカウントに切り替え
                     Auth::user()->twitterAccounts()
                                     ->where('active_flag', true)
                                     ->update(['active_flag' => false]);
@@ -79,6 +79,7 @@ class TwitterRegisterController extends Controller
                     return redirect('/home');
                 //未登録アカウントの場合
                 }else{
+                    //他のTwitterアカウントでログイン中の場合
                     if(Session::get('twitter_id')){
 
                         Log::debug('SESSION EXISTS');
@@ -107,7 +108,7 @@ class TwitterRegisterController extends Controller
                         ]);
 
                         Session::put('twitter_id', $twitter_id);
-
+                    //Twitterアカウント初登録のユーザの場合（ユーザ登録されていない場合）
                     }else{
                         // //usersレコードを生成
                         //$user = User::create(['active_twitter_id' => $twitter_id]);

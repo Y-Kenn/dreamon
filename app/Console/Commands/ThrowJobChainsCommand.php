@@ -27,6 +27,7 @@ class ThrowJobChainsCommand extends Command
     /**
      * Execute the console command.
      */
+    //各Twitterアカウントのジョブチェーンを発行
     public function handle()
     {
         $twitter_accounts_builder = TwitterAccount::whereNull('deleted_at')

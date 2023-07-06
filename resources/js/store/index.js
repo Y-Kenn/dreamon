@@ -37,8 +37,6 @@ export default createStore({
     },
     mutations: {
         findActiveAccount(state){
-            console.log('findMyAccount');
-            console.log(state.my_accounts.length);
             if(state.my_accounts.length !== 0){
                 for(let account of state.my_accounts){
                     if(account.active_flag){
@@ -46,7 +44,6 @@ export default createStore({
                     }
                 }
             }else{
-                console.log('empty')
                 state.active_account = {
                     description: "",
                     id:  "",
@@ -69,8 +66,6 @@ export default createStore({
     actions: {
         //パフォーマンスを取得
         async getPerformances(){
-            // const url = 'http://localhost/twitter-data';
-            console.log('unko');
             const url = import.meta.env.VITE_URL_TWITTER_DATA;
             const result = await axios.get(url);
             this.state.performances = result.data;
@@ -88,8 +83,6 @@ export default createStore({
             const url = import.meta.env.VITE_URL_PROCESS_STATUS;
             const result = await axios.get(url);
             this.state.process_statuses = result.data;
-            console.log('process_statuses');
-            console.log(this.state.process_statuses);
         },
         //メンション取得
         async getMentions(){
@@ -119,72 +112,48 @@ export default createStore({
         },
         //現在使用中のアカウントのプロフィイール情報を取得
         async getActiveAccount(context, payload){
-            // const url = 'http://localhost/change-account' + '/' + payload;
             const url = import.meta.env.VITE_URL_CHANGE_ACCOUNT + '/' + payload;
             const result = await axios.get(url, payload);
-            console.log('action');
 
             this.state.active_account = result.data;
-            console.log(this.state.active_account);
         },
         //登録済の全てのアカウントのプロフィール情報を取得
         async getMyAccounts(context){
-            // const url = 'http://localhost/change-account';
             const url = import.meta.env.VITE_URL_CHANGE_ACCOUNT;
             const result = await axios.get(url);
-            // if(result.data){
-            //     this.state.my_accounts = result.data;
-            // }else{
-            //     this.state.my_accounts = [];
-            //     console.log('empty');
-            // }
             this.state.my_accounts = result.data.data;
             this.state.user_id = result.data.user_id;
             this.commit('findActiveAccount');
-            console.log('action - getMyAccounts');
-            console.log(result.data);
         },
         //アクティブアカウントに対する全自動機能の稼働状態を取得
         async getProcessStatus(){
-            // const url = 'http://localhost/process-status';
             const url = import.meta.env.VITE_URL_PROCESS_STATUS;
             let result = await axios.get(url);
             this.state.process_status = result.data;
-            console.log('process-status');
-            console.log(this.state.process_status);
         },
         //フォロワー参照アカウントを取得
         async getFollowBases(){
-            // const url = 'http://localhost/target-base';
             const url = import.meta.env.VITE_URL_TARGET_BASE;
             const result = await axios.get(url);
             this.state.follow_bases = result.data;
-            console.log('get follow bases');
-            console.log(this.state.follow_bases);
         },
         //アンフォロー対象外アカウントの取得
         async getProtectedAccounts(){
-            // const url = 'http://localhost/protected-account';
             const url = import.meta.env.VITE_URL_PROTECTED_ACCOUNT;
             const result = await axios.get(url);
             this.state.protected_accounts = result.data;
-            console.log('get protected accounts');
-            console.log(this.state.protected_accounts);
         },
         //パスワードが登録されているか確認
         async checkExistPassword(){
-            // const url = 'http://localhost/regist-password';
             const url = import.meta.env.VITE_URL_REGIST_PASSWORD;
             const result = await axios.get(url);
             this.state.password_exist_flag = result.data;
         },
         //メールアドレスを取得
         async getEmailAddress(){
-            // const url = 'http://localhost/email';
             const url = import.meta.env.VITE_URL_EMAIL;
             const result = await axios.get(url);
             this.state.email_address = result.data.email;
-            console.log(result.data)
         }
 
     }

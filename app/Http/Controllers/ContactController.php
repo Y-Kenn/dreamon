@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
+//お問合せ受付用のコントローラ
 class ContactController extends Controller
 {
     public function create(){
@@ -22,7 +23,7 @@ class ContactController extends Controller
             'email' => '有効なメールアドレスを入力してください'
         ]);
 
-
+        //問い合わせ主と管理者にメール送信
         Mail::send(new ContactAdminMail($request->email, $request->text));
         Mail::send(new ContactCustomerMail($request->email, $request->text));
 

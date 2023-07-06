@@ -40,14 +40,11 @@ export default {
     setup(){
         const store = useStore();
         let status = computed(()=> store.state.process_statuses[0]);
+        //自動フォローの稼働状況(稼働中or停止中)を取得
         const getStatus = ()=>{
             store.dispatch('getProcessStatuses');
-            // const url = 'http://localhost/auto-follow';
-            // console.log('GET - auto process');
-            // const result = await axios.get(url);
-            // status.data = result.data;
-            // console.log(result.data.twitter_id);
         }
+        //稼働状況(稼働中or停止中)の切り替えをコントローラへリクエスト
         const toggleStatus = async ()=>{
             const url = import.meta.env.VITE_URL_PROCESS_STATUS + '/1';
             const new_status = status.value.status ? false : true;
@@ -57,7 +54,6 @@ export default {
                                 getStatus();
                             });
         };
-        //const process_status = computed(()=> store.state.process_status);
 
 
         return { status, getStatus, toggleStatus };

@@ -36,8 +36,8 @@ export default {
             error04: '半角英数字記号で入力してください',
             error05: '8文字以上、20文字以下で入力してください',
         });
+        //パスワードのバリデーション
         const checkPassword = ()=>{
-            console.log('check password');
             if(password.password === ''){
                 error.password = message.error01;
                 return false;
@@ -72,13 +72,12 @@ export default {
                 error.password_confirmation = message.error03;
                 return false;
             }
-        }
+        };
+
+        //パスワードの更新(初回登録)をコントローラへリクエスト
         const updatePassword = async ()=>{
             if(!checkPassword()){
-                console.log('not match');
                 return false;
-            }else{
-                console.log('match');
             }
             const url = import.meta.env.VITE_URL_REGIST_PASSWORD + '/1';
             let result = await axios.put(url, password)
@@ -88,7 +87,6 @@ export default {
                                         context.emit('firstRegist');
                                         context.emit('successRegist');
                                     });
-            console.log(result);
         }
 
         return { password, error, updatePassword };

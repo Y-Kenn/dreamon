@@ -8,6 +8,7 @@ use App\Models\ReservedTweet;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
+//ツイート予約用コントローラ
 class ReservedTweetController extends Controller
 {
     /**
@@ -48,7 +49,7 @@ class ReservedTweetController extends Controller
             'text' => 'required|string|max:' .env('TWEET_CHAR_NUM'),
             'reserved_date' => 'required',
         ]);
-        
+
         ReservedTweet::create([
             'twitter_id' => Session::get('twitter_id'),
             'text' => $request->text,

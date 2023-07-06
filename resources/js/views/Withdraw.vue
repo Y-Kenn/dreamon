@@ -21,8 +21,8 @@ import { useStore } from "vuex";
 export default {
     setup(){
         const store = useStore();
+        //退会処理をコントローラへリクエスト
         const withdraw = async ()=>{
-            console.log('click');
             const confirm_withdrow = confirm('退会すると全てのデータが削除されます。よろしいですか？');
 
             if(confirm_withdrow){

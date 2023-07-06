@@ -27,6 +27,8 @@ class ThrowUpdateFollowingJobsCommand extends Command
     /**
      * Execute the console command.
      */
+
+    //各Twitterアカウントのフォロー中のアカウント(followed_accountテーブル)の情報更新ジョブを発行
     public function handle()
     {
         $twitter_accounts_builder = TwitterAccount::whereNull('deleted_at')
@@ -35,7 +37,7 @@ class ThrowUpdateFollowingJobsCommand extends Command
         if(!$twitter_accounts_builder->exists()){
             Log::debug('NO ACCOUNT');
             return;
-        } 
+        }
 
         $twitter_accounts = $twitter_accounts_builder->get();
         foreach($twitter_accounts as $account){

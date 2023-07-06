@@ -1,15 +1,15 @@
 <template>
-    
+
     <div class="l-app__main">
         <div class="p-home">
             <div class="l-dashboard">
-                
+
 
                 <div class="l-dashboard__main">
                     <div class="p-home__header">
                         <i class="p-home__icon u-font_color--mainblue c-icon--shadow fa-solid fa-square-poll-vertical"></i>ダッシュボード
                     </div>
-                    <Dashboard /> 
+                    <Dashboard />
                     <div class="p-home__header u-margin--top--10px">
                         <i class="p-home__icon u-font_color--mainblue c-icon--shadow fa-regular fa-circle-play"></i>稼働状況
                     </div>
@@ -27,24 +27,24 @@
                                 <i class="c-icon--margin fa-solid fa-triangle-exclamation"></i>Twitterアカウントが凍結されている可能性があります
                             </div>
                             <div class="p-process__item__detail">アカウントが凍結されていないことを確認後、こちらをクリックして再開してください。</div>
-                            
+
                         </div>
                     </div>
-                    
+
                 </div>
-                
-                
-                
+
+
+
                 <div class="l-dashboard__sub">
                     <div class="p-home__header">
                         <i class="p-home__icon u-font_color--mainblue c-icon--shadow fa-solid fa-message"></i>メンション
                     </div>
                     <MentionBar />
                 </div>
-            </div>    
+            </div>
         </div>
-        
-        
+
+
     </div>
 
 </template>
@@ -57,15 +57,13 @@ import MentionBar from '../Components/MentionBar.vue';
 import { useStore } from "vuex";
 
 export default {
-    
+
     components: { Dashboard, ProcessStatus, MentionBar },
     setup(){
         const store = useStore();
         const process_statuses = computed(()=> store.state.process_statuses);
         let locked_flag = computed(()=> store.state.locked_flag);
-        const getProcessStatuses = ()=>{
-            store.dispatch('getProcessStatuses');
-        };
+        //Twitterアカウント凍結によるKamitterでのロックの解除をコントローラへリクエスト
         const updateLockedFlag = async ()=>{
             const update_confirm = confirm('Twitterアカウントが凍結されていないことを確認しましたか？');
             if(update_confirm){
@@ -76,12 +74,13 @@ export default {
                                 });
             }
         }
+        //マウントのたび凍結有無を確認する
         onBeforeMount(()=>{
             store.dispatch('getLockedFlag');
         })
-        
+
         return { process_statuses, locked_flag, updateLockedFlag }
-        
+
     }
 }
 </script>

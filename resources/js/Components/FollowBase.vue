@@ -5,14 +5,14 @@
             <input v-model="twitter_name.twitter_name" type="text" name="twitter_name" class="c-input">
         </div>
         <button @click="createFollowBase" class="c-button c-button--submit p-profile__submit">登録</button>
-        
+
         <Account v-for="account in base_accounts"
                         v-bind:key="account.id"
                         v-bind:info="account"
                         v-bind:url="url_target_base"
                         @delete="getFollowBases" />
     </div>
-    
+
 </template>
 
 
@@ -29,18 +29,13 @@ export default {
         let twitter_name = reactive({
             twitter_name: '',
         });
+        //フォロワー参照アカウント一覧をDBから取得
         const getFollowBases = ()=>{
             store.dispatch('getFollowBases');
-            // const url = 'http://localhost/target-base';
-            // console.log('GET');
-            // const result = await axios.get(url);
-            // console.log(result);
-            // base_accounts.data = result.data;
         }
         const url_target_base = import.meta.env.VITE_URL_TARGET_BASE;
+        //フォロワー参照アカウントをDB登録(コントローラへTwitterのユーザネームを送信)
         const createFollowBase = async ()=>{
-            console.log('POST');
-            console.log(twitter_name);
             const result = await axios.post(url_target_base, twitter_name)
                             .then(res =>{
                                 getFollowBases();
