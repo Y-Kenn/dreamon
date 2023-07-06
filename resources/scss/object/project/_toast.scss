@@ -3,7 +3,10 @@
     display: flex;
     justify-content: center;
     width: 78%;
-
+    @include mq(sm){
+        width: 100%;
+        margin-top: 10px;
+    }
     &__item{
         min-width: 200px;
         height: 60px;
@@ -19,7 +22,7 @@
         background-color: $lightBlue;
         animation-name: fadein;
         animation-duration: 4.4s;
-        animation-delay: 1s;
+        animation-delay: 0.5s;
         opacity: 0;
     }
 }

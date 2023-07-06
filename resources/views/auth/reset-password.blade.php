@@ -38,11 +38,10 @@
                             <x-input-error :messages="$errors->get('password_confirmation')" class="p-auth__form__error" />
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="p-auth__form__submit c-button">
-                                {{ __('送信') }}
-                            </x-primary-button>
-                        </div>
+                        <x-primary-button class="p-auth__form__submit">
+                            {{ __('送信') }}
+                        </x-primary-button>
+
                     </form>
                 </div>
 

@@ -25,7 +25,7 @@ $test = 'test';
                         </div>
 
                         <div class="">
-                            <x-primary-button class="p-auth__form__submit c-button">
+                            <x-primary-button class="p-auth__form__submit">
                                 {{ __('送信') }}
                             </x-primary-button>
                         </div>

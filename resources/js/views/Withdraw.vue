@@ -1,12 +1,18 @@
 <template>
-    <div class="p-auth">
-        <h1 class="p-auth__title">退会</h1>
-        <p>退会を押すと全てのデータが削除されます。</p>
-        <div class="p-auth__form">
-            <router-link to="/setting" class="p-auth__form__submit c-button">キャンセル</router-link>
-            <button @click="withdraw" class="p-auth__form__thin c-button u-margin--top--50px">退会する</button>
+    <div class="l-app__main">
+        <div class="l-auth">
+            <div class="p-auth">
+                <h1 class="p-auth__title">退会</h1>
+                <p>退会を押すと全てのデータが削除されます。</p>
+                <div class="p-auth__form">
+                    <router-link to="/setting" class="p-auth__form__submit">キャンセル</router-link>
+                    <button @click="withdraw" class="p-auth__form__thin u-margin--top--50px">退会する</button>
+                </div>
+            </div>
         </div>
+
     </div>
+
 </template>
 
 <script>

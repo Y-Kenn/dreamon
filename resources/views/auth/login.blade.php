@@ -40,7 +40,7 @@
                             <span class="p-auth__form__name">{{ __('ログイン状態を保持する') }}</span>
 
                         </div>
-                        <x-primary-button class="p-auth__form__submit c-button">
+                        <x-primary-button class="p-auth__form__submit">
                             {{ __('ログイン') }}
                         </x-primary-button>
                         <div class="p-auth__form__forget">
@@ -59,7 +59,7 @@
                         <h2 class="p-auth__form__title">Twitterでログイン</h2>
 
                         @if (Route::has('password.request'))
-                            <a class="p-auth__form__twitter c-button"
+                            <a class="p-auth__form__twitter"
                                href="{{ $authorize_url }}">
                                 <i class="fa-brands fa-twitter"></i>
                                 Twitter

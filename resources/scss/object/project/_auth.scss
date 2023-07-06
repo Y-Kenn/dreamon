@@ -86,8 +86,10 @@
             border-radius: 4px;
             color: #fff;
             font-size: $font-size_m;
-            margin: 2rem auto;
+            margin: 3rem auto;
             display: block;
+            font-weight: bold;
+            text-align: center;
             &:hover{
                 color: #fff;
                 cursor: pointer;
@@ -107,6 +109,8 @@
             font-size: $font-size_m;
             margin: 2rem auto;
             display: block;
+            font-weight: bold;
+            text-align: center;
             @include mq(sm) {
                 width: 100%;
             }
@@ -153,6 +157,8 @@
             line-height: 5rem;
             display: block;
             margin: 0 auto 20px auto;
+            font-weight: bold;
+            text-align: center;
             @include mq(sm){
                 width: 100%;
             }

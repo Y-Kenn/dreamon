@@ -23,7 +23,7 @@ export default createStore({
         protected_accounts: [],
         my_accounts: [],
         active_page: 0,
-        max_accounts: 3,
+        max_accounts: import.meta.env.VITE_MAX_ACCOUNTS,
         password_exist_flag: true,
         email_address: "",
     },

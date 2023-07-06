@@ -1,12 +1,13 @@
 <template>
     <div class="p-setting">
+        <div v-if="error.email" class="p-setting__error">
+            <span>{{error.email}}</span>
+        </div>
         <div class="p-setting__email">
             <input v-model="email.email" type="text" name="" class="p-setting__email__input c-input">
             <button @click="updateEmail" class="p-setting__submit c-button--submit">登録</button>
         </div>
-        <div v-if="error.email" class="p-setting__error">
-            <span>{{error.email}}</span>
-        </div>
+
 
     </div>
 
