@@ -46,7 +46,7 @@ class PasswordResetUserNotification extends Notification
         return (new BareMail)
             ->to($request->email)//送り先のメールアドレスがあるカラムを指定
             ->subject('【' . config('app.name') . '】パスワード再設定')
-            ->text('emails.passwordreset', ['reset_url' => $url]);//bladeのファイルを指定
+            ->text('emails.passwordReset', ['reset_url' => $url]);//bladeのファイルを指定
     }
 
     /**
