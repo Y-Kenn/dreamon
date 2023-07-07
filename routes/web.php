@@ -35,14 +35,6 @@ use App\Http\Controllers\ContactController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 
 Route::middleware('auth')->group(function () {
     Route::apiResource('/follow-keywords',FollowKeywordsController::class);
@@ -62,9 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::apiResource('/locked',LockedController::class);
     Route::apiResource('/withdraw-user',WithdrawController::class);
 
-    Route::get('/home', function () {
-        return view('app');
-    });
+    Route::get('/home', function () {return view('app');});
     Route::get('/follow', function () { return view('app'); });
     Route::get('/unfollow', function () { return view('app'); });
     Route::get('/like', function () { return view('app'); });
@@ -72,35 +62,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/twitter-account', function () { return view('app'); });
     Route::get('/setting', function () { return view('app'); });
     Route::get('/withdraw', function () { return view('app'); });
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 Route::get('/', function () {return view('pages/top');})->name('top');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-
 Route::get('terms', function () {return view('pages/terms');})->name('terms');
 Route::get('privacy-policy', function () {return view('pages/privacy-policy');})->name('privacy-policy');
 
-// Route::get('/loading', [TwitterRegisterController::class, 'create'])
-// ->name('twitter-register.create');
-Route::get('/loading', function () {
-    return view('loading');
-});
+Route::get('/loading', function () {return view('loading');});
 
-Route::post('/twitter-register', [TwitterRegisterController::class, 'store'])
-->name('twitter-register.store');
+//Twitter OAuthによる認証
+Route::post('/twitter-register', [TwitterRegisterController::class, 'store'])->name('twitter-register.store');
 
-Route::get('/temp/test',[TestController::class, 'test'])
-           ->name('test');
+//Route::get('/temp/test',[TestController::class, 'test'])
+//           ->name('test');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
 require __DIR__.'/auth.php';
