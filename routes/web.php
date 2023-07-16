@@ -1,28 +1,26 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\TestController;
-
+use App\Http\Controllers\AutoFollowController;
+use App\Http\Controllers\AutoLikeController;
+use App\Http\Controllers\AutoUnfollowController;
+use App\Http\Controllers\ChangeAccountController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\EmailAddressController;
 use App\Http\Controllers\FollowKeywordsController;
 use App\Http\Controllers\LikeKeywordsController;
-use App\Http\Controllers\TargetBaseController;
-use App\Http\Controllers\AutoFollowController;
-use App\Http\Controllers\AutoUnfollowController;
-use App\Http\Controllers\AutoLikeController;
-use App\Http\Controllers\ProtectedAccountController;
-use App\Http\Controllers\ReservedTweetController;
-use App\Http\Controllers\ChangeAccountController;
-use App\Http\Controllers\TwitterRegisterController;
-use App\Http\Controllers\ProcessStatusController;
-use App\Http\Controllers\TwitterAccountDataController;
-use App\Http\Controllers\MentionTweetController;
-use App\Http\Controllers\EmailAddressController;
-use App\Http\Controllers\RegistPasswordController;
 use App\Http\Controllers\LockedController;
+use App\Http\Controllers\MentionTweetController;
+use App\Http\Controllers\OAuth\CallbackTwitterOAuthController;
+use App\Http\Controllers\OAuth\RedirectTwitterOAuthController;
+use App\Http\Controllers\OAuth\TwitterRegisterController;
+use App\Http\Controllers\ProcessStatusController;
+use App\Http\Controllers\ProtectedAccountController;
+use App\Http\Controllers\RegistPasswordController;
+use App\Http\Controllers\ReservedTweetController;
+use App\Http\Controllers\TargetBaseController;
+use App\Http\Controllers\TwitterAccountDataController;
 use App\Http\Controllers\WithdrawController;
-use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,9 +69,9 @@ Route::get('terms', function () {return view('pages/terms');})->name('terms');
 Route::get('privacy-policy', function () {return view('pages/privacy-policy');})->name('privacy-policy');
 
 Route::get('/loading', function () {return view('loading');});
-
 //Twitter OAuthによる認証
-Route::post('/twitter-register', [TwitterRegisterController::class, 'store'])->name('twitter-register.store');
+Route::get('/oauth/twitter/redirect', RedirectTwitterOAuthController::class);
+Route::get('/oauth/twitter/callback', TwitterRegisterController::class);
 
 //Route::get('/temp/test',[TestController::class, 'test'])
 //           ->name('test');

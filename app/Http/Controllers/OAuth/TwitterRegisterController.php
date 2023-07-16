@@ -1,34 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\OAuth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Library\TwitterApi;
 use App\Models\TwitterAccount;
-use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Auth\Events\Registered;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Inertia\Response;
-use App\Library\TwitterApi;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 //Twitter OAuth 2.0 によるユーザ登録
 class TwitterRegisterController extends Controller
 {
-
-    public function create(): View
-    {
-        return view('loading');
-    }
-
-    public function store(Request $request): RedirectResponse
+    public function __invoke(Request $request): RedirectResponse
     {
         Log::debug('TWITTER REGISTER');
         Log::debug('CODE : ' .print_r($request->all(), true));
@@ -36,12 +28,8 @@ class TwitterRegisterController extends Controller
         Log::debug('CLIENT_ID : ' .print_r(env('CLIENT_ID'), true));
         Log::debug('CLIENT_SECLET : ' .print_r(env('CLIENT_SECRET'), true));
         $TwitterApi = new TwitterApi(env('API_KEY'), env('API_SECRET'), env('BEARER'), env('CLIENT_ID'), env('CLIENT_SECRET'), env('REDIRECT_URI'));
-        $request->validate([
-            'code' => 'required',
-            'code_verifier' =>'required'
-        ]);
 
-        $tokens = $TwitterApi->getAccessToken($request->code, $request->code_verifier);
+        $tokens = $TwitterApi->getAccessToken($request->query('code'), $request->query('state'));
         Log::debug('TOKEN : ' . print_r($tokens, true));
 
         //アクセストークンを正常取得できた場合
