@@ -10,6 +10,7 @@ export default createStore({
         follow_keywords: [],
         like_keywords: [],
         reserved_tweets: [],
+        tweeted_tweets: [],
         active_account: {
             description: "",
             id:  "",
@@ -72,21 +73,18 @@ export default createStore({
         },
         //Twitterアカウント凍結フラグを取得
         async getLockedFlag(){
-            // const url = 'http://localhost/locked';
             const url = import.meta.env.VITE_URL_LOCKED;
             const result = await axios.get(url);
             this.state.locked_flag = result.data.locked_flag;
         },
         //自動機能の稼働状況を取得
         async getProcessStatuses(){
-            // const url = 'http://localhost/process-status';
             const url = import.meta.env.VITE_URL_PROCESS_STATUS;
             const result = await axios.get(url);
             this.state.process_statuses = result.data;
         },
         //メンション取得
         async getMentions(){
-            // const url = 'http://localhost/mention';
             const url = import.meta.env.VITE_URL_MENTION;
             const result = await axios.get(url);
             this.state.mentions = result.data;
@@ -105,10 +103,15 @@ export default createStore({
         },
         //予約済かつ未投稿のツイートを取得
         async getReservedTweets(){
-            // const url = 'http://localhost/reserved-tweet';
             const url = import.meta.env.VITE_URL_RESERVED_TWEET;
             const result = await axios.get(url);
             this.state.reserved_tweets = result.data
+        },
+        //ツイート済みの予約投稿を取得
+        async getTweetedTweets(){
+            const url = import.meta.env.VITE_URL_TWEETED_TWEET;
+            const result = await axios.get(url);
+            this.state.tweeted_tweets = result.data
         },
         //現在使用中のアカウントのプロフィイール情報を取得
         async getActiveAccount(context, payload){

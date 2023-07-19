@@ -22,7 +22,7 @@ class TweetJob implements ShouldQueue
     protected $twitter_id;
     protected $text;
 
-    public $tries = 5; 
+    public $tries = 5;
 
     /**
      * Create a new job instance.
@@ -41,21 +41,25 @@ class TweetJob implements ShouldQueue
     {
 
 
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken($this->twitter_id);
         $TwitterApi->setTokenToHeader($access_token);
-        
+
         $result = $TwitterApi->tweet($this->text);
         //アカウント凍結を検出
         $TwitterApi->checkAccountLocked($result, $this->twitter_id);
-
+        Log::debug('TWEET JOB : ' .print_r($result['data']['id'], true));
         if(isset($result['data'])){
-            ReservedTweet::find($this->record_id)->update(['tweeted_at' => date("Y/m/d H:i:s")]);
+            //ツイート日時と、ツイート削除時に必要なツイートIDを保存
+            ReservedTweet::find($this->record_id)->update([
+                'tweeted_at' => date("Y/m/d H:i:s"),
+                'tweet_id' => $result['data']['id'],
+            ]);
             Log::debug('TWEET JOB : SUCCESS');
         }
     }

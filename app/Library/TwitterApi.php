@@ -793,6 +793,33 @@ class TwitterApi
         return $result;
     }
 
+    //ツイートを削除
+    public function deleteTweet($tweet_id){
+        $base_url = 'https://api.twitter.com/2/tweets/:id';
+        $data = [
+            ':id' => $tweet_id,
+        ];
+        $inserted_url = $this->insertParam($base_url, $data);
+        $method = 'DELETE';
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $inserted_url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $this->header);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($curl);
+        $result = json_decode($response, true);
+
+        curl_close($curl);
+
+        if(!isset($result['data'])){
+            Log::debug('ERROR - DELETE TWEET : ' . print_r($result, true));
+        }
+
+        return $result;
+    }
+
     //最後にツイートorリツイートorリプライorいいねした日時を抽出
     //いいねによる抽出日時はいいね先ツイートの発行日時
     public function checkLastActiveTime($twitter_id){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\TwitterApi;
 use Illuminate\Http\Request;
 use App\Models\TwitterAccount;
 use App\Models\ReservedTweet;
@@ -25,7 +26,6 @@ class ReservedTweetController extends Controller
         }
 
         $data = $data_builder->get();
-        Log::debug('RESERVED TWEET - INDEX : ' .print_r($data, true));
 
         return $data->toArray();
     }
@@ -86,7 +86,39 @@ class ReservedTweetController extends Controller
      */
     public function destroy(string $id)
     {
-        Log::debug('DELETE : ' .print_r($id, true));
-        ReservedTweet::find($id)->forceDelete();
+
+
+        $tweet = ReservedTweet::find($id)->toArray();
+//        Log::debug('DELETE : ' .print_r($tweet, true));
+        if($tweet['tweeted_at']){
+            Log::debug('TWEETED');
+
+            $tweet_id = ReservedTweet::find($id)->toArray()['tweet_id'];
+
+            $TwitterApi = new TwitterApi(env('API_KEY'),
+                                        env('API_SECRET'),
+                                        env('BEARER'),
+                                        env('CLIENT_ID'),
+                                        env('CLIENT_SECRET'),
+                                        env('REDIRECT_URI'));
+
+            $access_token = $TwitterApi->checkRefreshToken(Session::get('twitter_id'));
+            $TwitterApi->setTokenToHeader($access_token);
+            Log::debug('DELETE ID : ' .print_r($tweet_id, true));
+            //ツイートの削除
+            $result = $TwitterApi->deleteTweet($tweet_id);
+            //アカウント凍結を検出
+            $TwitterApi->checkAccountLocked($result, Session::get('twitter_id'));
+
+            if(isset($result['data'])){
+                ReservedTweet::find($id)->delete();
+            }
+            Log::debug('DELETE TWEET : ' .print_r($result, true));
+
+        }else{
+            Log::debug('RESERVING');
+            ReservedTweet::find($id)->delete();
+        }
+
     }
 }

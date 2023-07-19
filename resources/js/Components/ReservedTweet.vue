@@ -43,11 +43,15 @@ export default {
         //予約ツイートの削除をコントローラへリクエスト
         const deleteReservedTweet = async ()=>{
             const url = import.meta.env.VITE_URL_RESERVED_TWEET + '/' + props.id;
-            const result = await axios.delete(url, {
-                                        data: props.id})
-                                        .then(res =>{
-                                            context.emit('delete');
-                                        });
+            const confirm_delete = confirm('予約を取り消します。ツイート済みのものはツイートが削除されます。よろしいですか？');
+            if(confirm_delete){
+                const result = await axios.delete(url, {
+                    data: props.id})
+                    .then(res =>{
+                        context.emit('delete');
+                    });
+            }
+
         };
         return { active_account, date, deleteReservedTweet };
     }

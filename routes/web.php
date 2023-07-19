@@ -13,6 +13,7 @@ use App\Http\Controllers\AutoUnfollowController;
 use App\Http\Controllers\AutoLikeController;
 use App\Http\Controllers\ProtectedAccountController;
 use App\Http\Controllers\ReservedTweetController;
+use App\Http\Controllers\TweetedTweetController;
 use App\Http\Controllers\ChangeAccountController;
 use App\Http\Controllers\TwitterRegisterController;
 use App\Http\Controllers\ProcessStatusController;
@@ -45,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::apiResource('/auto-like',AutoLikeController::class);
     Route::apiResource('/protected-account',ProtectedAccountController::class);
     Route::apiResource('/reserved-tweet',ReservedTweetController::class);
+    Route::apiResource('/tweeted-tweet',TweetedTweetController::class);
     Route::apiResource('/change-account',ChangeAccountController::class);
     Route::apiResource('/process-status',ProcessStatusController::class);
     Route::apiResource('/twitter-data',TwitterAccountDataController::class);
@@ -75,8 +77,8 @@ Route::get('/loading', function () {return view('loading');});
 //Twitter OAuthによる認証
 Route::post('/twitter-register', [TwitterRegisterController::class, 'store'])->name('twitter-register.store');
 
-//Route::get('/temp/test',[TestController::class, 'test'])
-//           ->name('test');
+Route::get('/temp/test',[TestController::class, 'test'])
+           ->name('test');
 
 
 require __DIR__.'/auth.php';

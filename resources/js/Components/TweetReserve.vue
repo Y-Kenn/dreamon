@@ -5,8 +5,6 @@
             <div class="p-reserve">
                 <textarea v-model="new_tweet.text" name="text" id="" cols="30" rows="10" class="p-reserve__text c-input"></textarea>
                 <div class="p-reserve__inner">
-
-<!--                        <input type="datetime-local" name="reserved_date" v-model="new_tweet.reserved_date" v-bind:min="now" max="2099-12-31T23:59" class="p-reserve__datetime">-->
                     <div>
                         <label for="js-datepicker"><i class="p-reserve__icon fa-solid fa-calendar-days"></i></label>
                         <input type="text" class="p-reserve__datetime" name="datepicker" id="js-datepicker">
@@ -19,14 +17,33 @@
             </div>
         </div>
         <div class="l-tweet_reserve__tweets">
-            <div class="p-tweet_bar__inner">
-                <ReservedTweet v-for="tweet in reserved_tweets"
-                                v-bind:key="tweet.id"
-                                v-bind:id="tweet.id"
-                                v-bind:text="tweet.text"
-                                v-bind:reserved_date="tweet.reserved_date"
-                                @delete="getTweets" />
+            <div class="p-tweet_bar__tab">
+                <div class="p-tweet_bar__tab__2tab">
+                    <div @click="showReservingTweets" v-bind:class="{'p-tweet_bar__tab__2tab__item--active': show.tweets === 'reserving'}" class="p-tweet_bar__tab__2tab__item">予約中</div>
+                    <div @click="showTweetedTweets" v-bind:class="{'p-tweet_bar__tab__2tab__item--active': show.tweets === 'tweeted'}" class="p-tweet_bar__tab__2tab__item">投稿済み</div>
+                </div>
+
             </div>
+
+            <div>
+                <div v-if="show.tweets === 'reserving'" class="p-tweet_bar__inner">
+                    <ReservedTweet v-for="tweet in reserved_tweets"
+                                   v-bind:key="tweet.id"
+                                   v-bind:id="tweet.id"
+                                   v-bind:text="tweet.text"
+                                   v-bind:reserved_date="tweet.reserved_date"
+                                   @delete="getTweets" />
+                </div>
+                <div v-else class="p-tweet_bar__inner">
+                    <ReservedTweet v-for="tweet in tweeted_tweets"
+                                   v-bind:key="tweet.id"
+                                   v-bind:id="tweet.id"
+                                   v-bind:text="tweet.text"
+                                   v-bind:reserved_date="tweet.reserved_date"
+                                   @delete="getTweets" />
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -57,11 +74,13 @@ export default {
                 defaultDate : now_plus,
                 minDate     : now_plus,
                 enableTime  : true,
+                minuteIncrement: 1,
             });
         })
 
         const store = useStore();
         let reserved_tweets = computed(()=> store.state.reserved_tweets);
+        let tweeted_tweets = computed(()=> store.state.tweeted_tweets);
         let new_tweet = reactive({
             reserved_date: now_plus,
             text: "",
@@ -69,6 +88,7 @@ export default {
         //予約中のツイートを取得
         const getTweets = async ()=>{
             store.dispatch('getReservedTweets');
+            store.dispatch('getTweetedTweets');
             store.dispatch('getProcessStatuses');
         };
         //予約ツイートのDB登録をコントローラへリクエスト
@@ -82,7 +102,22 @@ export default {
                                 new_tweet.text = '';
                             });
         };
-        return { new_tweet, reserved_tweets, getTweets, createTweet };
+
+        let show = reactive({
+            tweets: 'reserving',
+        });
+        //予約中のツイートを表示する
+        const showReservingTweets = ()=>{
+            console.log('reserving');
+            show.tweets = 'reserving';
+        };
+        //投稿済みのツイートを表示する
+        const showTweetedTweets = ()=>{
+            console.log('tweeted');
+            show.tweets = 'tweeted';
+        };
+
+        return { new_tweet, reserved_tweets, tweeted_tweets, getTweets, createTweet, show,　showReservingTweets, showTweetedTweets };
     }
 
 

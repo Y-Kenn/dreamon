@@ -23,7 +23,7 @@ use DateTimeZone;
 //開発用テストコントローラ
 class TestController extends Controller
 {
-    public function test(){
+    public function test16(){
 //        $twitter_accounts = array_column(Auth::user()->twitterAccounts()->select('twitter_id')->get()->toArray(), 'twitter_id');
 //
 //        foreach ($twitter_accounts as $account){
@@ -316,7 +316,7 @@ class TestController extends Controller
         Log::debug('UNFOLLOW JOB : ' . print_r($result, true));
     }
 
-    public function test0()
+    public function test()
     {
         $user_twitter_id = '895207804469772288';
         $target_twitter_id = '924353116937392128';
@@ -331,11 +331,11 @@ class TestController extends Controller
         $access_token = $twitter_account_info->access_token;
         $TwitterApi->setTokenToHeader($access_token);
 
-        $result = $TwitterApi->follow($user_twitter_id, $target_twitter_id);
-        Log::debug('FOLLOW JOB : ' . print_r($result, true));
+//        $result = $TwitterApi->follow($user_twitter_id, $target_twitter_id);
+//        Log::debug('FOLLOW JOB : ' . print_r($result, true));
 
-        // $url = $TwitterApi->makeAuthorizeUrl();
-        // Log::debug('URL : ' . print_r($url, true));
+         $url = $TwitterApi->makeAuthorizeUrl();
+         Log::debug('URL : ' . print_r($url, true));
 
     }
 }

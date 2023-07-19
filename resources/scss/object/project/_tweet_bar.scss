@@ -1,6 +1,28 @@
 .p-tweet_bar{
+    &__tab{
+        text-align: center;
+        margin-bottom: 0.5rem;
+        &__2tab{
+            display: flex;
+            justify-content: center;
+            font-size: $font-size_m;
 
-    // margin: auto;
+            &__item{
+                width: 175px;
+                background-color: #ccc;
+                border-bottom: 2px solid $mainBlue;
+                color: white;
+                border-radius: 7px 7px 0 0;
+                &:hover{
+                    cursor: pointer;
+                }
+                &--active{
+                    background-color: $mainBlue;
+                }
+            }
+
+        }
+    }
     &__inner{
         display: flex;
         flex-direction: column;
@@ -9,15 +31,10 @@
         @include mq(){
             width: 100%;
         }
-        // border-left: 1px solid#ddd;
-        // border-right: 1px solid#ddd;
     }
     &__item{
         border-bottom: 1px solid#ddd;
         padding: 0.5rem 1rem;
-        // padding-top: 0;
-        // overflow: hidden;
-        // margin-bottom: 0.5rem;
         width: 100%;
         transition: 0.5s;
         @include mq(){

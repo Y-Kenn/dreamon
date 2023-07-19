@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Log;
 use App\Models\TwitterAccount;
 use App\Models\ReservedTweet;
@@ -34,8 +35,10 @@ class ThrowTweetJobsCommand extends Command
 
         $reserved_tweets_builder = TwitterAccount::whereNull('twitter_accounts.deleted_at')
                                                     ->where('locked_flag', false)
-                                                    ->join('reserved_tweets','twitter_accounts.twitter_id', '=', 'reserved_tweets.twitter_id')
-                                                    ->whereNull('thrown_at')
+                                                    ->join('reserved_tweets', function (JoinClause $join){
+                                                        $join->on('twitter_accounts.twitter_id', '=', 'reserved_tweets.twitter_id')
+                                                            ->where('reserved_tweets.deleted_at', '=', null);
+                                                    })->whereNull('thrown_at')
                                                     ->inRandomOrder();//特定のアカウントのツイートが毎回遅延することを回避;
         //予約ツイートが無い場合は終了
         if(!$reserved_tweets_builder->exists()){
@@ -51,7 +54,6 @@ class ThrowTweetJobsCommand extends Command
             $diff = $now->diff($reserved_datetime);
             //結果がマイナスの場合(投稿予定時間になっている場合)ツイートジョブ発行
             if($diff->invert){
-                Log::debug('PAST : ' . print_r($tweet, true));
                 TweetJob::dispatch($tweet['id'], $tweet['twitter_id'], $tweet['text'])
                             ->onQueue('reserved_tweets');
                 ReservedTweet::find($tweet['id'])->update(['thrown_at' => date("Y/m/d H:i:s")]);

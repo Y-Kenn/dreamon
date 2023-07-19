@@ -24,6 +24,7 @@ export default {
         store.dispatch('getFollowKeywords');
         store.dispatch('getLikeKeywords');
         store.dispatch('getReservedTweets');
+        store.dispatch('getTweetedTweets');
         store.dispatch('getMyAccounts');
         store.dispatch('getFollowBases');
         store.dispatch('getProtectedAccounts');

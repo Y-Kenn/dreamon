@@ -10,13 +10,14 @@ class ReservedTweet extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    
+
     protected $fillable = [
         'twitter_id',
         'text',
         'reserved_date',
         'thrown_at',
         'tweeted_at',
+        'tweet_id',
     ];
 
     public function twitterAccount(){
