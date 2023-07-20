@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::apiResource('/regist-password',RegistPasswordController::class);
     Route::apiResource('/locked',LockedController::class);
     Route::apiResource('/withdraw-user',WithdrawController::class);
+    Route::delete('/twitter-register/{id}', [TwitterRegisterController::class, 'destroy'])->name('twitter-register.delete');
 
     Route::get('/home', function () {return view('app');});
     Route::get('/follow', function () { return view('app'); });

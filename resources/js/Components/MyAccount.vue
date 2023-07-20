@@ -36,7 +36,9 @@
                 <span>{{ Math.round((info.public_metrics.followers_count / info.public_metrics.following_count) * 100) / 100 }}</span>
             </div>
         </div>
-
+        <div class="p-profile__item__delete">
+            <i v-if="!info.active_flag" @click="deleteAccount" class="fa-solid fa-xmark"></i>
+        </div>
     </div>
 </template>
 
@@ -60,8 +62,21 @@ export default {
                                             context.emit('put');
                                         });
         };
+        //Kamitter内でのTwitterアカウント削除
+        const deleteAccount = async ()=>{
+            const url = import.meta.env.VITE_URL_TWITTER_REGISTER + '/' + props.info.record_id;
+            const confirm_delete = confirm('OKを押すとこのTwitterアカウントに関するKamitter内での全ての情報が削除されます。');
+            if(confirm_delete){
+                console.log(url)
+                const result = await axios.delete(url)
+                                        .then(res =>{
+                                            context.emit('delete');
+                                        });
+            }
 
-        return { account_url, changeActiveAccount };
+        };
+
+        return { account_url, changeActiveAccount, deleteAccount };
     }
 }
 </script>

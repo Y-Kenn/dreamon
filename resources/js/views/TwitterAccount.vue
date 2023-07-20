@@ -19,7 +19,8 @@
                         v-bind:key="account.record_id"
                         v-bind:info="account"
                         v-bind:url="url_change_account"
-                        @put="getAllData" />
+                        @put="getAllData"
+                        @delete="getAllData"/>
         </div>
 
     </div>

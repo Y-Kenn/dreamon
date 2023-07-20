@@ -17,17 +17,14 @@ class ReservedTweetController extends Controller
      */
     public function index()
     {
-        $data_builder = ReservedTweet::where('twitter_id', Session::get('twitter_id'))
+        $data = ReservedTweet::where('twitter_id', Session::get('twitter_id'))
                                         ->whereNull('thrown_at')
                                         ->orderBy('reserved_date')
-                                        ->select('id', 'text', 'reserved_date');
-        if(!$data_builder->exists()){
-            return array();
-        }
+                                        ->select('id', 'text', 'reserved_date')
+                                        ->paginate(5)
+                                        ->toArray();
 
-        $data = $data_builder->get();
-
-        return $data->toArray();
+        return $data;
     }
 
     /**

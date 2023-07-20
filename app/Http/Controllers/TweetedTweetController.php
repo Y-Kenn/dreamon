@@ -14,9 +14,10 @@ class TweetedTweetController extends Controller
     public function index(){
         $data = ReservedTweet::where('twitter_id', Session::get('twitter_id'))
                                 ->whereNotNull('tweeted_at')
-                                ->orderBy('reserved_date')
+                                ->orderBy('reserved_date','desc')
                                 ->select('id', 'text', 'reserved_date')
-                                ->get()->toArray();
+                                ->paginate(5)
+                                ->toArray();
 
         Log::debug('TWEETED TWEET - INDEX : ' .print_r($data, true));
         return $data;

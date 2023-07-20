@@ -102,14 +102,14 @@ export default createStore({
             this.state.like_keywords = result.data;
         },
         //予約済かつ未投稿のツイートを取得
-        async getReservedTweets(){
-            const url = import.meta.env.VITE_URL_RESERVED_TWEET;
+        async getReservedTweets(context, page='1'){
+            const url = import.meta.env.VITE_URL_RESERVED_TWEET + '?page=' + page;
             const result = await axios.get(url);
             this.state.reserved_tweets = result.data
         },
         //ツイート済みの予約投稿を取得
-        async getTweetedTweets(){
-            const url = import.meta.env.VITE_URL_TWEETED_TWEET;
+        async getTweetedTweets(context, page='1'){
+            const url = import.meta.env.VITE_URL_TWEETED_TWEET + '?page=' + page;
             const result = await axios.get(url);
             this.state.tweeted_tweets = result.data
         },

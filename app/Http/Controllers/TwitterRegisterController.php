@@ -3,6 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\FollowedAccount;
+use App\Models\FollowKeyword;
+use App\Models\FollowTarget;
+use App\Models\LikeKeyword;
+use App\Models\LikeTarget;
+use App\Models\ProtectedFollowedAccount;
+use App\Models\ReservedTweet;
+use App\Models\TargetBaseAccount;
+use App\Models\TwitterAccountData;
+use App\Models\UnfollowTarget;
 use App\Models\User;
 use App\Models\TwitterAccount;
 use App\Http\Requests\Auth\LoginRequest;
@@ -148,5 +158,72 @@ class TwitterRegisterController extends Controller
         }
 
 
+    }
+
+    //Twitterアカウントのデータを削除
+    public function destroy(string $id)
+    {
+        Log::debug('DELETE MY ACCOUT');
+
+        $user = Auth::user()->twitterAccounts()->find($id)->toArray();
+        //idが自身のTwitterアカウントのものでなければ終了
+        if(!$user){
+            return false;
+        }
+
+        //Twitterアカウントに紐づく全テーブル(usersテーブル以外)の全レコード削除
+        try{
+            FollowKeyword::where('twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-FOLLOW KEYWORD ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            LikeKeyword::where('twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-LIKE KEYWORD ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            FollowedAccount::where('user_twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-FOLLOWED ACCOUNT ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            FollowTarget::where('user_twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-FOLLOW TARGET ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            LikeTarget::where('user_twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-LIKE TARGET ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            UnfollowTarget::where('user_twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-UNFOLLOW TARGET ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            TargetBaseAccount::where('user_twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-TARGET BASE ACCOUNT ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            ProtectedFollowedAccount::where('user_twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-PROTECTED FOLLOWED ACCOUNT ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            ReservedTweet::where('twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-RESERVED TWEET ' .(string)$id .' : ' .$e->getMessage());
+        }
+        try{
+            TwitterAccountData::where('twitter_id', $id)->forceDelete();
+        } catch(\Exception $e){
+            Log::notice('WITHDRAW-TWITTER ACCOUNT DATA ' .(string)$id .' : ' .$e->getMessage());
+        }
+
+        $result = Auth::user()->twitterAccounts()->find($id)->forceDelete();
+        Log::debug('DELETE MY ACCOUT : ' .print_r($result, true));
     }
 }

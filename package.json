@@ -25,6 +25,8 @@
         "vite": "^4.0.0",
         "vue": "^3.2.41",
         "vue-router": "^4.2.2",
+        "vuejs-paginate": "^2.1.0",
+        "vuejs-paginate-next": "^1.0.2",
         "vuex": "^4.1.0"
     },
     "dependencies": {

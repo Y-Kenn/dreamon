@@ -1,0 +1,48 @@
+.c-pagination{
+    &__container{
+        padding: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-size: $font-size_m;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    &__page {
+        width: 2em;
+        text-align: center;
+        color: $font-color_default;
+        transition: 0.5s;
+        &:hover{
+            cursor: pointer;
+        }
+        &--active {
+            background-color: $mainBlue;
+            color: #fff;
+        }
+        &__link {
+            width: 100%;
+            height: 100%;
+            padding: 0.3rem;
+        }
+    }
+    &__num{
+        border: 1px solid $border-color_default;
+        border-right: none;
+        width: 2em;
+        text-align: center;
+
+        &:last-child {
+            border-right: 1px solid $border-color_default;
+        }
+    }
+    &__prev{
+        border: 1px solid $border-color_default;
+        border-right: none;
+        border-radius: 6px 0 0 6px;
+    }
+    &__next{
+        border: 1px solid $border-color_default;
+        border-radius: 0 6px 6px 0;
+    }
+}

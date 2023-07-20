@@ -11,36 +11,71 @@
                         <span v-bind:class="{ 'p-reserve__text_count--over': new_tweet.text.length > 140 }" class=p-reserve__text_count>文字数 : {{ new_tweet.text.length}}</span>
                     </div>
                     <button @click="createTweet" class="p-reserve__submit c-button c-button--submit">登録</button>
-
                 </div>
-
             </div>
         </div>
         <div class="l-tweet_reserve__tweets">
-            <div class="p-tweet_bar__tab">
-                <div class="p-tweet_bar__tab__2tab">
-                    <div @click="showReservingTweets" v-bind:class="{'p-tweet_bar__tab__2tab__item--active': show.tweets === 'reserving'}" class="p-tweet_bar__tab__2tab__item">予約中</div>
-                    <div @click="showTweetedTweets" v-bind:class="{'p-tweet_bar__tab__2tab__item--active': show.tweets === 'tweeted'}" class="p-tweet_bar__tab__2tab__item">投稿済み</div>
+            <!--タブ-->
+            <div class="p-tweet_bar__inner">
+                <div class="p-tweet_bar__tab">
+                    <div class="p-tweet_bar__tab__2tab">
+                        <div @click="showReservingTweets" v-bind:class="{'p-tweet_bar__tab__2tab__item--active': show.tweets === 'reserving'}" class="p-tweet_bar__tab__2tab__item">予約中</div>
+                        <div @click="showTweetedTweets" v-bind:class="{'p-tweet_bar__tab__2tab__item--active': show.tweets === 'tweeted'}" class="p-tweet_bar__tab__2tab__item">投稿済み</div>
+                    </div>
                 </div>
-
             </div>
-
             <div>
+                <!--予約中ツイート-->
                 <div v-if="show.tweets === 'reserving'" class="p-tweet_bar__inner">
-                    <ReservedTweet v-for="tweet in reserved_tweets"
+                    <div v-if="!reserved_tweets.data.length" class="p-tweet_bar__nothing"><span>予約中のツイートはありません</span></div>
+                    <ReservedTweet v-for="tweet in reserved_tweets.data"
                                    v-bind:key="tweet.id"
                                    v-bind:id="tweet.id"
                                    v-bind:text="tweet.text"
                                    v-bind:reserved_date="tweet.reserved_date"
                                    @delete="getTweets" />
+                    <!--ページネーション-->
+                    <Paginate
+                        :page-count="reserved_tweets.last_page"
+                        :page-range="5"
+                        :click-handler="paginateReserved"
+                        :prev-text="'〈'"
+                        :next-text="'〉'"
+                        :container-class="'c-pagination__container'"
+                        :page-class="'c-pagination__page c-pagination__num'"
+                        :page-link-class="'c-pagination__page__link'"
+                        :prev-class="'c-pagination__page c-pagination__prev'"
+                        :prev-link-class="'c-pagination__page__link'"
+                        :next-class="'c-pagination__page c-pagination__next'"
+                        :next-link-class="'c-pagination__page__link'"
+                        :active-class="'c-pagination__page--active'">
+                    </Paginate>
                 </div>
+                <!--投稿済みツイート-->
                 <div v-else class="p-tweet_bar__inner">
-                    <ReservedTweet v-for="tweet in tweeted_tweets"
+                    <div v-if="!tweeted_tweets.data.length" class="p-tweet_bar__nothing"><span>投稿済みの予約ツイートはありません</span></div>
+                    <ReservedTweet v-for="tweet in tweeted_tweets.data"
                                    v-bind:key="tweet.id"
                                    v-bind:id="tweet.id"
                                    v-bind:text="tweet.text"
                                    v-bind:reserved_date="tweet.reserved_date"
                                    @delete="getTweets" />
+                    <!--ページネーション-->
+                    <Paginate
+                        :page-count="tweeted_tweets.last_page"
+                        :page-range="5"
+                        :click-handler="paginateTweeted"
+                        :prev-text="'〈'"
+                        :next-text="'〉'"
+                        :container-class="'c-pagination__container'"
+                        :page-class="'c-pagination__page c-pagination__num'"
+                        :page-link-class="'c-pagination__page__link'"
+                        :prev-class="'c-pagination__page c-pagination__prev'"
+                        :prev-link-class="'c-pagination__page__link'"
+                        :next-class="'c-pagination__page c-pagination__next'"
+                        :next-link-class="'c-pagination__page__link'"
+                        :active-class="'c-pagination__page--active'">
+                    </Paginate>
                 </div>
             </div>
 
@@ -58,10 +93,11 @@ import { useStore } from "vuex";
 import flatpickr from 'flatpickr/dist/flatpickr.min.js';
 import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import ReservedTweet from '../Components/ReservedTweet.vue';
+import Paginate from "vuejs-paginate-next";
 import moment from 'moment';
 
 export default {
-    components: {ReservedTweet},
+    components: { ReservedTweet, Paginate },
 
     setup(props){
         //現在時刻より10分後以降の予約しかできないようにする
@@ -116,8 +152,18 @@ export default {
             console.log('tweeted');
             show.tweets = 'tweeted';
         };
+        const paginateTweeted = async page =>{
+            console.log(('page', page))
+            await store.dispatch('getTweetedTweets', page);
+        };
+        const paginateReserved = async page =>{
+            console.log(('page', page))
+            await store.dispatch('getReservedTweets', page);
+        };
 
-        return { new_tweet, reserved_tweets, tweeted_tweets, getTweets, createTweet, show,　showReservingTweets, showTweetedTweets };
+        return { new_tweet, reserved_tweets, tweeted_tweets, show,
+            getTweets, createTweet, showReservingTweets, showTweetedTweets,
+            paginateTweeted, paginateReserved };
     }
 
 

@@ -95,9 +95,10 @@
             }
         }
         &__delete{
-            margin-right: 2rem;
+            width: 3.5rem;
+            padding-right: 2rem;
             font-size: $font-size_m;
-            &:hover{
+            & > i:hover{
                 cursor: pointer;
             }
             @include mq(md){
