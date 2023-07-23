@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 
 //メールアドレス更新用コントローラ
@@ -62,10 +64,22 @@ class EmailAddressController extends Controller
             'email' => 'required|email:filter',
         ]);
 
+        try {
+            DB::transaction(function () use($request){
+                $result = Auth::user()->update([
+                    'email' => $request->email,
+                ]);
+                Log::debug('EMAIL - UPDATE - RESULT : ' .print_r($result, true));
+                DBErrorHandler::checkUpdated($result);
+            });
+        }catch (\Throwable $e){
+            Log::error('[ERROR] EMAIL ADDRESS CONTROLLER - UPDATE : ' .print_r($e->getMessage(), true));
 
-        Auth::user()->update([
-            'email' => $request->email,
-        ]);
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+
+
     }
 
     /**

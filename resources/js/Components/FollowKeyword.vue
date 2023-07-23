@@ -1,7 +1,7 @@
 <template>
     <div class="p-keyword">
         <div class="p-keyword__inner">
-            <input v-model="new_keywords.keywords" type="text" name="keywords" class="p-keyword__input c-input">
+            <input v-model="new_keywords.keywords" type="text" name="keywords" class="p-keyword__form c-form--text">
             <span v-if="!new_keywords.not_flag" @click="toggleNotFlag" class="p-keyword__exclude c-input"><span>除外</span></span>
             <span v-else @click="toggleNotFlag" class="p-keyword__exclude p-keyword__exclude--active c-input"><span>除外</span></span>
             <button @click="createKeywords" class="p-keyword__submit c-button c-button--submit">登録</button>

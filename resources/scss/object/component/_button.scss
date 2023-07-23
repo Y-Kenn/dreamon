@@ -9,45 +9,36 @@
                 transform: translateY(3px);
             }
         }
-        //&:hover{
-        //    transform: translateY(3px);
-        //}
         @include mq(sm){
-            //&:hover{
-            //    pointer-events: none;
-            //}
             &:active{
                 transform: translateY(3px);
             }
         }
     &--submit{
-        //display: block;
-        //text-decoration: none;
-        color: #4a9ff3;//$mainBlue;//#27acd9;
-        border-bottom: 2px solid #66acf1;//#27acd9;
+        height: 4rem;
+        width: 6rem;
+        line-height: 4rem;
+        font-size: $font-size_s;
+        color: #4a9ff3;
+        border-bottom: 2px solid #66acf1;
         border-radius: 100vh;
         box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
         -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+        margin-left: 3rem;
         transition: 0.5s;
         @media(hover: hover) {
             &:hover {
                 color: #fff;
-                background: #4a9ff3;//#27acd9;
+                background: #4a9ff3;
                 border-bottom: 2px solid #fff;
             }
         }
         @include mq(sm){
-            //&:hover{
-            //    pointer-events: none;
-            //}
             &:active{
                 color: #fff;
-                background: #4a9ff3;//#27acd9;
+                background: #4a9ff3;
                 border-bottom: 2px solid #fff;
-                transform: translateY(3px);
             }
         }
     }
-
-    //font-size: $font-size_ss;
 }

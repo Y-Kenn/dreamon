@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
 use App\Models\ProtectedFollowedAccount;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Library\TwitterApi;
+use mysql_xdevapi\Exception;
 
 //自動アンフォローからのアカウント保護用コントローラ
 class ProtectedAccountController extends Controller
@@ -16,18 +20,27 @@ class ProtectedAccountController extends Controller
      */
     public function index()
     {
-        //保護アカウントのTwitter ID取得
-        $data_builder = ProtectedFollowedAccount::where('user_twitter_id', Session::get('twitter_id'))
-                                    ->limit('100')
-                                    ->orderBy('created_at', 'desc')
-                                    ->select('id','protected_twitter_id');
-        if(!$data_builder->exists()){
+        try{
+            //保護アカウントのTwitter ID取得
+            $data = ProtectedFollowedAccount::where('user_twitter_id', Session::get('twitter_id'))
+                                        ->limit('100')
+                                        ->orderBy('created_at', 'desc')
+                                        ->select('id','protected_twitter_id')
+                                        ->get()->toArray();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] PROTECTED ACCOUNT CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+        if(!$data){
             return array();
         }
 
-        $data = $data_builder->get();
+        Log::debug('PROTECTED ACCOUNT TEST');
 
-        $ids = array_column($data->toArray(), 'protected_twitter_id');
+
+        $ids = array_column($data, 'protected_twitter_id');
 
         $TwitterApi = new TwitterApi(env('API_KEY'),
                                     env('API_SECRET'),
@@ -42,7 +55,7 @@ class ProtectedAccountController extends Controller
         $result = $TwitterApi->getUserInfoByIds($ids);
         //リクエスト失敗時
         if(!isset($result['data'])){
-            return false;
+            return array();
         }
 
         for($i = 0; $i < count($result['data']); $i++){
@@ -90,15 +103,30 @@ class ProtectedAccountController extends Controller
         //正常取得できた場合
         if(isset($result['data'])){
 
-            $exist_flag = ProtectedFollowedAccount::where('protected_twitter_id', $result['data']['id'])
-                                            ->where('user_twitter_id', $user_twitter_id)
-                                            ->exists();
+            try{
+                $exist_flag = ProtectedFollowedAccount::where('protected_twitter_id', $result['data']['id'])
+                                                ->where('user_twitter_id', $user_twitter_id)
+                                                ->exists();
+            } catch (\Throwable $e) {
+                Log::error('[ERROR] PROTECTED ACCOUNT CONTROLLER - STORE - READ : ' . print_r($e->getMessage(), true));
+
+                return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+            }
             //未処理のターゲットベースアカウントと重複していない場合、DB登録
             if(!$exist_flag){
-                ProtectedFollowedAccount::create([
-                    'user_twitter_id' => $user_twitter_id,
-                    'protected_twitter_id' => $result['data']['id'],
-                ]);
+                try{
+                    DB::transaction(function () use($user_twitter_id, $result){
+                        $db_result = ProtectedFollowedAccount::create([
+                            'user_twitter_id' => $user_twitter_id,
+                            'protected_twitter_id' => $result['data']['id'],
+                        ]);
+                        DBErrorHandler::checkCreated($db_result);
+                    });
+                }catch (\Throwable $e){
+                    Log::error('[ERROR] PROTECTED ACCOUNT CONTROLLER - STORE - CREATE : ' .print_r($e->getMessage(), true));
+
+                    return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+                }
             }else{
                 Log::debug('EXIST');
             }
@@ -141,6 +169,16 @@ class ProtectedAccountController extends Controller
     public function destroy(string $id)
     {
         Log::debug('DELETE : ' .print_r($id, true));
-        ProtectedFollowedAccount::find($id)->forceDelete();
+
+        try{
+            DB::transaction(function () use ($id) {
+                $result = ProtectedFollowedAccount::find($id)->forceDelete();
+                DBErrorHandler::checkDeleted($result);
+            });
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] PROTECTED ACCOUNT CONTROLLER - DESTROY : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 }

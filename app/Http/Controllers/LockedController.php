@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
 use App\Models\TwitterAccount;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use mysql_xdevapi\Exception;
+use function Psy\debug;
 
 //Twitterアカウント凍結時の処理
 class LockedController extends Controller
@@ -17,12 +22,18 @@ class LockedController extends Controller
     //凍結の有無を送信
     public function index()
     {
-        $data = Auth::user()->twitterAccounts()
-                            ->where('twitter_id', Session::get('twitter_id'))
-                            ->select('locked_flag')
-                            ->first();
+        try{
+            $data = Auth::user()->twitterAccounts()
+                                ->where('twitter_id', Session::get('twitter_id'))
+                                ->first();
+            DBErrorHandler::checkFound($data);
 
-        return $data;
+            return $data;
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] LOCKED ACCOUNT CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 
     /**
@@ -67,9 +78,18 @@ class LockedController extends Controller
             'locked_flag' => 'required|boolean'
         ]);
 
-        Auth::user()->twitterAccounts()
-        ->where('twitter_id', Session::get('twitter_id'))
-        ->update($request->all());
+        try {
+            DB::transaction(function () use($request){
+                $result = Auth::user()->twitterAccounts()
+                ->where('twitter_id', Session::get('twitter_id'))
+                ->update($request->all());
+                DBErrorHandler::checkUpdated($result);
+            });
+        }catch (\Throwable $e){
+            Log::error('[ERROR] LOCKED ACCOUNT CONTROLLER - UPDATE : ' .print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 
     /**

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
 use App\Models\TwitterAccount;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -20,15 +23,18 @@ class ChangeAccountController extends Controller
     {
         Log::debug('USER : ' .print_r(Auth::id(), true));
 
-        //ユーザに紐づけられたTwitterアカウントIDを全て取得
-        $data_builder = Auth::user()->twitterAccounts()
-                                    ->select('twitter_id', 'active_flag');
+        try {
+            //ユーザに紐づけられたTwitterアカウントIDを全て取得
+            $data = Auth::user()->twitterAccounts()
+                ->select('twitter_id', 'active_flag')
+                ->get();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] CHANGE ACCOUNT CONTROLLER - INDEX - READ : ' . print_r($e->getMessage(), true));
 
-        if(!$data_builder->exists()){
-            return array();
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
         }
 
-        $data = $data_builder->get();
+
 
         $ids = array_column($data->toArray(), 'twitter_id');
 
@@ -51,11 +57,21 @@ class ChangeAccountController extends Controller
             return false;
         }
 
-        //取得した情報でtwitter_accounte_tableのtwitter_usernameを更新
+        Log::debug('CHANGE ACCOUNT TWITTER API RESPONSE : ' .print_r($result, true));
+        //取得した情報でtwitter_accounts_tableのtwitter_usernameを更新
         foreach($result['data'] as $account){
-            TwitterAccount::where('twitter_id', $account['id'])->update([
-                'twitter_username' => $account['username'],
-            ]);
+            try{
+                DB::transaction(function () use($account){
+                    $result = TwitterAccount::where('twitter_id', $account['id'])->update([
+                        'twitter_username' => $account['username'],
+                    ]);
+                    Log::debug('ACCOUNT : ' .print_r($account, true));
+                    DBErrorHandler::checkUpdated($result);
+                });
+            }catch (\Throwable $e){
+                Log::error('[ERROR] CHANGE ACCOUNT CONTROLLER - INDEX - UPDATE : ' . print_r($e->getMessage(), true));
+            }
+
         }
 
         //取得した情報にtwitter_account_tableのレコードID(Twitter ID)と使用中フラグを付加
@@ -92,30 +108,7 @@ class ChangeAccountController extends Controller
      */
     public function show(string $id)
     {
-        $data = Auth::user()->twitterAccounts()
-                            ->where('twitter_id', $id)
-                            ->select('twitter_id')
-                            ->get();
-
-        $ids = [$id];
-
-        $TwitterApi = new TwitterApi(env('API_KEY'),
-                                    env('API_SECRET'),
-                                    env('BEARER'),
-                                    env('CLIENT_ID'),
-                                    env('CLIENT_SECRET'),
-                                    env('REDIRECT_URI'));
-        $access_token = $TwitterApi->checkRefreshToken(Session::get('twitter_id'));
-        $TwitterApi->setTokenToHeader($access_token);
-
-        $result = $TwitterApi->getUserInfoByIds($ids);
-
-        //リクエスト失敗時
-        if(!isset($result['data'])){
-            return false;
-        }
-
-        return $result['data'][0];
+        //
     }
 
     /**
@@ -139,11 +132,23 @@ class ChangeAccountController extends Controller
         Log::debug('PUT - ID: ' .print_r($id, true));
         Log::debug('PUT - REQUEST : ' .print_r($request->all(), true));
 
-        Auth::user()->twitterAccounts()
+        try {
+            DB::transaction(function () use($id){
+                $result = Auth::user()->twitterAccounts()
                     ->where('active_flag', true)
                     ->update(['active_flag' => false]);
-        TwitterAccount::where('twitter_id', $id)->update(['active_flag' => true]);
-        Log::debug('PUT - ACTIVE : ' .print_r(TwitterAccount::find($id)->get(), true));
+                DBErrorHandler::checkUpdated($result);
+
+                $result = TwitterAccount::where('twitter_id', $id)->update(['active_flag' => true]);
+                DBErrorHandler::checkUpdated($result);
+            });
+        }catch (\Throwable $e){
+            Log::error('[ERROR] CHANGE ACCOUNTS CONTROLLER - UPDATE : ' .print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+        Log::debug('SESSION PUT - ACTIVE : ' .print_r(TwitterAccount::find($id)->toArray(), true));
         Session::put('twitter_id', $id);
     }
 

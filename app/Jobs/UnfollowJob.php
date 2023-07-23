@@ -42,18 +42,11 @@ class UnfollowJob implements ShouldQueue
         //Twitter API の自動化検出対策
         sleep(env('UNFOLLOW_INTERVAL'));
 
-        // Log::debug('UNFOLLOW JOB TEST---------------------------------------');
-        // Log::debug('| RECORD ID : ' . print_r($this->record_id, true));
-        // Log::debug('| FOLLOWED ACCOUNTS ID : ' . print_r($this->followed_accounts_id, true));
-        // Log::debug('| USER ID : ' . print_r($this->user_twitter_id, true));
-        // Log::debug('| TARGET ID : ' . print_r($this->target_twitter_id, true));
-        // Log::debug('| ------------------------------------------------------');
-
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
         $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
         $TwitterApi->setTokenToHeader($access_token);

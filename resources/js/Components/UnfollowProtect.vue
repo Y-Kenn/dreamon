@@ -1,10 +1,10 @@
 <template>
     <div class="p-profile">
-        <div class="p-profile__input">
-            <span class="p-profile__input__header">@</span>
-            <input v-model="twitter_name.twitter_name" type="text" name="twitter_name" class="p-profile__input c-input">
+        <div class="p-profile__form">
+            <span class="p-profile__form__header">@</span>
+            <input v-model="twitter_name.twitter_name" type="text" name="twitter_name" class="c-form--text">
         </div>
-        <button @click="createProtectedAccount" class="p-profile__submit c-button--submit">送信</button>
+        <button @click="createProtectedAccount" class="p-profile__submit c-button c-button--submit">送信</button>
 
         <Account v-for="account in protected_accounts"
                         v-bind:key="account.record_id"

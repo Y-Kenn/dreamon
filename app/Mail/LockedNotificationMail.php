@@ -19,14 +19,13 @@ class LockedNotificationMail extends Mailable
      */
     public $twitter_id;
     public $twitter_username;
+    public $email_address;
 
-    public function __construct($twitter_id)
+    public function __construct($twitter_id, $twitter_username ,$email_address)
     {
         $this->twitter_id = $twitter_id;
-        $this->twitter_username = TwitterAccount::where('twitter_id', $twitter_id)
-                                                ->select('twitter_username')
-                                                ->first()->toArray()['twitter_username'];
-        $this->user = TwitterAccount::find($this->twitter_id)->user()->first();
+        $this->twitter_username = $twitter_username;
+        $this->email_address = $email_address;
     }
 
     /**
@@ -38,7 +37,7 @@ class LockedNotificationMail extends Mailable
 
         return $envelope->subject('Twitterアカウントが凍結された可能性があります')
             ->from('foo@example.net', 'Kamitter')
-            ->to($this->user->email);
+            ->to($this->email_address);
     }
 
     /**

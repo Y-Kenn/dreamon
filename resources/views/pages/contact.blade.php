@@ -15,14 +15,14 @@
                         @endif
                         <div class="p-auth__form__input">
                             <x-input-label for="email" class="p-auth__form__name" :value="__('メールアドレス')" />
-                            <x-text-input id="email" class="c-input" type="email" name="email" :value="old('email')" required autofocus />
+                            <x-text-input id="email" class="c-form--text" type="email" name="email" :value="old('email')" required autofocus />
                             <x-input-error :messages="$errors->get('email')" class="p-auth__form__error" />
                         </div>
 
                         <div class="p-auth__form__input">
                             <x-input-label for="text" class="p-auth__form__name" :value="__('お問合せ内容')" />
                             {{--                    <x-text-input id="text" class="c-input" type="textarea" name="email" :value="old('email')" required autofocus autocomplete="username" />--}}
-                            <textarea id="text" class="c-input" name="text" required autofocus>{{ old('text') }}</textarea>
+                            <textarea id="text" class="c-form--textarea" name="text" required autofocus>{{ old('text') }}</textarea>
                             <x-input-error :messages="$errors->get('text')" class="p-auth__form__error" />
                         </div>
                         <x-primary-button class="p-auth__form__submit">

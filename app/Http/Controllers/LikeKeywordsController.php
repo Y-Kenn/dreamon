@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
 use App\Models\Users;
-use App\Models\TwitterAccount;
 use App\Models\LikeKeyword;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 
 //いいねキーワード用コントローラ
 class LikeKeywordsController extends Controller
@@ -18,11 +19,17 @@ class LikeKeywordsController extends Controller
      */
     public function index()
     {
-        $data = LikeKeyword::where('twitter_id', Session::get('twitter_id'))
-                                ->select('id', 'keywords', 'not_flag')
-                                ->get();
+        try{
+            $data = LikeKeyword::where('twitter_id', Session::get('twitter_id'))
+                                    ->select('id', 'keywords', 'not_flag')
+                                    ->get();
 
-        return $data->toArray();
+            return $data->toArray();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] LIKE KEYWORD CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 
     /**
@@ -44,11 +51,20 @@ class LikeKeywordsController extends Controller
         ]);
         Log::debug('SESSION : ' .print_r($request->session()->all(), true));
 
-        LikeKeyword::create([
-            'twitter_id' => Session::get('twitter_id'),
-            'keywords' => $request->keywords,
-            'not_flag' => $request->not_flag,
-        ]);
+        try{
+            DB::transaction(function () use($request){
+                $result = LikeKeyword::create([
+                    'twitter_id' => Session::get('twitter_id'),
+                    'keywords' => $request->keywords,
+                    'not_flag' => $request->not_flag,
+                ]);
+                DBErrorHandler::checkCreated($result);
+            });
+        }catch (\Throwable $e){
+            Log::error('[ERROR] LIKE KEYWORD CONTROLLER - STORE : ' .print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 
     /**
@@ -81,6 +97,16 @@ class LikeKeywordsController extends Controller
     public function destroy(string $id)
     {
         Log::debug('DELETE : ' .print_r($id, true));
-        LikeKeyword::find($id)->forceDelete();
+
+        try{
+            DB::transaction(function () use ($id) {
+                $result = LikeKeyword::find($id)->forceDelete();
+                DBErrorHandler::checkDeleted($result);
+            });
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] LIKE KEYWORD CONTROLLER - DESTROY : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 }

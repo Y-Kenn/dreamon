@@ -20,7 +20,7 @@ $test = 'test';
                         <!-- Email Address -->
                         <div class="p-auth__form__input">
                             <x-input-label for="email" :value="__('メールアドレス')" class="p-auth__form__name" />
-                            <x-text-input id="email" class="" class="c-input" type="email" name="email" :value="old('email')" required autofocus />
+                            <x-text-input id="email" class="" class="c-form--text" type="email" name="email" :value="old('email')" required autofocus />
                             <x-input-error :messages="$errors->get('email')" class="p-auth__form__error" />
                         </div>
 

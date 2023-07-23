@@ -7,7 +7,7 @@
                 <h1 class="p-auth__title">ログイン</h1>
                 <div class="p-auth__form">
                     <!-- Session Status -->
-                    <x-auth-session-status class="" :status="session('status')" />
+                    <x-auth-session-status class="p-auth__form__success" :status="session('status')" />
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -16,7 +16,7 @@
                         <!-- Email Address -->
                         <div class="p-auth__form__input">
                             <x-input-label for="email" class="p-auth__form__name" :value="__('メールアドレス')" />
-                            <x-text-input id="email" class="c-input" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                            <x-text-input id="email" class="c-form--text" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
                             <x-input-error :messages="$errors->get('email')" class="p-auth__form__error" />
                         </div>
 
@@ -24,7 +24,7 @@
                         <div class="p-auth__form__input ">
                             <x-input-label for="password" class="p-auth__form__name" :value="__('パスワード')" />
 
-                            <x-text-input id="password" class="c-input"
+                            <x-text-input id="password" class="c-form--text"
                                           type="password"
                                           name="password"
                                           required autocomplete="current-password" />

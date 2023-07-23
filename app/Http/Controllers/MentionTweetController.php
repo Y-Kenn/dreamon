@@ -16,6 +16,7 @@ class MentionTweetController extends Controller
      */
     public function index()
     {
+        return array();
         $twitter_id = Session::get('twitter_id');
 
         $TwitterApi = new TwitterApi(env('API_KEY'),

@@ -21,14 +21,11 @@
 
     }
 
-    &__input{
+    &__form{
         height: 4rem;
         width: 250px;
-        border: 1px solid#ddd;
-        font-size: $font-size_m;
-        padding-left: 1.5rem;
+        padding: 0 0 0 1.5rem;
         margin-left: 1rem;
-        vertical-align: middle;
         background-color: $background-color_soft;
         @include mq(sm){
             width: calc(100% - 150px);
@@ -56,13 +53,6 @@
         }
     }
     &__submit{
-        vertical-align: middle;
-        height: 4rem;
-        width: 6rem;
-        text-align: center;
-        border-radius: 10rem;
-        font-size: $font-size_s;
-        margin-left: 4rem;
         @include mq(sm){
             margin-left: 1rem;
         }

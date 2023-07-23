@@ -2,22 +2,22 @@
     <div class="p-setting">
         <div class="p-setting__password">
             <span class="p-setting__password__name">現在のパスワード</span>
-            <input v-model="password.current_password" id="current_password" name="current_password" type="password" class="p-setting__password__input c-input" autocomplete="current-password">
+            <input v-model="password.current_password" id="current_password" name="current_password" type="password" class="p-setting__form c-form--text" autocomplete="current-password">
         </div>
         <div v-if="error.current_password" class="p-setting__error">
             <span>{{error.current_password}}</span>
         </div>
         <div class="p-setting__password">
             <span class="p-setting__password__name">新しいパスワード</span>
-            <input v-model="password.password" id="password" name="password" type="password" class="p-setting__password__input c-input" autocomplete="new-password">
+            <input v-model="password.password" id="password" name="password" type="password" class="p-setting__form c-form--text" autocomplete="new-password">
         </div>
         <div v-if="error.password" class="p-setting__error">
             <span>{{error.password}}</span>
         </div>
         <div class="p-setting__password">
             <span class="p-setting__password__name">新しいパスワード(確認)</span>
-            <input v-model="password.password_confirmation" id="password_confirmation" name="password_confirmation" type="password" class="p-setting__password__input c-input" autocomplete="new-password">
-            <button @click="updatePassword" class="p-setting__submit c-button--submit">登録</button>
+            <input v-model="password.password_confirmation" id="password_confirmation" name="password_confirmation" type="password" class="p-setting__form c-form--text" autocomplete="new-password">
+            <button @click="updatePassword" class="p-setting__submit c-button c-button--submit">登録</button>
         </div>
         <div v-if="error.password_confirmation" class="p-setting__error">
             <span>{{error.password_confirmation}}</span>

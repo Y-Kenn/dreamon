@@ -1,8 +1,8 @@
 <template>
     <div class="p-profile">
-        <div class="p-profile__input">
-            <span class="p-profile__input__header">@</span>
-            <input v-model="twitter_name.twitter_name" type="text" name="twitter_name" class="c-input">
+        <div class="p-profile__form">
+            <span class="p-profile__form__header">@</span>
+            <input v-model="twitter_name.twitter_name" type="text" name="twitter_name" class="c-form--text">
         </div>
         <button @click="createFollowBase" class="c-button c-button--submit p-profile__submit">登録</button>
 

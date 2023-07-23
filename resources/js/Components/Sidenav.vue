@@ -60,9 +60,6 @@ export default {
         const store = useStore();
         const active_account = computed(()=> store.state.active_account);
         const my_accounts = computed(()=> store.state.my_accounts);
-        const getActiveAccount = ()=>{
-            store.dispatch('getMyAccounts');
-        }
         //ログアウト処理をコントローラへリクエスト、成功でログイン画面へリダイレクト
         const logout = async ()=>{
             const url = import.meta.env.VITE_URL_LOGOUT;

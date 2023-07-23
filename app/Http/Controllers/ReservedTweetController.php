@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use App\Library\TwitterApi;
 use Illuminate\Http\Request;
-use App\Models\TwitterAccount;
 use App\Models\ReservedTweet;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Response;
 
 //ツイート予約用コントローラ
 class ReservedTweetController extends Controller
@@ -17,14 +19,21 @@ class ReservedTweetController extends Controller
      */
     public function index()
     {
-        $data = ReservedTweet::where('twitter_id', Session::get('twitter_id'))
-                                        ->whereNull('thrown_at')
-                                        ->orderBy('reserved_date')
-                                        ->select('id', 'text', 'reserved_date')
-                                        ->paginate(5)
-                                        ->toArray();
+        try {
+            $data = ReservedTweet::where('twitter_id', Session::get('twitter_id'))
+                                ->whereNull('thrown_at')
+                                ->orderBy('reserved_date')
+                                ->select('id', 'text', 'reserved_date')
+                                ->paginate(5)
+                                ->toArray();
 
-        return $data;
+            return $data;
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] RESERVED TWEET CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
     }
 
     /**
@@ -40,18 +49,30 @@ class ReservedTweetController extends Controller
      */
     public function store(Request $request)
     {
-        //Log::debug('RESERVED TWEET - STORE');
         Log::debug('RESERVED TWEET - STORE : ' .print_r($request->all(), true));
         $request->validate([
             'text' => 'required|string|max:' .env('TWEET_CHAR_NUM'),
             'reserved_date' => 'required',
         ]);
 
-        ReservedTweet::create([
-            'twitter_id' => Session::get('twitter_id'),
-            'text' => $request->text,
-            'reserved_date' => $request->reserved_date
-        ]);
+        try{
+            DB::transaction(function() use($request){
+                $result = ReservedTweet::create([
+                    'twitter_id' => Session::get('twitter_id'),
+                    'text' => $request->text,
+                    'reserved_date' => $request->reserved_date
+                ]);
+
+                DBErrorHandler::checkCreated($result);
+            });
+        }catch (\Throwable $e){
+            Log::error('[ERROR] RESERVED TWEET CONTROLLER - STORE : ' .print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+
+
     }
 
     /**
@@ -86,7 +107,8 @@ class ReservedTweetController extends Controller
 
 
         $tweet = ReservedTweet::find($id)->toArray();
-//        Log::debug('DELETE : ' .print_r($tweet, true));
+
+        //ツイート済みの場合
         if($tweet['tweeted_at']){
             Log::debug('TWEETED');
 
@@ -107,15 +129,34 @@ class ReservedTweetController extends Controller
             //アカウント凍結を検出
             $TwitterApi->checkAccountLocked($result, Session::get('twitter_id'));
 
+            //ツイートを削除出来た場合、DBレコードの削除
             if(isset($result['data'])){
-                ReservedTweet::find($id)->delete();
+                try {
+                    DB::transaction(function() use($id){
+                        $result = ReservedTweet::find($id)->delete();
+
+                        DBErrorHandler::checkDeleted($result);
+                    });
+                }catch (\Throwable $e){
+                    Log::error('[ERROR] ESERVED TWEET CONTROLLER - DESTROY - TWEETED : ' .print_r($e->getMessage(), true));
+
+                    return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+                }
             }
-            Log::debug('DELETE TWEET : ' .print_r($result, true));
 
-        }else{
-            Log::debug('RESERVING');
-            ReservedTweet::find($id)->delete();
+        //ツイート前の場合
+        }else {
+            try {
+                DB::transaction(function () use ($id) {
+                    $result = ReservedTweet::find($id)->delete();
+
+                    DBErrorHandler::checkDeleted($result);
+                });
+            } catch (\Throwable $e) {
+                Log::error('[ERROR] RESERVED TWEET CONTROLLER - DESTROY - RESERVING : ' . print_r($e->getMessage(), true));
+
+                return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+            }
         }
-
     }
 }

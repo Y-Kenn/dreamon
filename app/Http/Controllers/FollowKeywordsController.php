@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
 use App\Models\Users;
-use App\Models\TwitterAccount;
 use App\Models\FollowKeyword;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
 
 //フォローキーワード用コントローラ
 class FollowKeywordsController extends Controller
@@ -18,10 +19,19 @@ class FollowKeywordsController extends Controller
      */
     public function index()
     {
-        $data = FollowKeyword::where('twitter_id', Session::get('twitter_id'))
-                                ->select('id', 'keywords', 'not_flag')
-                                ->get();
-        return $data->toArray();
+        try{
+            $data = FollowKeyword::where('twitter_id', Session::get('twitter_id'))
+                ->select('id', 'keywords', 'not_flag')
+                ->get();
+
+            return $data->toArray();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] FOLLOW KEYWORD CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+
     }
 
     /**
@@ -41,13 +51,23 @@ class FollowKeywordsController extends Controller
             'keywords' => 'required|string|max:255',
             'not_flag' => 'required|boolean',
         ]);
-        Log::debug('SESSION : ' .print_r($request->session()->all(), true));
 
-        FollowKeyword::create([
-            'twitter_id' => Session::get('twitter_id'),
-            'keywords' => $request->keywords,
-            'not_flag' => $request->not_flag,
-        ]);
+        try{
+            DB::transaction(function () use($request){
+                $result = FollowKeyword::create([
+                    'twitter_id' => Session::get('twitter_id'),
+                    'keywords' => $request->keywords,
+                    'not_flag' => $request->not_flag,
+                ]);
+                DBErrorHandler::checkCreated($result);
+            });
+        }catch (\Throwable $e){
+            Log::error('[ERROR] FOLLOW KEYWORD CONTROLLER - STORE : ' .print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+
     }
 
     /**
@@ -80,6 +100,17 @@ class FollowKeywordsController extends Controller
     public function destroy(string $id)
     {
         Log::debug('DELETE : ' .print_r($id, true));
-        FollowKeyword::find($id)->forceDelete();
+
+        try{
+            DB::transaction(function () use ($id) {
+                $result = FollowKeyword::find($id)->forceDelete();
+                DBErrorHandler::checkDeleted($result);
+            });
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] FOLLOW KEYWORD CONTROLLER - DESTROY : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
     }
 }

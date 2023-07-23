@@ -2,17 +2,17 @@
 
 namespace App\Jobs;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\TwitterAccount;
-use App\Models\ThrowJobsHist;
 use App\Models\ReservedTweet;
 use App\Library\TwitterApi;
+use mysql_xdevapi\Exception;
 
 class TweetJob implements ShouldQueue
 {
@@ -21,8 +21,6 @@ class TweetJob implements ShouldQueue
     protected $record_id;
     protected $twitter_id;
     protected $text;
-
-    public $tries = 5;
 
     /**
      * Create a new job instance.
@@ -53,14 +51,21 @@ class TweetJob implements ShouldQueue
         $result = $TwitterApi->tweet($this->text);
         //アカウント凍結を検出
         $TwitterApi->checkAccountLocked($result, $this->twitter_id);
-        Log::debug('TWEET JOB : ' .print_r($result['data']['id'], true));
         if(isset($result['data'])){
             //ツイート日時と、ツイート削除時に必要なツイートIDを保存
-            ReservedTweet::find($this->record_id)->update([
-                'tweeted_at' => date("Y/m/d H:i:s"),
-                'tweet_id' => $result['data']['id'],
-            ]);
-            Log::debug('TWEET JOB : SUCCESS');
+            try{
+                DB::transaction(function () use($result){
+                    $db_result = ReservedTweet::find($this->record_id)->update([
+                        'tweeted_at' => date("Y/m/d H:i:s"),
+                        'tweet_id' => $result['data']['id'],
+                    ]);
+                    DBErrorHandler::checkUpdated($db_result);
+                    Log::debug('TWEET JOB : SUCCESS');
+                });
+            } catch (\Throwable $e) {
+                Log::error('[ERROR] TWEET JOB : ' . print_r($e->getMessage(), true));
+            }
         }
+
     }
 }

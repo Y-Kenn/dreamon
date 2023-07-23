@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
 use App\Models\Users;
 use App\Models\TwitterAccount;
 use App\Models\TargetBaseAccount;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Library\TwitterApi;
+use mysql_xdevapi\Exception;
 
 //ターゲットベースアカウント(フォロワー参照用アカウント)用コントローラ
 class TargetBaseController extends Controller
@@ -18,18 +22,23 @@ class TargetBaseController extends Controller
      */
     public function index()
     {
-        Log::debug('INDEX');
-        $data_builder = TargetBaseAccount::where('user_twitter_id', Session::get('twitter_id'))
-                                    ->whereNull('completed_at')
-                                    ->limit('100')
-                                    ->select('id', 'base_twitter_id', 'started_at');
-        if(!$data_builder->exists()){
+        try{
+            $data= TargetBaseAccount::where('user_twitter_id', Session::get('twitter_id'))
+                                        ->whereNull('completed_at')
+                                        ->limit('100')
+                                        ->select('id', 'base_twitter_id', 'started_at')
+                                        ->get()->toArray();;
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] TARGET BASE CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+        if(!$data){
             return array();
         }
 
-        $data = $data_builder->get();
 
-        $ids = array_column($data->toArray(), 'base_twitter_id');
+        $ids = array_column($data, 'base_twitter_id');
 
         $TwitterApi = new TwitterApi(env('API_KEY'),
                                     env('API_SECRET'),
@@ -44,7 +53,7 @@ class TargetBaseController extends Controller
         $result = $TwitterApi->getUserInfoByIds($ids);
         //リクエスト失敗時
         if(!isset($result['data'])){
-            return false;
+            return array();
         }
 
         for($i = 0; $i < count($result['data']); $i++){
@@ -91,16 +100,32 @@ class TargetBaseController extends Controller
         //正常取得できた場合
         if(isset($result['data'])){
 
-            $exist_flag = TargetBaseAccount::where('base_twitter_id', $result['data']['id'])
-                                            ->where('user_twitter_id', $user_twitter_id)
-                                            ->whereNull('completed_at')
-                                            ->exists();
+            try{
+                $exist_flag = TargetBaseAccount::where('base_twitter_id', $result['data']['id'])
+                                                ->where('user_twitter_id', $user_twitter_id)
+                                                ->whereNull('completed_at')
+                                                ->exists();
+            } catch (\Throwable $e) {
+                Log::error('[ERROR] TARGET BASE CONTROLLER - STORE - READ : ' . print_r($e->getMessage(), true));
+
+                return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+            }
             //未処理のターゲットベースアカウントと重複していない場合、DB登録
             if(!$exist_flag){
-                TargetBaseAccount::create([
-                    'user_twitter_id' => $user_twitter_id,
-                    'base_twitter_id' => $result['data']['id'],
-                ]);
+                try{
+                    DB::transaction(function () use($user_twitter_id, $result){
+                        $db_result = TargetBaseAccount::create([
+                            'user_twitter_id' => $user_twitter_id,
+                            'base_twitter_id' => $result['data']['id'],
+                        ]);
+                        DBErrorHandler::checkCreated($db_result);
+                    });
+                }catch (\Throwable $e){
+                    Log::error('[ERROR] TARGET BASE CONTROLLER - STORE - CREATE : ' .print_r($e->getMessage(), true));
+
+                    return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+                }
+
             }else{
                 Log::debug('EXIST');
             }
@@ -142,7 +167,15 @@ class TargetBaseController extends Controller
      */
     public function destroy(string $id)
     {
-        Log::debug('DELETE : ' .print_r($id, true));
-        TargetBaseAccount::find($id)->forceDelete();
+        try{
+            DB::transaction(function () use ($id) {
+                $result = TargetBaseAccount::find($id)->forceDelete();
+                DBErrorHandler::checkDeleted($result);
+            });
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] TARGET BASE CONTROLLER CONTROLLER - DESTROY : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 }

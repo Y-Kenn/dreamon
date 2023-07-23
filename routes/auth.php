@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 //ログイン中でもパスワードリセットできるようミドルウェアから外す
 Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
     ->name('password.request');
+Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->name('password.email');
+
+Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->name('password.reset');
+
+Route::post('reset-password', [NewPasswordController::class, 'store'])
+    ->name('password.store');
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -27,14 +35,7 @@ Route::middleware('guest')->group(function () {
 
 
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-                ->name('password.email');
 
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->name('password.reset');
-
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-                ->name('password.store');
 });
 
 Route::middleware('auth')->group(function () {

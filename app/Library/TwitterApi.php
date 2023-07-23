@@ -1,6 +1,7 @@
 <?php
 namespace App\Library;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use App\Models\TwitterAccount;
@@ -86,12 +87,35 @@ class TwitterApi
     public function checkAccountLocked($result, $twitter_id){
         if(isset($result['status'])){
             if($result['status'] === 403){
-                $data = TwitterAccount::where('twitter_id', $twitter_id)->select('locked_flag')->first()->toArray();
+                try {
+                    $data = TwitterAccount::where('twitter_id', $twitter_id)->first()->toArray();
+                } catch (\Throwable $e) {
+                    Log::error('[ERROR] TWITTER API - CHECK ACCOUNT LOCKED - READ : ' . print_r($e->getMessage(), true));
+                    return false;
+                }
                 //凍結後の処理未実施の場合
                 if(!$data['locked_flag']){
-                    Log::notice('ACCOUNT LOCKED : ' .print_r($result, true));
-                    TwitterAccount::where('twitter_id', $twitter_id)->update(['locked_flag' => true]);
-                    Mail::send(new LockedNotificationMail($twitter_id));
+                    Log::notice('ACCOUNT LOCKED : '.print_r($twitter_id, true) .' : ' .print_r($result, true));
+                        try{
+                            $db_result = TwitterAccount::find($twitter_id)->user()->first();
+                            DBErrorHandler::checkFound($db_result);
+                            Log::debug('TEST : ' .print_r($db_result, true));
+                            if(isset($db_result['email'])){
+                                Mail::send(new LockedNotificationMail($twitter_id, $data['twitter_username'], $db_result['email']));
+                            }
+                        } catch (\Throwable $e) {
+                            Log::error('[ERROR] TWITTER API - CHECK ACCOUNT LOCKED - FIND : ' . print_r($e->getMessage(), true));
+                        }
+
+                    //凍結中の状態に変更
+                    try{
+                        DB::transaction(function () use($twitter_id){
+                            $db_result = TwitterAccount::where('twitter_id', $twitter_id)->update(['locked_flag' => true]);
+                            DBErrorHandler::checkUpdated($db_result);
+                        });
+                    } catch (\Throwable $e) {
+                        Log::error('[ERROR] TWITTER API - CHECK ACCOUNT LOCKED - UPDATE : ' . print_r($e->getMessage(), true));
+                    }
                     return true;
                 }
             }
@@ -187,9 +211,15 @@ class TwitterApi
 
     //アクセストークンの期限切れを判定し、期限切れの場合はリフレッシュ
     public function checkRefreshToken($twitter_id){
-        $account_builder = TwitterAccount::where('twitter_id', $twitter_id);
-        $account = $account_builder->first();
-        Log::debug('TOKEN GENERATED TIME : ' .print_r(strtotime($account['token_generated_time']), true));
+        try{
+            $account_builder = TwitterAccount::where('twitter_id', $twitter_id);
+            $account = $account_builder->first();
+            Log::debug('TOKEN GENERATED TIME : ' .print_r(strtotime($account['token_generated_time']), true));
+        }catch (\Throwable $e) {
+            Log::error('[ERROR] TWITTER API - CHECK REFRESH TOKEN : ' . print_r($e->getMessage(), true));
+            throw new \Exception();
+        }
+
         if(time() - strtotime($account['token_generated_time']) > env('TOKEN_LIFETIME')){
 
             Log::debug('REFRESH : ' .print_r($twitter_id, true));
@@ -518,7 +548,6 @@ class TwitterApi
         ];
         $url = $this->makeUrl($inserted_url, $query);
         $result = $this->request($url, 'GET');
-        //Log::debug('GET LIKING : ' . print_r($result, true));
         //取得に失敗した場合
         if(!isset($result['data'])){
             Log::debug('ERROR - GET LIKING TWEETS : ' . print_r($result, true));
@@ -535,7 +564,6 @@ class TwitterApi
 
             //2回目以降のリクエスト
             for($i = 0; $i < 10; $i++){
-                //Log::debug('PAGENATION');
                 if(!$next_token) break;
 
                 $query = [
@@ -545,7 +573,6 @@ class TwitterApi
                 ];
                 $url_with_next_token = $this->makeUrl($inserted_url, $query);
                 $result = $this->request($url_with_next_token, 'GET');
-                //Log::debug('GET LIKING : ' . print_r($result, true));
                 if(isset($result['data'])){
                     foreach($result['data'] as $one_tweet){
                         $liking['data'][] = $one_tweet;
@@ -709,7 +736,6 @@ class TwitterApi
 
             //2回目以降のリクエスト
             for($i = 0; $i < 10; $i++){
-                //Log::debug('PAGENATION');
                 if(!$next_token) break;
 
                 $query = [
@@ -722,7 +748,6 @@ class TwitterApi
                 ];
                 $url_with_next_token = $this->makeUrl($inserted_url, $query);
                 $result = $this->request($url_with_next_token, 'GET');
-                //Log::debug('GET mentions : ' . print_r($result, true));
                 if(isset($result['data'])){
                     foreach($result['data'] as $one_tweet){
                         $mentions['data'][] = $one_tweet;
@@ -861,10 +886,8 @@ class TwitterApi
     //文字列からひらがな、カタカナを検出
     public function checkJapanese($str){
         if(preg_match("/[ぁ-ん]+|[ァ-ヴー]+|[ｦ-ﾟ]+/u", $str)){
-            //Log::debug('JAPANESE');
             return true;
         }else{
-            //Log::debug('FOREIGN LANGAGE');
             return false;
         }
     }

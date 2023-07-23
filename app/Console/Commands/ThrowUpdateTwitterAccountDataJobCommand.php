@@ -7,6 +7,7 @@ use App\Models\TwitterAccount;
 use App\Library\TwitterApi;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\UpdateTwitterAccountDataJob;
+use mysql_xdevapi\Exception;
 
 class ThrowUpdateTwitterAccountDataJobCommand extends Command
 {
@@ -30,15 +31,22 @@ class ThrowUpdateTwitterAccountDataJobCommand extends Command
     //各Twitterアカウントのフォロー・フォロワー数等の情報記録のジョブ発行
     public function handle()
     {
-        $twitter_accounts_builder = TwitterAccount::whereNull('deleted_at')
-                                                    ->where('locked_flag', false);
+        try {
+            $twitter_accounts = TwitterAccount::whereNull('deleted_at')
+                                                ->where('locked_flag', false)
+                                                ->get()->toArray();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] THROW UPDATE TWITTER ACCOUNT DATA JOBS COMMAND - READ : ' . print_r($e->getMessage(), true));
+
+            return false;
+        }
+
         //アカウントがない場合は終了
-        if(!$twitter_accounts_builder->exists()){
+        if(empty($twitter_accounts)){
             Log::debug('NO ACCOUNT');
             return;
         }
 
-        $twitter_accounts = $twitter_accounts_builder->get();
         foreach($twitter_accounts as $account){
             UpdateTwitterAccountDataJob::dispatch($account['twitter_id']);
             Log::debug('Throw UpdateTwitterAccountDataJob : ' . print_r($account['twitter_id'], true));

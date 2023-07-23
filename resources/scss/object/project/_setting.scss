@@ -1,26 +1,19 @@
 .p-setting{
-    //overflow: hidden;
     max-width: 750px;
     :after{
         clear: both;
+    }
+    &__form{
+        width: 400px;
+        @include mq(sm){
+            width: 100%;
+        }
     }
     &__email{
         margin: 1rem 0 1rem 210px;
         @include mq(sm){
             margin-left: 0;
         }
-        &__input{
-            width: 400px;
-            height: 4rem;
-            font-size: $font-size_m;
-            padding: 1rem 2rem;
-            vertical-align: middle;
-            @include mq(sm){
-                width: 100%;
-            }
-        }
-
-
     }
     &__password{
         margin-top: 1.5rem;
@@ -34,25 +27,8 @@
                 text-align: left;
             }
         }
-        &__input{
-            width: 400px;
-            height: 4rem;
-            font-size: $font-size_m;
-            padding: 1rem 2rem;
-            @include mq(sm){
-                width: 100%;
-            }
-        }
     }
     &__submit{
-        vertical-align: middle;
-        height: 4rem;
-        width: 6rem;
-        text-align: center;
-        border-radius: 10rem;
-        font-size: $font-size_s;
-        margin-left: 3rem;
-        vertical-align: middle;
         @include mq(sm){
             display: block;
             width: 100px;
@@ -70,7 +46,6 @@
         }
     }
     &__forget{
-        //float: right;
         display: block;
         text-align: end;
         color: $font-color_link;

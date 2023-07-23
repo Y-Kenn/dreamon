@@ -14,6 +14,10 @@ export const axiosErrorHandle = ()=>{
             window.location.href = import.meta.env.VITE_URL_LOGIN;
 
           return Promise.reject(error.response?.data);
+      case 501:
+          alert('正常に処理できませんでした。ページをリロードして再度実行してください。')
+
+          return Promise.reject(error.response?.data);
         default:
 
           return Promise.reject(error.response?.data);

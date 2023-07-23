@@ -31,15 +31,22 @@ class ThrowUpdateFollowingJobsCommand extends Command
     //各Twitterアカウントのフォロー中のアカウント(followed_accountテーブル)の情報更新ジョブを発行
     public function handle()
     {
-        $twitter_accounts_builder = TwitterAccount::whereNull('deleted_at')
-                                                    ->where('locked_flag', false);
+        try {
+            $twitter_accounts = TwitterAccount::whereNull('deleted_at')
+                                                        ->where('locked_flag', false)
+                                                        ->get()->toArray();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] THROW UPDATE FOLLOWING JOBS COMMAND - READ : ' . print_r($e->getMessage(), true));
+
+            return false;
+        }
+
         //アカウントがない場合は終了
-        if(!$twitter_accounts_builder->exists()){
+        if(empty($twitter_accounts)){
             Log::debug('NO ACCOUNT');
             return;
         }
 
-        $twitter_accounts = $twitter_accounts_builder->get();
         foreach($twitter_accounts as $account){
             UpdateFollowedAccountsJob::dispatch($account['twitter_id']);
             Log::debug('GENERATE UPDATE JOB : ' . print_r($account['twitter_id'], true));

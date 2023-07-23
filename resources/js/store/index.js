@@ -10,7 +10,9 @@ export default createStore({
         follow_keywords: [],
         like_keywords: [],
         reserved_tweets: [],
+        reserved_tweets_num: 0,
         tweeted_tweets: [],
+        tweeted_tweets_num: 0,
         active_account: {
             description: "",
             id:  "",
@@ -105,20 +107,19 @@ export default createStore({
         async getReservedTweets(context, page='1'){
             const url = import.meta.env.VITE_URL_RESERVED_TWEET + '?page=' + page;
             const result = await axios.get(url);
-            this.state.reserved_tweets = result.data
+            this.state.reserved_tweets = result.data;
+            if(this.state.reserved_tweets.data){
+                this.state.reserved_tweets_num = this.state.reserved_tweets.data.length;
+            }
         },
         //ツイート済みの予約投稿を取得
         async getTweetedTweets(context, page='1'){
             const url = import.meta.env.VITE_URL_TWEETED_TWEET + '?page=' + page;
             const result = await axios.get(url);
-            this.state.tweeted_tweets = result.data
-        },
-        //現在使用中のアカウントのプロフィイール情報を取得
-        async getActiveAccount(context, payload){
-            const url = import.meta.env.VITE_URL_CHANGE_ACCOUNT + '/' + payload;
-            const result = await axios.get(url, payload);
-
-            this.state.active_account = result.data;
+            this.state.tweeted_tweets = result.data;
+            if(this.state.tweeted_tweets.data){
+                this.state.tweeted_tweets_num = this.state.tweeted_tweets.data.length;
+            }
         },
         //登録済の全てのアカウントのプロフィール情報を取得
         async getMyAccounts(context){

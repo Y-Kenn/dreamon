@@ -2,12 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\TwitterAccount;
 
@@ -29,9 +31,16 @@ class ReadyChainJob implements ShouldQueue
      */
     public function handle(): void
     {
-        TwitterAccount::find($this->user_twitter_id)
-                        ->update(['last_chain_at' => date("Y/m/d H:i:s"),
-                                    'waiting_chain_flag' => false]);
-        Log::debug('READY CHAIN JOB');
+        try{
+            DB::transaction(function () {
+                $result = TwitterAccount::find($this->user_twitter_id)
+                    ->update(['last_chain_at' => date("Y/m/d H:i:s"),
+                        'waiting_chain_flag' => false]);
+                DBErrorHandler::checkUpdated($result);
+                Log::debug('READY CHAIN JOB');
+            });
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] READY CHAIN JOB : ' . print_r($e->getMessage(), true));
+        }
     }
 }

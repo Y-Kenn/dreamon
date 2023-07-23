@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Library\TwitterApi;
+use mysql_xdevapi\Exception;
 
 //Twitterアカウントの情報(フォロー・フォロワー等)の処理
 class TwitterAccountDataController extends Controller
@@ -22,39 +23,72 @@ class TwitterAccountDataController extends Controller
         $twitter_id = Session::get('twitter_id');
 
         //本日フォローした数
-        $following_today =  FollowedAccount::where('user_twitter_id', $twitter_id)
-                                            ->where('followed_at', '>', date("Y/m/d"))
-                                            ->count();
-        //過去30日でフォローした数
-        $following_30days =  FollowedAccount::where('user_twitter_id', $twitter_id)
-                                            ->where('followed_at', '>', date("Y/m/d", time() - 60*60*24*30))
-                                            ->count();
-        //本日アンフォローした数
-        $unfollowing_today =  FollowedAccount::where('user_twitter_id', $twitter_id)
-                                            ->where('unfollowed_at', '>', date("Y/m/d"))
-                                            ->count();
-        //過去30日でフォローした数
-        $unfollowing_30days =  FollowedAccount::where('user_twitter_id', $twitter_id)
-                                            ->where('unfollowed_at', '>', date("Y/m/d", time() - 60*60*24*50))
-                                            ->count();
-        //本日いいねした数
-        $like_today =  LikeTarget::where('user_twitter_id', $twitter_id)
-                                            ->where('liked_at', '>', date("Y/m/d"))
-                                            ->count();
-        //過去30日でいいねした数
-        $like_30days =  LikeTarget::where('user_twitter_id', $twitter_id)
-                                            ->where('liked_at', '>', date("Y/m/d", time() - 60*60*24*50))
-                                            ->count();
+        try{
+            $following_today = FollowedAccount::where('user_twitter_id', $twitter_id)
+                                                ->where('followed_at', '>', date("Y/m/d"))
+                                                ->count();
+        } catch (\Throwable $e) {
+            $following_today = '-';
+            Log::error('[ERROR] TWITTER ACCOUNT DATA CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+        }
 
+        try{
+        //過去30日でフォローした数
+            $following_30days =  FollowedAccount::where('user_twitter_id', $twitter_id)
+                                                ->where('followed_at', '>', date("Y/m/d", time() - 60*60*24*30))
+                                                ->count();
+        } catch (\Throwable $e) {
+            $following_30days = '-';
+            Log::error('[ERROR] TWITTER ACCOUNT DATA CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+        }
 
-        Log::debug('FOLLOWED ACCOUNTS: ' .print_r($like_today, true));
+        try {
+            //本日アンフォローした数
+            $unfollowing_today =  FollowedAccount::where('user_twitter_id', $twitter_id)
+                                                ->where('unfollowed_at', '>', date("Y/m/d"))
+                                                ->count();
+        } catch (\Throwable $e) {
+            $unfollowing_today = '-';
+            Log::error('[ERROR] TWITTER ACCOUNT DATA CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+        }
+
+        try {
+            //過去30日でフォローした数
+            $unfollowing_30days =  FollowedAccount::where('user_twitter_id', $twitter_id)
+                                                ->where('unfollowed_at', '>', date("Y/m/d", time() - 60*60*24*50))
+                                                ->count();
+        } catch (\Throwable $e) {
+            $unfollowing_30days = '-';
+            Log::error('[ERROR] TWITTER ACCOUNT DATA CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+        }
+
+        try {
+            //本日いいねした数
+            $like_today =  LikeTarget::where('user_twitter_id', $twitter_id)
+                                    ->where('liked_at', '>', date("Y/m/d"))
+                                    ->count();
+        } catch (\Throwable $e) {
+            $like_today = '-';
+            Log::error('[ERROR] TWITTER ACCOUNT DATA CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+        }
+
+        try {
+            //過去30日でいいねした数
+            $like_30days =  LikeTarget::where('user_twitter_id', $twitter_id)
+                                    ->where('liked_at', '>', date("Y/m/d", time() - 60*60*24*50))
+                                    ->count();
+        } catch (\Throwable $e) {
+            $like_30days = '-';
+            Log::error('[ERROR] TWITTER ACCOUNT DATA CONTROLLER - INDEX : ' . print_r($e->getMessage(), true));
+        }
+
 
         //返却データ整形
         $response = [
             'following_today' => $following_today,
             'following_30days' => $following_30days,
-            'followers_today' => 0,
-            'followers_30days' => 0,
+            'followers_today' => '-',
+            'followers_30days' => '-',
             'unfollowing_today' => $unfollowing_today,
             'unfollowing_30days' => $unfollowing_30days,
             'like_today' => $like_today,
@@ -62,13 +96,19 @@ class TwitterAccountDataController extends Controller
         ];
 
 
-        //過去30日のフォロワー数の記録を取得
-        $twitter_data = TwitterAccountData::where('twitter_id', $twitter_id)
+        try {
+            //過去30日のフォロワー数の記録を取得
+            $twitter_data = TwitterAccountData::where('twitter_id', $twitter_id)
                                             ->latest()
                                             ->limit(30)
                                             ->get()->toArray();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] TWITTER ACCOUNT DATA CONTROLLER - INDEX - TWITTER DATA : ' . print_r($e->getMessage(), true));
+            return $response;
+        }
 
         if(empty($twitter_data)){
+            Log::debug('EMPTY');
             return $response;
         }
 

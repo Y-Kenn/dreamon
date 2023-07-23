@@ -38,26 +38,19 @@ class FollowJob implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void
-    {   
+    {
         //Twitter API の自動化検出対策
         sleep(env('FOLLOW_INTERVAL'));
 
-        // Log::debug('FOLLOW JOB TEST-----------------------------------------');
-        // Log::debug('| RECORD ID : ' . print_r($this->record_id, true));
-        // Log::debug('| USER ID : ' . print_r($this->user_twitter_id, true));
-        // Log::debug('| TARGET ID : ' . print_r($this->target_twitter_id, true));
-        // Log::debug('| ACTIVE TIME : ' . print_r($this->last_active_time, true));
-        // Log::debug('| ------------------------------------------------------');
-
-        $TwitterApi = new TwitterApi(env('API_KEY'), 
-                                    env('API_SECRET'), 
-                                    env('BEARER'), 
-                                    env('CLIENT_ID'), 
-                                    env('CLIENT_SECRET'), 
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+                                    env('API_SECRET'),
+                                    env('BEARER'),
+                                    env('CLIENT_ID'),
+                                    env('CLIENT_SECRET'),
                                     env('REDIRECT_URI'));
 
         $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
-        
+
         // $twitter_account_info = TwitterAccount::find($this->user_twitter_id);
         // $access_token = $twitter_account_info->access_token;
         $TwitterApi->setTokenToHeader($access_token);
@@ -73,7 +66,7 @@ class FollowJob implements ShouldQueue
         //     Log::debug('DELETE FOLLOW TARGET RECORD [ INACTIVE ] : ' . print_r($this->record_id, true));
         //     return;
         // }
-        
+
         $result = $TwitterApi->follow($this->user_twitter_id, $this->target_twitter_id);
         //Log::debug('FOLLOW JOB RESULT : ' . print_r($result, true));
         if(isset($result['data'])){

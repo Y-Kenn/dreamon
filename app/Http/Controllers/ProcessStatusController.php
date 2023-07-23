@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Http\Request;
 use App\Models\ReservedTweet;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -16,14 +19,28 @@ class ProcessStatusController extends Controller
      */
     public function index()
     {
-        $data = Auth::user()->twitterAccounts()
-                            ->where('twitter_id', Session::get('twitter_id'))
-                            ->select('following_flag', 'unfollowing_flag', 'liking_flag')
-                            ->first();
+        try{
+            $data = Auth::user()->twitterAccounts()
+                ->find(Session::get('twitter_id'))
+                ->toArray();
+            DBErrorHandler::checkFound($data);
 
-        $tweets_num = ReservedTweet::where('twitter_id', Session::get('twitter_id'))
-                                        ->whereNull('thrown_at')
-                                        ->count();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] PROCESS STATUS CONTROLLER - INDEX - FIND : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
+        try{
+            $tweets_num = ReservedTweet::where('twitter_id', Session::get('twitter_id'))
+                                            ->whereNull('thrown_at')
+                                            ->count();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] PROCESS STATUS CONTROLLER - INDEX - READ : ' . print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
+
         $response = [
             [
                 'id' => 0,
@@ -97,9 +114,18 @@ class ProcessStatusController extends Controller
             'status' => 'required|boolean'
         ]);
 
-        Auth::user()->twitterAccounts()
-                    ->where('twitter_id', Session::get('twitter_id'))
-                    ->update([$request->flag_name => $request->status]);
+        try {
+            DB::transaction(function () use($request){
+                $result = Auth::user()->twitterAccounts()
+                            ->where('twitter_id', Session::get('twitter_id'))
+                            ->update([$request->flag_name => $request->status]);
+                DBErrorHandler::checkUpdated($result);
+            });
+        }catch (\Throwable $e){
+            Log::error('[ERROR] PROCESS STATUS CONTROLLER - UPDATE : ' .print_r($e->getMessage(), true));
+
+            return response()->json('', Response::HTTP_NOT_IMPLEMENTED);
+        }
     }
 
     /**

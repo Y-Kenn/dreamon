@@ -4,13 +4,11 @@
     &__add{
         display: inline-block;
         width: 200px;
+        height: 5rem;
+        line-height: 5rem;
         font-size: $font-size_l;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-        // border: 1px solid#ddd;
-        border-radius: 15px;
+        border-radius: 13px;
+
     }
     &__reached{
         display: inline-block;

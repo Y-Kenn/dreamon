@@ -1,0 +1,32 @@
+.c-form{
+    &--text{
+        border: 1px solid#ddd;
+        border-radius: 4px;
+        display: inline-block;
+        box-sizing: border-box;
+        background-color: $background-color_soft;
+        width: 100%;
+        height: 4rem;
+        font-size: $font-size_m;
+        padding: 1rem 2rem;
+        vertical-align: middle;
+        @include mq(sm){
+            width: 100%;
+        }
+    }
+    &--textarea{
+        border: 1px solid#ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: $background-color_soft;
+        height: 150px;
+        width: 100%;
+        display: block;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1rem;
+        font-size: $font-size_m;
+        resize: none;
+        background-color: $background-color_soft;
+        overflow-wrap: anywhere;
+    }
+}

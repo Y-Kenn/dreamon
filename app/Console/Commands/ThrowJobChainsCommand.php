@@ -7,6 +7,7 @@ use App\Models\TwitterAccount;
 use App\Library\TwitterApi;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\GenerateChainJob;
+use mysql_xdevapi\Exception;
 
 class ThrowJobChainsCommand extends Command
 {
@@ -30,16 +31,23 @@ class ThrowJobChainsCommand extends Command
     //各Twitterアカウントのジョブチェーンを発行
     public function handle()
     {
-        $twitter_accounts_builder = TwitterAccount::whereNull('deleted_at')
-                                                    ->where('waiting_chain_flag', false)
-                                                    ->where('locked_flag', false);
+        try {
+            $twitter_accounts = TwitterAccount::whereNull('deleted_at')
+                                                ->where('waiting_chain_flag', false)
+                                                ->where('locked_flag', false)
+                                                ->get()->toArray();
+        } catch (\Throwable $e) {
+            Log::error('[ERROR] THROW JOB CHAINS COMMAND - READ : ' . print_r($e->getMessage(), true));
+
+            return false;
+        }
+
         //ジョブチェーン発行可能なアカウントがない場合は終了
-        if(!$twitter_accounts_builder->exists()){
+        if(empty($twitter_accounts)){
             Log::debug('ALL TWITTER ACCOUNTS BUSY');
             return;
         }
 
-        $twitter_accounts = $twitter_accounts_builder->get();
         foreach($twitter_accounts as $account){
             $last_chain_generated_time = strtotime($account['last_chain_at']);
             $now = time();
