@@ -51,7 +51,7 @@ class FollowKeywordsController extends Controller
             'keywords' => 'required|string|max:255',
             'not_flag' => 'required|boolean',
         ]);
-
+        Log::debug('FOLLOW KEYWORDS CONTROLLER - STORE - REQUEST : ' .print_r($request->all(), true));
         try{
             DB::transaction(function () use($request){
                 $result = FollowKeyword::create([

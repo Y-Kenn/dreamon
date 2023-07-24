@@ -1,0 +1,26 @@
+<?php
+
+namespace Tests\Unit;
+
+use Illuminate\Support\Facades\Log;
+use Tests\TestCase;
+use App\Library\TwitterApi;
+
+class CheckRefreshTokenTest extends TestCase
+{
+    /**
+     * A basic unit test example.
+     */
+    public function testCheckRefreshToken(): void
+    {
+
+        $TwitterApi = new TwitterApi(env('API_KEY'),
+            env('API_SECRET'),
+            env('BEARER'),
+            env('CLIENT_ID'),
+            env('CLIENT_SECRET'),
+            env('REDIRECT_URI'));
+        $access_token = $TwitterApi->checkRefreshToken('1683346494706028549');
+        $access_token = $TwitterApi->checkRefreshToken('1683349434913153026');
+    }
+}

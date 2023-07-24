@@ -6,7 +6,7 @@
 /storage/*.key
 /vendor
 .env
-.env.test
+.env.testing
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -21,3 +21,4 @@ yarn-error.log
 /config/database.php
 /resources/views/loading.blade.php
 vite.config.js
+kamitter_test_origin.dump.sql
