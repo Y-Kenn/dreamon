@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controllers;
 
 use App\Models\FollowedAccount;
 use App\Models\FollowKeyword;
@@ -8,16 +8,15 @@ use App\Models\FollowTarget;
 use App\Models\LikeKeyword;
 use App\Models\LikeTarget;
 use App\Models\ProtectedFollowedAccount;
+use App\Models\ReservedTweet;
 use App\Models\TargetBaseAccount;
 use App\Models\TwitterAccount;
 use App\Models\TwitterAccountData;
 use App\Models\UnfollowTarget;
-use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
 use App\Models\User;
-use App\Models\ReservedTweet;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Session;
+use Tests\TestCase;
 
 class WithdrawControllerTest extends TestCase
 {

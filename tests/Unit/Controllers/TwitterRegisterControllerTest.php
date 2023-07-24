@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controllers;
 
 use App\Models\FollowedAccount;
 use App\Models\FollowKeyword;
@@ -13,7 +13,6 @@ use App\Models\TargetBaseAccount;
 use App\Models\TwitterAccount;
 use App\Models\TwitterAccountData;
 use App\Models\UnfollowTarget;
-use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Session;

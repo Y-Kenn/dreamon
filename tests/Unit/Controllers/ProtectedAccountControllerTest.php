@@ -1,15 +1,14 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controllers;
 
-use App\Models\TargetBaseAccount;
-use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
+use App\Models\ProtectedFollowedAccount;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Session;
+use Tests\TestCase;
 
-class TargetBaseControllerTest extends TestCase
+class ProtectedAccountControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -26,17 +25,17 @@ class TargetBaseControllerTest extends TestCase
 
     public function testIndex():void
     {
-        $result = TargetBaseAccount::create([
+        $result = ProtectedFollowedAccount::create([
             'user_twitter_id' => $this->twitter_id,
-            'base_twitter_id' => '1683349434913153026',
+            'protected_twitter_id' => '1683349434913153026',
         ]);
         $response = $this
             ->actingAs($this->user)
-            ->get('/target-base');
+            ->get('/protected-account');
         $response->assertOk()
             ->assertJsonFragment([
-                'id' => '1683349434913153026',
-                'record_id' => $result['id']
+                    'id' => '1683349434913153026',
+                    'record_id' => $result['id']
             ]);
     }
 
@@ -44,25 +43,24 @@ class TargetBaseControllerTest extends TestCase
     {
         $response = $this
             ->actingAs($this->user)
-            ->post('/target-base', [
+            ->post('/protected-account', [
                 'twitter_name' => 'taro91813',
             ]);
         $response->assertOk();
-        $stored = TargetBaseAccount::where('user_twitter_id', $this->twitter_id)->latest()->first()->toArray();
-        $this->assertEquals($stored['base_twitter_id'], '1683349434913153026');
+        $stored = ProtectedFollowedAccount::where('user_twitter_id', $this->twitter_id)->latest()->first()->toArray();
+        $this->assertEquals($stored['protected_twitter_id'], '1683349434913153026');
 
     }
 
     public function testDestroy(): void
     {
-        $result = TargetBaseAccount::create([
+        $result = ProtectedFollowedAccount::create([
             'user_twitter_id' => $this->twitter_id,
-            'base_twitter_id' => '1683349434913153026',
+            'protected_twitter_id' => '1683349434913153026',
         ]);
         $response = $this->actingAs($this->user)
-            ->delete('/target-base/' .$result['id']);
+            ->delete('/protected-account/' .$result['id']);
         $response->assertOk();
-        $this->assertNull(TargetBaseAccount::find($result['id']));
+        $this->assertNull(ProtectedFollowedAccount::find($result['id']));
     }
-
 }

@@ -1,13 +1,12 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controllers;
 
-use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\ReservedTweet;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Session;
+use Tests\TestCase;
 
 class TweetedTweetControllerTest extends TestCase
 {

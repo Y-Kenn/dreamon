@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controllers;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\TwitterAccount;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Session;
+use Tests\TestCase;
 
 class LockedControllerTest extends TestCase
 {

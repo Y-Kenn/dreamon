@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controllers;
 
-use App\Models\LikeKeyword;
+use App\Models\FollowKeyword;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
-class LikeKeywordsControllerTest extends TestCase
+class FollowKeywordsControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -27,14 +27,14 @@ class LikeKeywordsControllerTest extends TestCase
 
     public function testIndex(): void
     {
-        LikeKeyword::create([
+        FollowKeyword::create([
             'twitter_id' => $this->twitter_id,
             'keywords' => $this->keywords,
             'not_flag' => false
         ]);
 
         $response = $this->actingAs($this->user)
-            ->get('/like-keywords');
+            ->get('/follow-keywords');
 
         $response->assertOk()
             ->assertJsonFragment([
@@ -48,30 +48,33 @@ class LikeKeywordsControllerTest extends TestCase
     {
         $response = $this
             ->actingAs($this->user)
-            ->post('/like-keywords', [
+            ->post('/follow-keywords', [
                 'keywords' => $this->keywords,
                 'not_flag' => false
-            ]);
+        ]);
         $response->assertOk();
 
-        $stored = LikeKeyword::latest()->first()->toArray();
+        $stored = FollowKeyword::latest()->first()->toArray();
         $this->assertEquals($stored['keywords'], $this->keywords);
         $this->assertEquals($stored['not_flag'], false);
     }
 
     public function testDestroy():void
     {
-        $result = LikeKeyword::create([
+        $result = FollowKeyword::create([
             'twitter_id' => $this->twitter_id,
             'keywords' => $this->keywords,
             'not_flag' => false
         ]);
 
         $response = $this->actingAs($this->user)
-            ->delete('/like-keywords/' .$result['id']);
+            ->delete('/follow-keywords/' .$result['id']);
 
         $response->assertOk();
-        $this->assertNull(LikeKeyword::find($result['id']));
+        $this->assertNull(FollowKeyword::find($result['id']));
     }
+
+
+
 
 }

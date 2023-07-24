@@ -2,9 +2,8 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
 use App\Library\TwitterApi;
+use Tests\TestCase;
 
 class CheckRefreshTokenTest extends TestCase
 {

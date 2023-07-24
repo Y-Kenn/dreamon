@@ -1,11 +1,9 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Controllers;
 
-use Illuminate\Support\Facades\Log;
-use Tests\TestCase;
 use App\Mail\MailSend;
-use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
 
 class ContactControllerTest extends TestCase
 {
