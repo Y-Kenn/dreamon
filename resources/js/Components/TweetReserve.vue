@@ -100,7 +100,7 @@ export default {
 
     setup(props){
         //現在時刻より10分後以降の予約しかできないようにする
-        const now_plus = moment().add(1,'minute').format('YYYY-MM-DD HH:mm');
+        const now_plus = moment().add(10,'minute').format('YYYY-MM-DD HH:mm');
         onBeforeMount(()=>{
             store.dispatch('getReservedTweets');
             store.dispatch('getTweetedTweets');
