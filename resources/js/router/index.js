@@ -78,30 +78,6 @@ const router = createRouter({
             },
         },
 
-        // {
-        //     path: '/login',
-        //     name: 'login',
-        //     components: {
-        //         default: Login,
-        //         sidenav: Sidenav,
-        //     },
-        // },
-        // {
-        //     //path: '/side',
-        //     name: 'sidenav',
-        //     component: Sidenav,
-        // },
-        // {
-        //     path: '/create',
-        //     name: 'create',
-        //     component: CreateTask,
-        // },
-        // {
-        //     path: '/detail/:id',
-        //     name: 'detail',
-        //     component: Detail,
-        //     props: true,
-        // }
     ]
 })
 

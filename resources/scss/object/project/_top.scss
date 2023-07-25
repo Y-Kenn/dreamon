@@ -105,7 +105,6 @@
         }
         &__icon{
             font-size: 50px;
-            //text-shadow: 2px 2px 2px #ddd, -1px 1px 1px #ddd, 1px -1px 1px #ddd, -1px -1px 1px #ddd;
             text-shadow: 2px 2px 3px #ddd, -1px 1px 2px #ddd, 1px -1px 2px #ddd, -1px -1px 2px #ddd;
             @include mq(sm){
                 text-shadow: 2px 2px 2px #ddd, -1px 1px 1px #ddd, 1px -1px 1px #ddd, -1px -1px 1px #ddd;
@@ -122,7 +121,7 @@
                }
            }
             &--follow{
-                color: $mainBlue;//#40ee8b;//#70f55e;
+                color: $mainBlue;
                 position: absolute;
                 top: 360px;
                 left: 420px;
@@ -133,7 +132,7 @@
                 }
             }
             &--unfollow{
-                color: #fa42d1;//#d900a6;//#d900d9;
+                color: #fa42d1;
                 position: absolute;
                 top: 60px;
                 left: 540px;

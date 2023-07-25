@@ -24,22 +24,15 @@
             color: #fff;
             &:nth-child(1){
                 background-image: radial-gradient(#a2e5ef 30%, #41dcf2 80%);
-                // color: #efefef;
-                // background-image: radial-gradient(#74c9f3 40%,$mainBlue 110%);
             }
             &:nth-child(2){
                 background-image: radial-gradient(#a4e0f5 40%, #00bdff 110%)
-                // background-image: radial-gradient(#95bef2 40%, #1e66f5 110%);
-                // background-image: radial-gradient(#9cacf5 30%, #617bf2 70%);
             }
             &:nth-child(3){
-                
                 background-image: radial-gradient(#74c9f3 40%,$mainBlue 110%);
-                // background-image: radial-gradient(#ebaffc 30%, #dc74fb 70%);
             }
             &:nth-child(4){
                 background-image: radial-gradient(#90bff0 40%, #2082f5 110%);
-                // background-image: radial-gradient(#74c9f3 30%,#17f7ff 70%);
             }
         }
         &--danger{

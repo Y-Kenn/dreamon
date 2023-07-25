@@ -7,9 +7,8 @@ use Tests\TestCase;
 
 class CheckRefreshTokenTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     */
+    /**ユニットテスト前にテストDBのTwitterAPIのアクセス・リフレッシュトークンを更新するためのものです。
+     * テスト目的ではありません。*/
     public function testCheckRefreshToken(): void
     {
 

@@ -34,7 +34,7 @@
                                        v-bind:reserved_date="tweet.reserved_date"
                                        @delete="getTweets" />
                         <!--ページネーション-->
-                        <Paginate
+                        <Paginate v-if="reserved_tweets_status.show"
                             :page-count="reserved_tweets.last_page"
                             :page-range="5"
                             :click-handler="paginateReserved"
@@ -49,6 +49,7 @@
                             :next-link-class="'c-pagination__page__link'"
                             :active-class="'c-pagination__page--active'">
                         </Paginate>
+
                     </div>
                     <!--投稿済みツイート-->
                     <div v-show="show.tweets === 'tweeted'" class="p-tweet_bar__inner">
@@ -60,7 +61,7 @@
                                        v-bind:reserved_date="tweet.reserved_date"
                                        @delete="getTweets" />
                         <!--ページネーション-->
-                        <Paginate
+                        <Paginate v-if="tweeted_tweets_status.show"
                             :page-count="tweeted_tweets.last_page"
                             :page-range="5"
                             :click-handler="paginateTweeted"
@@ -87,7 +88,7 @@
 </template>
 
 <script>
-import {onBeforeMount, reactive, computed, onMounted} from 'vue';
+import {onBeforeMount, reactive, computed, onMounted, watch} from 'vue';
 import { useStore } from "vuex";
 import flatpickr from 'flatpickr/dist/flatpickr.min.js';
 import { Japanese } from 'flatpickr/dist/l10n/ja.js';
@@ -120,17 +121,26 @@ export default {
         const store = useStore();
         let reserved_tweets = computed(()=> store.state.reserved_tweets);
         let reserved_tweets_num = computed(()=> store.state.reserved_tweets_num);
+        let reserved_tweets_status = reactive({show: true});
         let tweeted_tweets = computed(()=> store.state.tweeted_tweets);
         let tweeted_tweets_num = computed(()=> store.state.tweeted_tweets_num);
+        let tweeted_tweets_status = reactive({show: true});
         let new_tweet = reactive({
             reserved_date: now_plus,
             text: "",
         });
         //予約中のツイートを取得
         const getTweets = async ()=>{
-            store.dispatch('getReservedTweets');
-            store.dispatch('getTweetedTweets');
+            //ページ更新時にページネーションのアクティブ表示のページ位置がおかしくなるため、
+            //ページネーションを一瞬消して再表示する
+            reserved_tweets_status.show = false;
+            await store.dispatch('getReservedTweets');
+            reserved_tweets_status.show = true;
+            tweeted_tweets_status.show = false;
+            await store.dispatch('getTweetedTweets');
+            tweeted_tweets_status.show = true;
             store.dispatch('getProcessStatuses');
+
         };
         //予約ツイートのDB登録をコントローラへリクエスト
         const createTweet = async ()=>{
@@ -141,7 +151,6 @@ export default {
                             .then(res =>{
                                 getTweets();
                                 new_tweet.text = '';
-                                console.log('create', res)
                             });
         };
 
@@ -156,16 +165,19 @@ export default {
         const showTweetedTweets = ()=>{
             show.tweets = 'tweeted';
         };
+        //ツイート済みツイートのページ切り替え
         const paginateTweeted = async page =>{
             await store.dispatch('getTweetedTweets', page);
         };
+        //予約中ツイートのページ切り替え
         const paginateReserved = async page =>{
             await store.dispatch('getReservedTweets', page);
         };
 
 
 
-        return { new_tweet, reserved_tweets, reserved_tweets_num, tweeted_tweets, tweeted_tweets_num, show,
+        return { new_tweet, reserved_tweets, reserved_tweets_num, tweeted_tweets,
+            tweeted_tweets_num, show, reserved_tweets_status, tweeted_tweets_status,
             getTweets, createTweet, showReservingTweets, showTweetedTweets,
             paginateTweeted, paginateReserved };
     }

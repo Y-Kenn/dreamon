@@ -8,8 +8,6 @@
         padding: 1rem 10px;
     }
     &__inner{
-        // display: flex;
-        // justify-content: space-between;
         margin-bottom: 1rem;
         @include mq(sm){
             display: flex;

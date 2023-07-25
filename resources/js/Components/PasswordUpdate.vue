@@ -35,7 +35,6 @@
 import {onBeforeMount, reactive} from 'vue';
 
 export default {
-    // components: { Field, Form, ErrorMessage },
     setup(props, context){
         let password = reactive({
             current_password: '',

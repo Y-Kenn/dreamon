@@ -24,7 +24,7 @@ class ReservedTweetController extends Controller
                                 ->whereNull('thrown_at')
                                 ->orderBy('reserved_date')
                                 ->select('id', 'text', 'reserved_date')
-                                ->paginate(5)
+                                ->paginate(10)
                                 ->toArray();
 
             return $data;

@@ -1,6 +1,4 @@
-@php
-$test = 'test';
-@endphp
+
 <x-guest-layout message="Forget-Password">
 <x-header title="Forget-Password"/>
     <main class="u-bg_color--softGray">

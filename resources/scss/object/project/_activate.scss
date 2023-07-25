@@ -1,7 +1,5 @@
 .p-activate{
     margin-top: 30px;
-    //margin-left: 15px;
-    //margin: auto;
     display: flex;
     justify-content: center;
     &__button{
@@ -22,13 +20,7 @@
                 transform: translateY(3px);
             }
         }
-        //&:hover{
-        //    opacity: 0.8;
-        //}
         @include mq(sm){
-            //&:hover{
-            //    pointer-events: none;
-            //}
             &:active{
                 opacity: 0.8;
             }
@@ -36,7 +28,6 @@
         &--active{
             color: white;
             border: none;
-            // background-image: radial-gradient(#74c9f3 30%,#17b2ff 70%);
             background-image: radial-gradient(#74c9f3 40%,$mainBlue 110%);
             opacity: 1;
         }

@@ -21,7 +21,6 @@ class FollowJob implements ShouldQueue
     protected $record_id;
     protected $user_twitter_id;
     protected $target_twitter_id;
-    // protected $last_active_time;
 
     /**
      * Create a new job instance.
@@ -31,7 +30,6 @@ class FollowJob implements ShouldQueue
         $this->record_id = $record_id;
         $this->user_twitter_id = $user_twitter_id;
         $this->target_twitter_id = $target_twitter_id;
-        // $this->last_active_time = $last_active_time;
     }
 
     /**
@@ -51,21 +49,9 @@ class FollowJob implements ShouldQueue
 
         $access_token = $TwitterApi->checkRefreshToken($this->user_twitter_id);
 
-        // $twitter_account_info = TwitterAccount::find($this->user_twitter_id);
-        // $access_token = $twitter_account_info->access_token;
         $TwitterApi->setTokenToHeader($access_token);
 
         $follow_target_builder = FollowTarget::find($this->record_id);
-
-
-        // $last_active_time = $TwitterApi->checkLastActiveTime($this->target_twitter_id);
-        // $now = time();
-        // //非アクティブ期間が指定期間以上であれば、フォローせずにジョブ終了
-        // if($now - $last_active_time > env('INACTIVE_BASELINE_UNFOLLOW')){
-        //     $follow_target_builder->forceDelete();
-        //     Log::debug('DELETE FOLLOW TARGET RECORD [ INACTIVE ] : ' . print_r($this->record_id, true));
-        //     return;
-        // }
 
         $result = $TwitterApi->follow($this->user_twitter_id, $this->target_twitter_id);
         //Log::debug('FOLLOW JOB RESULT : ' . print_r($result, true));
@@ -75,7 +61,6 @@ class FollowJob implements ShouldQueue
                 'user_twitter_id' => $this->user_twitter_id,
                 'target_twitter_id' => $this->target_twitter_id,
                 'followed_at' => date("Y/m/d H:i:s"),
-                // 'last_active_at' => date("Y/m/d H:i:s", $this->last_active_time),
             ]);
             Log::debug('FOLLOW JOB : SUCCESS--');
         }else{

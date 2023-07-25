@@ -77,8 +77,6 @@ Route::get('/loading', function () {return view('loading');});
 //Twitter OAuthによる認証
 Route::post('/twitter-register', [TwitterRegisterController::class, 'store'])->name('twitter-register.store');
 
-Route::get('/temp/test',[TestController::class, 'test'])
-           ->name('test');
 
 
 require __DIR__.'/auth.php';

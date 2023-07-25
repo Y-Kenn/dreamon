@@ -19,7 +19,7 @@ class TweetedTweetController extends Controller
                                     ->whereNotNull('tweeted_at')
                                     ->orderBy('reserved_date','desc')
                                     ->select('id', 'text', 'reserved_date')
-                                    ->paginate(5)
+                                    ->paginate(10)
                                     ->toArray();
             return $data;
         } catch (\Throwable $e) {
