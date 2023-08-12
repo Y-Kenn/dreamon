@@ -14,7 +14,8 @@ use App\Http\Controllers\ProtectedAccountController;
 use App\Http\Controllers\ReservedTweetController;
 use App\Http\Controllers\TweetedTweetController;
 use App\Http\Controllers\ChangeAccountController;
-use App\Http\Controllers\TwitterRegisterController;
+use App\Http\Controllers\OAuth\RedirectTwitterOAuthController;
+use App\Http\Controllers\OAuth\TwitterRegisterController;
 use App\Http\Controllers\ProcessStatusController;
 use App\Http\Controllers\TwitterAccountDataController;
 use App\Http\Controllers\MentionTweetController;
@@ -75,7 +76,8 @@ Route::get('privacy-policy', function () {return view('pages/privacy-policy');})
 Route::get('/loading', function () {return view('loading');});
 
 //Twitter OAuthによる認証
-Route::post('/twitter-register', [TwitterRegisterController::class, 'store'])->name('twitter-register.store');
+Route::get('/oauth/twitter', RedirectTwitterOAuthController::class)->name('oauth-twitter-redirect');
+Route::get('/twitter-register', [TwitterRegisterController::class, 'store'])->name('twitter-register.store');
 
 
 
