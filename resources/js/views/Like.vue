@@ -36,7 +36,7 @@ export default {
     components: { LikeKeyword },
     setup(props){
         const store = useStore();
-        let status = computed(()=> store.state.process_statuses[2]);
+        let status = computed(()=> store.state.process_statuses.find(proc => proc.id === 2));
         //自動いいねの稼働状況(稼働中or停止中)を取得
         const getStatus = async ()=>{
             store.dispatch('getProcessStatuses');

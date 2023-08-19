@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Library\DBErrorHandler;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,6 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Library\TwitterApi;
 use App\Models\TwitterAccount;
 use App\Models\FollowedAccount;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UpdateFollowedAccountsJob implements ShouldQueue
@@ -65,58 +67,69 @@ class UpdateFollowedAccountsJob implements ShouldQueue
         $followed_accounts_builder = FollowedAccount::where('user_twitter_id', $this->user_twitter_id)
                                                         ->whereNull('unfollowed_at')
                                                         ->orderBy('updated_at', 'asc');
-        $followed_accounts = $followed_accounts_builder->get();
+        $followed_accounts = $followed_accounts_builder->get()->toArray();
         // Log::debug('FOLLOWED ACCOUNTS: ' .print_r($followed_accounts->toArray(), true));
 
+        /*******************************
+         *TwitterApi一部削除により機能停止中*
+         ********************************/
         #####################################################################
         #手動登録されたアカウントを検出し、DB(followed_accounts_table)へ登録する処理
         #####################################################################
 
-        $unregistered_followings = array();
-        //APIでフォローアカウント取得
-        $followings = $TwitterApi->getFollowings($this->user_twitter_id);
-        //アカウント凍結を検出
-        $TwitterApi->checkAccountLocked($followings, $this->user_twitter_id);
-
-        if(isset($followings['data'])){
-
-            if($followed_accounts_builder->exists()){
-                $followed_accounts = $followed_accounts_builder->get();
-                //Twitter APIで取得したフォローアカウントとDBを比較し、DBに未登録のアカウントのリストを抽出
-                $unregistered_followings = $this->filterUnregisteredFollowings($followings['data'], $followed_accounts);
-            }else{
-                $unregistered_followings = $followings['data'];
-            }
-        }
-
-        if(!empty($unregistered_followings)){
-            foreach($unregistered_followings as $following){
-                FollowedAccount::create([
-                            'user_twitter_id' => $this->user_twitter_id,
-                            'target_twitter_id' => $following['id'],
-                            'followed_at' => date("Y/m/d H:i:s"),
-                            'manual_followed_flag' => true,
-                            ]);
-            }
-        }
+//        $unregistered_followings = array();
+//        //APIでフォローアカウント取得
+        /**API削除箇所**/
+//        $followings = $TwitterApi->getFollowings($this->user_twitter_id);
+//        //アカウント凍結を検出
+//        $TwitterApi->checkAccountLocked($followings, $this->user_twitter_id);
+//
+//        if(isset($followings['data'])){
+//
+//            if($followed_accounts_builder->exists()){
+//                $followed_accounts = $followed_accounts_builder->get();
+//                //Twitter APIで取得したフォローアカウントとDBを比較し、DBに未登録のアカウントのリストを抽出
+//                $unregistered_followings = $this->filterUnregisteredFollowings($followings['data'], $followed_accounts);
+//            }else{
+//                $unregistered_followings = $followings['data'];
+//            }
+//        }
+//
+//        if(!empty($unregistered_followings)){
+//            foreach($unregistered_followings as $following){
+//                FollowedAccount::create([
+//                            'user_twitter_id' => $this->user_twitter_id,
+//                            'target_twitter_id' => $following['id'],
+//                            'followed_at' => date("Y/m/d H:i:s"),
+//                            'manual_followed_flag' => true,
+//                            ]);
+//            }
+//        }
 
         #####################################################################
         #followed_accounts_tableの全ターゲットのlast_active_atを更新する処理
         #####################################################################
 
-        if($followed_accounts_builder->exists()){
+        if($followed_accounts){
             foreach($followed_accounts as $account){
                 $last_active_at = $TwitterApi->checkLastActiveTime($account['target_twitter_id']);
                 //checkLastActiveTime()が取得失敗した場合、$followingsのループ終了
-                //TwitterのBasicプランで最大連続15回
+                //TwitterのBasicプランで最大連続5回
                 if($last_active_at === strtotime("1980-01-01")){
                     Log::debug('API LIMIT - UPDATE LAST ACTIVE');
                     break;
                 //checkLastActiveTime()が取得できた場合
                 }else{
-                    Log::debug('UPDADTED : ' .print_r($account['id'], true));
-                    FollowedAccount::find($account['id'])
-                    ->update(['last_active_at' => date("Y/m/d H:i:s", $last_active_at)]);
+                    Log::debug('UPDATED : ' .print_r($account['id'], true));
+                    try{
+                        DB::transaction(function () use($account, $last_active_at){
+                            $result = FollowedAccount::find($account['id'])
+                                        ->update(['last_active_at' => date("Y/m/d H:i:s", $last_active_at)]);
+                            DBErrorHandler::checkUpdated($result);
+                        });
+                    } catch (\Throwable $e) {
+                        Log::error('[ERROR] UPDATE FOLLOWED ACCOUNTS JOB : ' . print_r($e->getMessage(), true));
+                    }
                 }
             }
         }

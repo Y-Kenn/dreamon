@@ -43,6 +43,12 @@ class ProcessStatusController extends Controller
 
         $response = [
             [
+                'id' => 2,
+                'process_name' => '自動いいね',
+                'status' => ($data['liking_flag']) ? true : false,
+                'detail' => ($data['liking_flag']) ? '稼働中' : '停止中',
+            ],
+            [
                 'id' => 0,
                 'process_name' => '自動フォロー',
                 'status' => ($data['following_flag']) ? true : false,
@@ -53,12 +59,6 @@ class ProcessStatusController extends Controller
                 'process_name' => '自動アンフォロー',
                 'status' => ($data['unfollowing_flag']) ? true : false,
                 'detail' => ($data['unfollowing_flag']) ? '稼働中' : '停止中',
-            ],
-            [
-                'id' => 2,
-                'process_name' => '自動いいね',
-                'status' => ($data['liking_flag']) ? true : false,
-                'detail' => ($data['liking_flag']) ? '稼働中' : '停止中',
             ],
             [
                 'id' => 3,

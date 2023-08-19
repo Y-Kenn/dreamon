@@ -36,7 +36,7 @@ export default {
     components: { UnfollowProtect },
     setup(){
         const store = useStore();
-        let status = computed(()=> store.state.process_statuses[1]);
+        let status = computed(()=> store.state.process_statuses.find(proc => proc.id === 1));
         //自動アンフォローの稼働状況(稼働中or停止中)を取得
         const getStatus = async ()=>{
             store.dispatch('getProcessStatuses');

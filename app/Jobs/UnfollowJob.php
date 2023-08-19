@@ -11,6 +11,8 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\TwitterAccount;
 use App\Models\FollowedAccount;
 use App\Library\TwitterApi;
+use App\Library\DBErrorHandler;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\UnfollowTarget;
 
@@ -55,12 +57,20 @@ class UnfollowJob implements ShouldQueue
         if(isset($result['data']['following'])){
             //アンフォローに成功した場合
             if($result['data']['following'] === false){
-                UnfollowTarget::find($this->record_id)
-                                ->update(['unfollowed_at' => date("Y/m/d H:i:s")]);
-                FollowedAccount::find($this->followed_accounts_id)
-                                ->update(['unfollowed_at' => date("Y/m/d H:i:s")]);
-                Log::debug('UNFOLLOWED : ' . print_r($this->target_twitter_id, true));
+                try{
+                    DB::transaction(function () {
+                        $result = UnfollowTarget::find($this->record_id)
+                                        ->update(['unfollowed_at' => date("Y/m/d H:i:s")]);
+                        DBErrorHandler::checkUpdated($result);
 
+                        $result = FollowedAccount::find($this->followed_accounts_id)
+                                        ->update(['unfollowed_at' => date("Y/m/d H:i:s")]);
+                        Log::debug('UNFOLLOWED : ' . print_r($this->target_twitter_id, true));
+                        DBErrorHandler::checkUpdated($result);
+                    });
+                } catch (\Throwable $e) {
+                    Log::error('[ERROR] UNFOLLOW JOB : ' . print_r($e->getMessage(), true));
+                }
             }
         }else{
             Log::debug('FAILED UNFOLLOW : ' . print_r($this->target_twitter_id, true));

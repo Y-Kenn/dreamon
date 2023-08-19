@@ -14,6 +14,7 @@ class LikeTarget extends Model
     protected $fillable = [
         'user_twitter_id',
         'target_tweet_id',
+        'target_twitter_id',
         'thrown_at',
         'liked_at',
     ];

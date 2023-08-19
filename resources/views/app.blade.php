@@ -10,7 +10,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
-        <title>Kamitter</title>
+        <title>Heartroid</title>
         @vite(['resources/js/kamitter.js', 'resources/scss/app.scss'])
     </head>
     <body>

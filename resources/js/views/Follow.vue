@@ -5,7 +5,9 @@
                 <div><i class="p-page__icon u-font_color--mainblue c-icon--shadow fa-solid fa-user-plus"></i>フォロー</div>
             </div>
             <div class="p-page__discription">
-                <p>参照アカウントに登録されたアカウントのフォロワーから、設定したキーワードのいずれかににヒットするアカウントを抽出して自動フォローします。</p>
+                <p>自動でいいねを付けたアカウントに対し、フォローキーワードのいずれかににヒットする場合に自動でフォローします。</p>
+                <p>フォローキーワードを設定しない場合、いいねを付けた全てのアカウントをフォローします。</p>
+                <p class="u-underline">自動フォローを使用するには自動いいねを起動している必要があります。</p>
             </div>
 
             <div class="p-activate">
@@ -20,10 +22,6 @@
                     除外指定したキーワードにヒットするアカウントはフォローされません。</p>
             </div>
             <FollowKeyword />
-            <div class="p-page__sub_title">
-                <i class="fa-solid fa-square u-margin--right--5px"></i>参照アカウント
-            </div>
-            <FollowBase />
         </div>
 
     </div>
@@ -39,7 +37,7 @@ export default {
     components: { FollowKeyword, FollowBase },
     setup(){
         const store = useStore();
-        let status = computed(()=> store.state.process_statuses[0]);
+        let status = computed(()=> store.state.process_statuses.find(proc => proc.id === 0));
         //自動フォローの稼働状況(稼働中or停止中)を取得
         const getStatus = ()=>{
             store.dispatch('getProcessStatuses');

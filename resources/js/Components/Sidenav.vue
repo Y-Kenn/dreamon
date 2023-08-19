@@ -37,9 +37,9 @@
             </div>
             <div class="p-sidenav__menu">
                 <router-link @click="slideSidenav" to="/home" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-house u-margin--right--10px"></i>ホーム</router-link>
+                <router-link @click="slideSidenav" to="/like" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-heart-circle-check u-margin--right--10px"></i>いいね</router-link>
                 <router-link @click="slideSidenav" to="/follow" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-user-check u-margin--right--10px"></i>フォロー</router-link>
                 <router-link @click="slideSidenav" to="/unfollow" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-user-large-slash u-margin--right--10px"></i>アンフォロー</router-link>
-                <router-link @click="slideSidenav" to="/like" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-heart-circle-check u-margin--right--10px"></i>いいね</router-link>
                 <router-link @click="slideSidenav" to="/tweet" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-comment-medical u-margin--right--10px"></i>ツイート予約</router-link>
                 <router-link @click="slideSidenav" to="/twitter-account" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-right-left u-margin--right--10px"></i>アカウント切り替え</router-link>
                 <router-link @click="slideSidenav" to="/setting" active-class="p-sidenav__item--active" class="p-sidenav__item"><i class="fa-solid fa-gear u-margin--right--10px"></i>設定</router-link>

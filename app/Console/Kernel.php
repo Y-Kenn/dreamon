@@ -22,10 +22,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('throw-tweets')->everyMinute();
 
         /*******************************
-        *TwitterApi一部削除により機能停止中*
+        *TwitterApi一部削除により機能制限中*
         ********************************/
         //followed_accounts table の更新
-        //$schedule->command('throw-update-following')->hourly();
+        $schedule->command('throw-update-following')->daily();
 
         //アカウントのフォロー数・フォロワー数等更新
         $schedule->command('throw-update-twitter-data')->daily();

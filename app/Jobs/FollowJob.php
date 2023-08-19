@@ -11,23 +11,23 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\TwitterAccount;
 use App\Models\FollowTarget;
 use App\Models\FollowedAccount;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Library\TwitterApi;
+use App\Library\DBErrorHandler;
 
 class FollowJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $record_id;
     protected $user_twitter_id;
     protected $target_twitter_id;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($record_id, $user_twitter_id, $target_twitter_id)//, $last_active_time
+    public function __construct($user_twitter_id, $target_twitter_id)//, $last_active_time
     {
-        $this->record_id = $record_id;
         $this->user_twitter_id = $user_twitter_id;
         $this->target_twitter_id = $target_twitter_id;
     }
@@ -51,17 +51,22 @@ class FollowJob implements ShouldQueue
 
         $TwitterApi->setTokenToHeader($access_token);
 
-        $follow_target_builder = FollowTarget::find($this->record_id);
-
         $result = $TwitterApi->follow($this->user_twitter_id, $this->target_twitter_id);
-        //Log::debug('FOLLOW JOB RESULT : ' . print_r($result, true));
+
         if(isset($result['data'])){
             //フォロー済テーブルに登録
-            FollowedAccount::create([
-                'user_twitter_id' => $this->user_twitter_id,
-                'target_twitter_id' => $this->target_twitter_id,
-                'followed_at' => date("Y/m/d H:i:s"),
-            ]);
+            try{
+                DB::transaction(function () {
+                    $result = FollowedAccount::create([
+                        'user_twitter_id' => $this->user_twitter_id,
+                        'target_twitter_id' => $this->target_twitter_id,
+                        'followed_at' => date("Y/m/d H:i:s"),
+                    ]);
+                    DBErrorHandler::checkCreated($result);
+                });
+            } catch (\Throwable $e) {
+                Log::error('[ERROR] FOLLOW JOB : ' . print_r($e->getMessage(), true));
+            }
             Log::debug('FOLLOW JOB : SUCCESS--');
         }else{
             Log::debug('FOLLOW JOB : FAILED-- : ' .print_r($result, true));
