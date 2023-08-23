@@ -39,27 +39,44 @@
             </div>
             <div class="p-top__section">
                 <div class="p-top__section__inner">
-                    <span class="p-top__copy--big">Twitter運用のよくある悩み</span>
+                    <div class="p-top__title">
+                        <span class="p-top__copy--big">Twitter運用のよくある悩み</span>
+                    </div>
                 </div>
                 <div class="p-top__section__inner">
                     <div class="p-top__problem">
                         <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/busy.png" class="p-top__problem__img">
-                        <span class="p-top__copy--middle">運用の時間が確保できない</span>
+                        <div class="p-top__problem__text">
+                            <span class="p-top__copy p-top__copy--middle">運用の時間が</span>
+                            <span class="p-top__copy p-top__copy--middle">確保できない</span>
+                        </div>
+
                     </div>
                     <div class="p-top__problem">
                         <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/data.png" class="p-top__problem__img">
-                        <span class="p-top__copy--middle">フォロワーが思うように増えない</span>
+                        <div class="p-top__problem__text">
+                            <span class="p-top__copy--middle">フォロワーが</span>
+                            <span class="p-top__copy--middle">思うように増えない</span>
+                        </div>
+
                     </div>
                     <div class="p-top__problem">
                         <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/money.png" class="p-top__problem__img">
-                        <span class="p-top__copy--middle">顧客獲得に繋がらない</span>
+                        <div class="p-top__problem__text">
+                            <span class="p-top__copy--middle">顧客獲得に</span>
+                            <span class="p-top__copy--middle">繋がらない</span>
+                        </div>
+
                     </div>
                 </div>
             </div>
             <div class="p-top__section">
                 <div class="p-top__section__inner">
-                    <span class="p-top__copy p-top__copy--big">Heartroidなら自動運用で</span>
-                    <span class="u-highlight--blue p-top__copy p-top__copy--big">圧倒的パフォーマンス</span>
+                    <div class="p-top__title">
+                        <span class="p-top__copy p-top__copy--big">Heartroidなら自動運用で</span>
+                        <span class="u-highlight--blue p-top__copy p-top__copy--big">圧倒的パフォーマンス</span>
+                    </div>
+
                 </div>
                 <div class="p-top__section__inner">
                     <img src="https://dreamon-s3-1.s3.ap-northeast-1.amazonaws.com/graph.png" class="p-top__graph">
@@ -75,7 +92,9 @@
             <!--Heartroid機能-->
             <div class="p-top__section">
                 <div class="p-top__section__inner">
-                    <span class="p-top__copy--big">Heartroidの機能</span>
+                    <div class="p-top__title">
+                        <span class="p-top__copy--big">Heartroidの機能</span>
+                    </div>
                 </div>
                 <!--いいね-->
                 <div class="p-top__function p-top__function--like">
@@ -141,7 +160,9 @@
             <!--QA-->
             <div class="p-top__section">
                 <div class="p-top__section__inner">
-                    <span class="p-top__copy p-top__copy--big">よくある質問</span>
+                    <div class="p-top__title">
+                        <span class="p-top__copy p-top__copy--big">よくある質問</span>
+                    </div>
                 </div>
                 <div class="p-top__qa">
                     <span class="p-top__qa__q">Q. 使用開始後しばらくはフォローが少ないのはなぜですか？</span>

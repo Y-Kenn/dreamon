@@ -12,12 +12,9 @@
         border-radius: 15px;
         padding-top: 2rem;
         padding-bottom: 2rem;
-        //background-color: #d6dfe6;
         background-color: #fff;
         font-weight: 600;
-        //color: #999797;
         color: $mainBlue;
-        //border: 1px solid#ddd;
         border: 1px solid $mainBlue;
         margin-bottom: 25px;
         @include mq(){

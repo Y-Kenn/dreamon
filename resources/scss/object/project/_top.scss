@@ -18,7 +18,7 @@
             width: 100%;
             margin-top: 30px;
             margin-bottom: 30px;
-            @include mq(){
+            @include mq(sm){
                 flex-direction: column;
             }
         }
@@ -30,8 +30,9 @@
         width: 35%;
         height: 500px;
         @include mq(){
-            width: 100%;
+            width: 45%;
             justify-content: center;
+            height: 350px;
         }
         @include mq(sm){
             width: 100%;
@@ -57,10 +58,6 @@
         position: relative;
         margin-left: 50px;
         @include mq(){
-            width: 620px;
-            margin: 0;
-        }
-        @include mq(sm){
             width: 360px;
             margin: 0;
             height: 350px;
@@ -71,7 +68,7 @@
             border-radius: 7px;
             box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
             -webkit-box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
-            @include mq(sm){
+            @include mq(){
                 width: 220px;
                 border: 10px solid #eee;
                 border: 8px solid #eee;
@@ -80,7 +77,7 @@
                 position: absolute;
                 top: 210px;
                 z-index: 1;
-                @include mq(sm){
+                @include mq(){
                     top: 150px;
                     left: 10px;
                 }
@@ -89,7 +86,7 @@
                 position: absolute;
                 top: 50px;
                 left: 150px;
-                @include mq(sm){
+                @include mq(){
                     top: 50px;
                     left: 90px;
                 }
@@ -104,7 +101,7 @@
             position: absolute;
             top: 200px;
             left: 520px;
-            @include mq(sm){
+            @include mq(){
                 width: 70px;
                 top: 140px;
                 left: 280px;
@@ -114,7 +111,7 @@
         &__icon{
             font-size: 50px;
             text-shadow: 2px 2px 3px #ddd, -1px 1px 2px #ddd, 1px -1px 2px #ddd, -1px -1px 2px #ddd;
-            @include mq(sm){
+            @include mq(){
                 text-shadow: 2px 2px 2px #ddd, -1px 1px 1px #ddd, 1px -1px 1px #ddd, -1px -1px 1px #ddd;
             }
            &--like{
@@ -122,7 +119,7 @@
                position: absolute;
                top: 130px;
                left: 20px;
-               @include mq(sm){
+               @include mq(){
                    top: 90px;
                    left: 10px;
                    font-size: 35px;
@@ -133,7 +130,7 @@
                 position: absolute;
                 top: 360px;
                 left: 420px;
-                @include mq(sm){
+                @include mq(){
                     top: 260px;
                     left: 245px;
                     font-size: 35px;
@@ -145,7 +142,7 @@
                 top: 60px;
                 left: 540px;
                 font-size: 47px;
-                @include mq(sm){
+                @include mq(){
                     top: 60px;
                     left: 320px;
                     font-size: 30px;
@@ -156,7 +153,7 @@
                 position: absolute;
                 top: 8px;
                 left: 230px;
-                @include mq(sm){
+                @include mq(){
                     top: 19px;
                     left: 140px;
                     font-size: 35px;
@@ -165,8 +162,14 @@
         }
 
     }
+    &__title{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
     &__copy{
         vertical-align: text-bottom;
+        display: inline-block;
         &--middle{
             color: $font-color_dark;
             font-size: $font-size_xl;
@@ -195,17 +198,26 @@
         justify-content: flex-start;
         align-items: center;
         @include mq(){
-            width: 500px;
-            margin: 0 0 40px 0;
+            margin: 0 10px 40px 10px;
         }
         @include mq(sm){
             width: 100%;
             margin: 0 0 40px 0;
         }
         &__img{
-            width: 100%;
             height: 300px;
             object-fit: cover;
+            @include mq(){
+                height: 230px;
+            }
+            @include mq(sm){
+                height: 250px;
+            }
+        }
+        &__text{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
         }
     }
     &__graph{
