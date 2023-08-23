@@ -84,7 +84,7 @@
             width: 3.5rem;
             padding-right: 2rem;
             font-size: $font-size_m;
-            & > i:hover{
+            &:hover{
                 cursor: pointer;
             }
             @include mq(md){

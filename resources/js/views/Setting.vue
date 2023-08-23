@@ -12,8 +12,7 @@
                 <i class="p-page__icon c-icon--shadow fa-solid fa-gear"></i>設定
             </div>
             <div class="p-page__discription">
-                <p>メールアドレスとパスワードを登録することで、Twitterアカウントの認証無しでログインできるようになります。<br>
-                また自動フォローの完了通知を受け取ることができます。</p>
+                <p>メールアドレスとパスワードを登録することで、Twitterアカウントの認証無しでログインできるようになります。</p>
             </div>
             <div class="p-page__sub_title">
                 <i class="fa-solid fa-square"></i> メールアドレス

@@ -4,5 +4,5 @@
         <a href="{{ route('privacy-policy') }}" class="p-footer__link">プライバシーポリシー</a>
         <a href="{{ route('contact.create') }}" class="p-footer__link">お問合せ</a>
     </div>
-    <span class="p-footer__copyright">Copyright ©️ Kamitter</span>
+    <span class="p-footer__copyright">Copyright ©️ Heartroid</span>
 </footer>
