@@ -33,7 +33,7 @@ class ContactCustomerMail extends Mailable
         $envelope = new Envelope();
 
         return $envelope->subject('お問合せを受け付けました')
-            ->from(env('MAIL_ADDRESS_INFO'), 'Kamitter')
+            ->from(env('MAIL_ADDRESS_INFO'), 'Heartroid')
             ->to($this->email);
     }
 

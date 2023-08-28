@@ -6,7 +6,7 @@
             <div class="p-auth">
                 <h1 class="p-auth__title">パスワード再発行</h1>
                 <p>パスワード再設定の案内メールを送信します。</p>
-                <p>Kamitterに登録済のメールアドレスを入力してください。</p>
+                <p>Heartroidに登録済のメールアドレスを入力してください。</p>
 
                 <div class="p-auth__form">
                     <!-- Session Status -->

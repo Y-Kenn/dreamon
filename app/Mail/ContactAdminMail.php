@@ -33,7 +33,7 @@ class ContactAdminMail extends Mailable
         $envelope = new Envelope();
 
         return $envelope->subject('お問合せを受信しました')
-            ->from(env('MAIL_ADDRESS_INFO'), 'Kamitter')
+            ->from(env('MAIL_ADDRESS_INFO'), 'Heartroid')
             ->to(env('MAIL_ADDRESS_ADMIN'));
     }
 
