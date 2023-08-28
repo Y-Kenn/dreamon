@@ -5,14 +5,10 @@
 /public/storage
 /storage/*.key
 /vendor
-.editorconfig
 .env
-.env.example
 .env.testing
 .env.backup
 .env.production
-.gitattributes
-.gitignore
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
